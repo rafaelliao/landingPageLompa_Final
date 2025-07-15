@@ -94,20 +94,6 @@ export default function Navigation({ items, className }: NavigationProps) {
             variants={itemVariants}
           >
             <motion.button
-              className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 transform hover:scale-105"
-              style={{ 
-                backgroundColor: '#4807AD',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 600,
-                fontSize: '16px'
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Acesso Vendedor
-            </motion.button>
-            
-            <motion.button
               className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 transform hover:scale-105 gap-2"
               style={{ 
                 backgroundColor: '#4807AD',
@@ -120,6 +106,19 @@ export default function Navigation({ items, className }: NavigationProps) {
             >
               <HeadphonesIcon className="w-5 h-5" />
               Suporte
+            </motion.button>
+            <motion.button
+              className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 transform hover:scale-105"
+              style={{ 
+                backgroundColor: '#4807AD',
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 600,
+                fontSize: '16px'
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Acesso Vendedor
             </motion.button>
           </motion.div>
 
@@ -162,20 +161,6 @@ export default function Navigation({ items, className }: NavigationProps) {
                     </motion.a>
                   ))}
                                   <motion.button
-                  className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 w-full"
-                  style={{ 
-                    backgroundColor: '#4807AD',
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '16px'
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Acesso Vendedor
-                </motion.button>
-                
-                <motion.button
                   className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 w-full gap-2"
                   style={{ 
                     backgroundColor: '#4807AD',
@@ -188,6 +173,20 @@ export default function Navigation({ items, className }: NavigationProps) {
                 >
                   <HeadphonesIcon className="w-5 h-5" />
                   Suporte
+                </motion.button>
+                
+                <motion.button
+                  className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 w-full"
+                  style={{ 
+                    backgroundColor: '#4807AD',
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: 600,
+                    fontSize: '16px'
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Acesso Vendedor
                 </motion.button>
                 </div>
               </motion.div>

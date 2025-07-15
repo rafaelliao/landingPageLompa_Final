@@ -100,7 +100,7 @@ export default function HomePage() {
         
         {/* Card com imagem da garrafa à esquerda */}
         <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 380px)', top: 'calc(50% + 80px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-2 w-36 h-44 flex items-center justify-center">
+          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
             <div className="relative w-full h-full">
               <img 
                 src="/garrafa_card.png" 
@@ -118,7 +118,7 @@ export default function HomePage() {
         
         {/* Card sobreposto à esquerda, posicionado acima */}
         <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 420px)', top: 'calc(50% - 60px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-0 w-36 h-44 flex items-center justify-center">
+          <div className="bg-white rounded-2xl shadow-2xl p-0 w-28 h-36 flex items-center justify-center">
             <div className="relative w-full h-full">
               <img 
                 src="/ursopelucia_icon.png" 
@@ -136,7 +136,7 @@ export default function HomePage() {
         
         {/* Card com imagem da blusa à direita */}
         <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 380px)', top: 'calc(50% + 80px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-2 w-36 h-44 flex items-center justify-center">
+          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
             <div className="relative w-full h-full">
               <img 
                 src="/blusa-creme.png" 
@@ -154,7 +154,7 @@ export default function HomePage() {
         
         {/* Card sobreposto à direita, posicionado acima */}
         <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-20" style={{ left: 'calc(50% + 420px)', top: 'calc(50% - 60px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-2 w-36 h-44 flex items-center justify-center">
+          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
             <div className="relative w-full h-full">
               <img 
                 src="/bolsa_icon.png" 
@@ -169,6 +169,67 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+        
+        {/* Novo card extremo à esquerda */}
+        <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 500px)', top: 'calc(50% + 180px)' }}>
+          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+            <div className="relative w-full h-full">
+              <img 
+                src="/oculos_icon.png" 
+                alt="Óculos Icon" 
+                className="w-full h-full object-contain rounded-xl"
+                style={{
+                  background: '#ffffff'
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+        {/* Novo card extremo à direita */}
+        <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 500px)', top: 'calc(50% + 180px)' }}>
+          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+            <div className="relative w-full h-full">
+              <img 
+                src="/maquiagem_icon.png" 
+                alt="Maquiagem Icon" 
+                className="w-full h-full object-contain rounded-xl"
+                style={{
+                  background: '#ffffff'
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+      {/* Novo card inferior esquerdo-central */}
+      <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 260px)', top: 'calc(50% + 240px)' }}>
+        <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+          <div className="relative w-full h-full">
+            <img 
+              src="/tenis_icon.png" 
+              alt="Tênis Icon" 
+              className="w-full h-full object-contain rounded-xl"
+              style={{ background: '#ffffff' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
+          </div>
+        </div>
+      </div>
+      {/* Novo card inferior direito-central */}
+      <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 260px)', top: 'calc(50% + 240px)' }}>
+        <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+          <div className="relative w-full h-full">
+            <img 
+              src="/bone_icon.png" 
+              alt="Boné Icon" 
+              className="w-full h-full object-contain rounded-xl"
+              style={{ background: '#ffffff' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
+          </div>
+        </div>
+      </div>
         
         <div className="text-center max-w-3xl mx-auto px-4">
           <div className="flex justify-center mb-8">
