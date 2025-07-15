@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -94,6 +94,10 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  
+  .border-pink-transparent {
+    border-color: rgba(227, 33, 255, 0.7) !important;
+  }
 }
 
 @layer utilities {
@@ -108,5 +112,18 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
   }
 } 

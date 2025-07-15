@@ -8,7 +8,7 @@ export default function LogoIcon({ size = 'md', className = '' }: LogoIconProps)
     sm: 'w-12 h-12',
     md: 'w-16 h-16',
     lg: 'w-24 h-24',
-    xl: 'w-28 h-28'
+    xl: 'w-24 h-24'
   }
 
   return (
