@@ -130,6 +130,14 @@ export default function HomePage() {
                   className="w-full h-full object-contain rounded-xl"
                 />
               </div>
+              {/* Ícone de estrela sobreposto à frente do card */}
+              <div className="absolute -top-6 -left-6 z-20">
+                <img 
+                  src="/star_icon.svg" 
+                  alt="Star" 
+                  className="w-[70px] h-[70px] drop-shadow-sm"
+                />
+              </div>
             </div>
             
             {/* Card sobreposto à direita, posicionado acima */}
@@ -152,6 +160,15 @@ export default function HomePage() {
                   className="w-full h-full object-contain rounded-xl"
                 />
               </div>
+              {/* Ícone de like sobreposto à frente do card */}
+              <div className="absolute -top-6 -right-6 z-20">
+                <img 
+                  src="/icon_like.svg" 
+                  alt="Like" 
+                  className="w-16 h-16 drop-shadow-sm"
+                />
+              </div>
+
             </div>
             
             {/* Card extremo à direita */}
@@ -248,6 +265,28 @@ export default function HomePage() {
               </div>
             </div>
             
+            {/* Novo Card 1 - No quadro amarelo esquerdo */}
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 140px)', top: 'calc(50% - 60px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
+                <img 
+                  src="/relogio_card.png" 
+                  alt="Relógio" 
+                  className="w-full h-full object-contain rounded-lg"
+                />
+              </div>
+            </div>
+            
+            {/* Novo Card 2 - No quadro amarelo direito */}
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 140px)', top: 'calc(50% - 60px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
+                <img 
+                  src="/camera_card.png" 
+                  alt="Câmera" 
+                  className="w-full h-full object-contain rounded-lg"
+                />
+              </div>
+            </div>
+            
             {/* Card com imagem da blusa à direita */}
             <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 160px)', top: 'calc(50% + 80px)' }}>
               <div className="product-card-transparent w-[46px] h-[58px]">
@@ -257,6 +296,7 @@ export default function HomePage() {
                   className="w-full h-full object-contain rounded-lg"
                 />
               </div>
+
             </div>
             
             {/* Card sobreposto à direita, posicionado acima */}
@@ -279,6 +319,15 @@ export default function HomePage() {
                   className="w-full h-full object-contain rounded-lg"
                 />
               </div>
+              {/* Ícone de like sobreposto à frente do card */}
+              <div className="absolute -top-3 -right-3 z-20">
+                <img 
+                  src="/icon_like.svg" 
+                  alt="Like" 
+                  className="w-12 h-12 drop-shadow-sm"
+                />
+              </div>
+
             </div>
             
             {/* Card extremo à direita */}

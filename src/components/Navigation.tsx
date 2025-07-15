@@ -123,44 +123,42 @@ export default function Navigation({ items, className }: NavigationProps) {
           </motion.div>
 
           {/* Mobile Menu Button */}
-          {items.length > 0 && (
-            <motion.button
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              onClick={() => setIsOpen(!isOpen)}
-              whileTap={{ scale: 0.95 }}
-              variants={itemVariants}
-            >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </motion.button>
-          )}
+          <motion.button
+            className="lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors text-white"
+            onClick={() => setIsOpen(!isOpen)}
+            whileTap={{ scale: 0.95 }}
+            variants={itemVariants}
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </motion.button>
         </div>
 
         {/* Mobile Menu */}
-        {items.length > 0 && (
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                className="lg:hidden"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="py-4 space-y-4">
-                  {items.map((item) => (
-                    <motion.a
-                      key={item.label}
-                      href={item.href}
-                      className="block text-white/80 hover:text-white transition-colors duration-200 font-medium"
-                      onClick={() => setIsOpen(false)}
-                      whileTap={{ scale: 0.95 }}
-                      target={item.external ? '_blank' : undefined}
-                      rel={item.external ? 'noopener noreferrer' : undefined}
-                    >
-                      {item.label}
-                    </motion.a>
-                  ))}
-                                  <motion.button
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              className="lg:hidden bg-white/10 backdrop-blur-md rounded-lg mt-2"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="py-4 space-y-4 px-4">
+                {items.map((item) => (
+                  <motion.a
+                    key={item.label}
+                    href={item.href}
+                    className="block text-white/80 hover:text-white transition-colors duration-200 font-medium"
+                    onClick={() => setIsOpen(false)}
+                    whileTap={{ scale: 0.95 }}
+                    target={item.external ? '_blank' : undefined}
+                    rel={item.external ? 'noopener noreferrer' : undefined}
+                  >
+                    {item.label}
+                  </motion.a>
+                ))}
+                <motion.button
                   className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 w-full gap-2"
                   style={{ 
                     backgroundColor: '#4807AD',
@@ -188,11 +186,10 @@ export default function Navigation({ items, className }: NavigationProps) {
                 >
                   Acesso Vendedor
                 </motion.button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.nav>
   )
