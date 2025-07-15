@@ -7,8 +7,6 @@ import type { NavItem, Feature, FooterSection } from '@/types'
 // Dados de exemplo para a landing page
 const navigationItems: NavItem[] = []
 
-
-
 const featuresData: Feature[] = [
   {
     id: '1',
@@ -93,186 +91,238 @@ export default function HomePage() {
       {/* Navigation */}
       <Navigation items={navigationItems} />
       
-      {/* Título Centralizado */}
-      <section className="flex justify-center pt-0 mt-24 lg:mt-28 relative">
-        {/* Elemento invisível no centro para referência */}
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-1 opacity-0 pointer-events-none" style={{ top: 'calc(50% + 80px)' }}></div>
-        
-        {/* Card com imagem da garrafa à esquerda */}
-        <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 380px)', top: 'calc(50% + 80px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
-            <div className="relative w-full h-full">
-              <img 
-                src="/garrafa_card.png" 
-                alt="Garrafa Stanley" 
-                className="w-full h-full object-cover rounded-xl"
-                style={{
-                  background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)'
-                }}
-              />
-              {/* Overlay sutil para melhorar a apresentação */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
+      {/* Hero Section com Layout Responsivo */}
+      <section className="relative pt-20 pb-12 overflow-hidden">
+        {/* Layout Desktop - Título Centralizado com Cards ao Redor */}
+        <div className="hidden lg:block relative w-full max-w-7xl mx-auto px-4">
+          <div className="flex justify-center pt-0 mt-24 lg:mt-28 relative">
+            {/* Elemento invisível no centro para referência */}
+            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-1 opacity-0 pointer-events-none" style={{ top: 'calc(50% + 80px)' }}></div>
+            
+            {/* Card com imagem da garrafa à esquerda */}
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 380px)', top: 'calc(50% + 80px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+                <img 
+                  src="/garrafa_card.png" 
+                  alt="Garrafa Stanley" 
+                  className="w-full h-full object-cover rounded-xl"
+                />
+              </div>
+            </div>
+            
+            {/* Card sobreposto à esquerda, posicionado acima */}
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 420px)', top: 'calc(50% - 60px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-0 w-28 h-36 flex items-center justify-center">
+                <img 
+                  src="/ursopelucia_icon.png" 
+                  alt="Urso Pelúcia" 
+                  className="w-full h-full object-contain rounded-2xl"
+                />
+              </div>
+            </div>
+            
+            {/* Card com imagem da blusa à direita */}
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 380px)', top: 'calc(50% + 80px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+                <img 
+                  src="/blusa-creme.png" 
+                  alt="Suéter de malha creme" 
+                  className="w-full h-full object-cover rounded-xl"
+                />
+              </div>
+            </div>
+            
+            {/* Card sobreposto à direita, posicionado acima */}
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-20" style={{ left: 'calc(50% + 420px)', top: 'calc(50% - 60px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+                <img 
+                  src="/bolsa_icon.png" 
+                  alt="Bolsa Icon" 
+                  className="w-full h-full object-contain rounded-xl"
+                />
+              </div>
+            </div>
+            
+            {/* Card extremo à esquerda */}
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 500px)', top: 'calc(50% + 180px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+                <img 
+                  src="/oculos_icon.png" 
+                  alt="Óculos Icon" 
+                  className="w-full h-full object-contain rounded-xl"
+                />
+              </div>
+            </div>
+            
+            {/* Card extremo à direita */}
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 500px)', top: 'calc(50% + 180px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+                <img 
+                  src="/maquiagem_icon.png" 
+                  alt="Maquiagem Icon" 
+                  className="w-full h-full object-contain rounded-xl"
+                />
+              </div>
+            </div>
+            
+            {/* Card inferior esquerdo-central */}
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 260px)', top: 'calc(50% + 240px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+                <img 
+                  src="/tenis_icon.png" 
+                  alt="Tênis Icon" 
+                  className="w-full h-full object-contain rounded-xl"
+                />
+              </div>
+            </div>
+            
+            {/* Card inferior direito-central */}
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 260px)', top: 'calc(50% + 240px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
+                <img 
+                  src="/bone_icon.png" 
+                  alt="Boné Icon" 
+                  className="w-full h-full object-contain rounded-xl"
+                />
+              </div>
+            </div>
+            
+            {/* Título Centralizado */}
+            <div className="text-center max-w-3xl mx-auto px-4">
+              <div className="flex justify-center mb-8">
+                <LogoIcon size="md" />
+              </div>
+              <h1 className="text-4xl md:text-6xl lg:text-[60px] font-bold text-white leading-tight mb-2" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}>
+                O <span style={{ color: '#4807AD' }}>FUTURO</span> DAS VENDAS É SOCIAL, VISUAL E ACESSÍVEL. E ELE <span style={{ color: '#E321FF' }}>COMEÇA AQUI</span>
+              </h1>
             </div>
           </div>
         </div>
         
-        {/* Card sobreposto à esquerda, posicionado acima */}
-        <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 420px)', top: 'calc(50% - 60px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-0 w-28 h-36 flex items-center justify-center">
-            <div className="relative w-full h-full">
-              <img 
-                src="/ursopelucia_icon.png" 
-                alt="Urso Pelúcia" 
-                className="w-full h-full object-contain rounded-2xl"
-                style={{
-                  background: '#ffffff'
-                }}
-              />
-              {/* Overlay sutil para melhorar a apresentação */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
+        {/* Layout Mobile - Cards em Scroll Horizontal + Título Separado */}
+        <div className="lg:hidden">
+          {/* Cards para Mobile - Layout Horizontal Scroll */}
+          <div className="mb-8">
+            <div className="flex gap-4 overflow-x-auto pb-4 px-4 -mx-4">
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-2xl shadow-2xl p-2 w-20 h-24 flex items-center justify-center">
+                  <img 
+                    src="/ursopelucia_icon.png" 
+                    alt="Urso Pelúcia" 
+                    className="w-full h-full object-contain rounded-xl"
+                  />
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-2xl shadow-2xl p-2 w-20 h-24 flex items-center justify-center">
+                  <img 
+                    src="/garrafa_card.png" 
+                    alt="Garrafa Stanley" 
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-2xl shadow-2xl p-2 w-20 h-24 flex items-center justify-center">
+                  <img 
+                    src="/bolsa_icon.png" 
+                    alt="Bolsa Icon" 
+                    className="w-full h-full object-contain rounded-xl"
+                  />
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-2xl shadow-2xl p-2 w-20 h-24 flex items-center justify-center">
+                  <img 
+                    src="/blusa-creme.png" 
+                    alt="Suéter de malha creme" 
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-2xl shadow-2xl p-2 w-20 h-24 flex items-center justify-center">
+                  <img 
+                    src="/oculos_icon.png" 
+                    alt="Óculos Icon" 
+                    className="w-full h-full object-contain rounded-xl"
+                  />
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-2xl shadow-2xl p-2 w-20 h-24 flex items-center justify-center">
+                  <img 
+                    src="/maquiagem_icon.png" 
+                    alt="Maquiagem Icon" 
+                    className="w-full h-full object-contain rounded-xl"
+                  />
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-2xl shadow-2xl p-2 w-20 h-24 flex items-center justify-center">
+                  <img 
+                    src="/tenis_icon.png" 
+                    alt="Tênis Icon" 
+                    className="w-full h-full object-contain rounded-xl"
+                  />
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-2xl shadow-2xl p-2 w-20 h-24 flex items-center justify-center">
+                  <img 
+                    src="/bone_icon.png" 
+                    alt="Boné Icon" 
+                    className="w-full h-full object-contain rounded-xl"
+                  />
+                </div>
+              </div>
             </div>
+          </div>
+          
+          {/* Título Principal para Mobile */}
+          <div className="text-center max-w-4xl mx-auto px-4 mb-8">
+            <div className="flex justify-center mb-6">
+              <LogoIcon size="md" />
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-4" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}>
+              O <span style={{ color: '#4807AD' }}>FUTURO</span> DAS VENDAS É SOCIAL, VISUAL E ACESSÍVEL. E ELE <span style={{ color: '#E321FF' }}>COMEÇA AQUI</span>
+            </h1>
           </div>
         </div>
         
-        {/* Card com imagem da blusa à direita */}
-        <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 380px)', top: 'calc(50% + 80px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
-            <div className="relative w-full h-full">
-              <img 
-                src="/blusa-creme.png" 
-                alt="Suéter de malha creme" 
-                className="w-full h-full object-cover rounded-xl"
-                style={{
-                  background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)'
-                }}
+        {/* Seta de rolagem animada */}
+        <div className="flex justify-center py-4">
+          <div className="animate-bounce">
+            <svg 
+              width="40" 
+              height="40" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              className="cursor-pointer hover:scale-110 transition-transform duration-300"
+            >
+              <path 
+                d="M7 13L12 18L17 13" 
+                stroke="url(#gradient)" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
               />
-              {/* Overlay sutil para melhorar a apresentação */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
-            </div>
+              <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#4807AD" />
+                  <stop offset="100%" stopColor="#E321FF" />
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
-        </div>
-        
-        {/* Card sobreposto à direita, posicionado acima */}
-        <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-20" style={{ left: 'calc(50% + 420px)', top: 'calc(50% - 60px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
-            <div className="relative w-full h-full">
-              <img 
-                src="/bolsa_icon.png" 
-                alt="Bolsa Icon" 
-                className="w-full h-full object-contain rounded-xl"
-                style={{
-                  background: '#ffffff'
-                }}
-              />
-              {/* Overlay sutil para melhorar a apresentação */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Novo card extremo à esquerda */}
-        <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 500px)', top: 'calc(50% + 180px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
-            <div className="relative w-full h-full">
-              <img 
-                src="/oculos_icon.png" 
-                alt="Óculos Icon" 
-                className="w-full h-full object-contain rounded-xl"
-                style={{
-                  background: '#ffffff'
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
-            </div>
-          </div>
-        </div>
-        {/* Novo card extremo à direita */}
-        <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 500px)', top: 'calc(50% + 180px)' }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
-            <div className="relative w-full h-full">
-              <img 
-                src="/maquiagem_icon.png" 
-                alt="Maquiagem Icon" 
-                className="w-full h-full object-contain rounded-xl"
-                style={{
-                  background: '#ffffff'
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
-            </div>
-          </div>
-        </div>
-      {/* Novo card inferior esquerdo-central */}
-      <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 260px)', top: 'calc(50% + 240px)' }}>
-        <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
-          <div className="relative w-full h-full">
-            <img 
-              src="/tenis_icon.png" 
-              alt="Tênis Icon" 
-              className="w-full h-full object-contain rounded-xl"
-              style={{ background: '#ffffff' }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
-          </div>
-        </div>
-      </div>
-      {/* Novo card inferior direito-central */}
-      <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 260px)', top: 'calc(50% + 240px)' }}>
-        <div className="bg-white rounded-2xl shadow-2xl p-2 w-28 h-36 flex items-center justify-center">
-          <div className="relative w-full h-full">
-            <img 
-              src="/bone_icon.png" 
-              alt="Boné Icon" 
-              className="w-full h-full object-contain rounded-xl"
-              style={{ background: '#ffffff' }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-xl"></div>
-          </div>
-        </div>
-      </div>
-        
-        <div className="text-center max-w-3xl mx-auto px-4">
-          <div className="flex justify-center mb-8">
-            <LogoIcon size="md" />
-          </div>
-          <h1 className="text-4xl md:text-6xl lg:text-[60px] font-bold text-white leading-tight mb-2" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}>
-            O <span style={{ color: '#4807AD' }}>FUTURO</span> DAS VENDAS É SOCIAL, VISUAL E ACESSÍVEL. E ELE <span style={{ color: '#E321FF' }}>COMEÇA AQUI</span>
-          </h1>
         </div>
       </section>
       
-      {/* Seta de rolagem animada */}
-      <div className="flex justify-center py-4">
-        <div className="animate-bounce">
-          <svg 
-            width="40" 
-            height="40" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            xmlns="http://www.w3.org/2000/svg"
-            className="cursor-pointer hover:scale-110 transition-transform duration-300"
-          >
-            <path 
-              d="M7 13L12 18L17 13" 
-              stroke="url(#gradient)" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            />
-            <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#4807AD" />
-                <stop offset="100%" stopColor="#E321FF" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-      </div>
-      
       {/* Retângulo tipo smartphone centralizado */}
-      <div className="flex justify-center items-center py-12">
+      <div className="flex justify-center items-center py-8 lg:py-12 px-4">
         <div
-          className="rounded-[32px] border-2 bg-white/10 shadow-2xl w-[280px] h-[480px] sm:w-[320px] sm:h-[560px] md:w-[360px] md:h-[640px] lg:w-[380px] lg:h-[680px] transition-all duration-300 border-pink-transparent relative"
+          className="rounded-[32px] border-2 bg-white/10 shadow-2xl w-[280px] h-[540px] sm:w-[320px] sm:h-[620px] md:w-[360px] md:h-[680px] lg:w-[380px] lg:h-[680px] transition-all duration-300 border-pink-transparent relative flex flex-col items-center justify-start px-4 pb-6"
           style={{
             boxShadow: '0 0 32px 0 #4807AD, 0 0 64px 8px #E321FF55'
           }}
@@ -281,39 +331,49 @@ export default function HomePage() {
           <div className="absolute inset-0 rounded-[32px] pointer-events-none overflow-hidden z-0">
             <div className="w-full h-full animate-shimmer bg-gradient-to-r from-[#4807AD33] via-[#E321FF44] to-[#4807AD33] opacity-60" style={{backgroundSize: '200% 100%'}}></div>
           </div>
+          
           {/* Selo 100% Brasileiro no topo */}
           <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-20">
             <span className="bg-[#E321FF] text-white font-bold text-xs px-4 py-1 rounded-full shadow-lg tracking-wide border-2 border-white/30" style={{letterSpacing: 1}}>MARKETPLACE</span>
           </div>
-          {/* Logo no topo centralizado */}
-          <div className="absolute top-16 left-1/2 transform -translate-x-1/2 z-10">
+          
+          {/* Logo no topo centralizado DENTRO do retângulo */}
+          <div className="w-full flex justify-center pt-6 pb-3">
             <Logo size="lg" />
           </div>
           
-          {/* Call to Action abaixo do logo */}
-          <div className="absolute top-32 left-1/2 transform -translate-x-1/2 text-center w-full px-4">
-            <h2 className="text-white font-bold text-xl mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              Um novo jeito de comprar e vender.
-            </h2>
-            <p className="text-white/90 leading-relaxed text-xl mb-20" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>
-              O primeiro <span style={{ color: '#4807AD' }}>marketplace 100% brasileiro</span> feito para transformar como as pessoas compram e vendem no <span style={{ color: '#E321FF' }}>digital</span>
-            </p>
-            <div className="mt-4 flex justify-center">
+          {/* Conteúdo do retângulo */}
+          <div className="flex flex-col items-center w-full flex-1 justify-between py-2 sm:py-4">
+            {/* Texto superior */}
+            <div className="flex flex-col items-center w-full flex-shrink-0">
+              <h2 className="text-white font-bold text-xl sm:text-2xl mb-2 sm:mb-3 text-center w-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                Um novo jeito de comprar e vender.
+              </h2>
+              <p className="text-white/90 leading-relaxed text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 text-center w-full px-2" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>
+                O primeiro <span style={{ color: '#4807AD' }}>marketplace 100% brasileiro</span> feito para transformar como as pessoas compram e vendem no <span style={{ color: '#E321FF' }}>digital</span>
+              </p>
+            </div>
+            
+            {/* Botões de Call to Action - Posicionados na parte inferior */}
+            <div className="flex flex-col items-center w-full gap-3 sm:gap-4 lg:gap-6 mt-auto flex-shrink-0">
               <button
-                className="relative px-8 py-4 rounded-full text-base font-semibold text-white shadow-xl bg-gradient-to-r from-[#4807AD] via-[#7B2FF2] to-[#E321FF] transition-all duration-300 ease-out
-                hover:from-[#7B2FF2] hover:to-[#E321FF] hover:shadow-2xl hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#E321FF66] group"
+                className="relative px-6 py-3 rounded-full text-sm sm:text-base font-semibold text-white shadow-xl bg-gradient-to-r from-[#4807AD] via-[#7B2FF2] to-[#E321FF] transition-all duration-300 ease-out
+                hover:from-[#7B2FF2] hover:to-[#E321FF] hover:shadow-2xl hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#E321FF66] group w-full max-w-[180px] sm:max-w-[200px] lg:max-w-[220px]"
                 style={{boxShadow: '0 4px 32px 0 #E321FF88, 0 2px 8px 0 #4807AD55'}}
               >
                 <span className="relative z-10 tracking-wide drop-shadow-lg">BAIXAR AGORA</span>
                 {/* Efeito de brilho ao hover */}
                 <span className="absolute left-0 top-0 w-full h-full rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                  style={{background: 'linear-gradient(90deg, #fff3 0%, #fff8 50%, #fff3 100%)', filter: 'blur(8px)'}}
-                ></span>
+                  style={{background: 'linear-gradient(90deg, #fff3 0%, #fff8 50%, #fff3 100%)', filter: 'blur(8px)'}}>
+                </span>
               </button>
-            </div>
-            {/* Imagem dos botões de download Apple e Android */}
-            <div className="mt-6 flex justify-center">
-              <img src="/Apple_Android_Download.svg" alt="Download para Android e Apple" className="w-[120px] md:w-[140px] lg:w-[160px] h-auto" />
+              
+              {/* Imagem dos botões de download Apple e Android */}
+              <img 
+                src="/Apple_Android_Download.svg" 
+                alt="Download para Android e Apple" 
+                className="w-[80px] sm:w-[90px] md:w-[100px] lg:w-[120px] h-auto" 
+              />
             </div>
           </div>
         </div>

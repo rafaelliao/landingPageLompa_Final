@@ -50,6 +50,28 @@
     border: none !important;
     outline: none !important;
   }
+  
+  /* Estilos para scroll horizontal no mobile */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Melhorar a experiência de scroll no mobile */
+  @media (max-width: 1024px) {
+    .overflow-x-auto {
+      scroll-snap-type: x mandatory;
+    }
+    
+    .flex-shrink-0 {
+      scroll-snap-align: start;
+    }
+  }
 }
 
 @layer components {
@@ -98,6 +120,25 @@
   .border-pink-transparent {
     border-color: rgba(227, 33, 255, 0.7) !important;
   }
+  
+  /* Componente para cards de produtos */
+  .product-card {
+    @apply bg-white rounded-2xl shadow-2xl p-2 flex items-center justify-center transition-all duration-300;
+  }
+  
+  .product-card:hover {
+    @apply transform scale-105 shadow-3xl;
+  }
+  
+  /* Grid responsivo para desktop */
+  .product-grid {
+    @apply hidden lg:grid lg:grid-cols-7 lg:gap-4 lg:items-center lg:justify-center;
+  }
+  
+  /* Scroll horizontal para mobile */
+  .product-scroll {
+    @apply lg:hidden flex gap-4 overflow-x-auto pb-4 px-4 -mx-4;
+  }
 }
 
 @layer utilities {
@@ -125,5 +166,21 @@
   
   .animate-shimmer {
     animation: shimmer 2s infinite;
+  }
+  
+  /* Utilitários para responsividade */
+  .mobile-only {
+    @apply lg:hidden;
+  }
+  
+  .desktop-only {
+    @apply hidden lg:block;
+  }
+  
+  /* Melhorar espaçamento em dispositivos móveis */
+  @media (max-width: 640px) {
+    .container-custom {
+      @apply px-3;
+    }
   }
 } 
