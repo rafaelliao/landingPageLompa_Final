@@ -191,8 +191,8 @@ export default function HomePage() {
             <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 600px)', top: 'calc(50% - 40px)' }}>
               <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
                 <img 
-                  src="/ursopelucia_icon.png" 
-                  alt="Urso Pelúcia Extra" 
+                  src="/creme_icon.png" 
+                  alt="Creme Icon" 
                   className="w-full h-full object-contain rounded-xl"
                 />
               </div>
@@ -201,8 +201,8 @@ export default function HomePage() {
             <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 600px)', top: 'calc(50% - 40px)' }}>
               <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
                 <img 
-                  src="/bone_icon.png" 
-                  alt="Boné Icon Extra" 
+                  src="/camera_icon.jpeg" 
+                  alt="Camera Icon" 
                   className="w-full h-full object-contain rounded-xl"
                 />
               </div>
