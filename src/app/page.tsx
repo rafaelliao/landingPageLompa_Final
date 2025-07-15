@@ -101,7 +101,7 @@ export default function HomePage() {
             
             {/* Card com imagem da garrafa à esquerda */}
             <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 380px)', top: 'calc(50% + 80px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/garrafa_card.png" 
                   alt="Garrafa Stanley" 
@@ -112,7 +112,7 @@ export default function HomePage() {
             
             {/* Card sobreposto à esquerda, posicionado acima */}
             <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 420px)', top: 'calc(50% - 60px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/ursopelucia_icon.png" 
                   alt="Urso Pelúcia" 
@@ -123,7 +123,7 @@ export default function HomePage() {
             
             {/* Card com imagem da blusa à direita */}
             <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 380px)', top: 'calc(50% + 80px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/blusa-creme.png" 
                   alt="Suéter de malha creme" 
@@ -134,7 +134,7 @@ export default function HomePage() {
             
             {/* Card sobreposto à direita, posicionado acima */}
             <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-20" style={{ left: 'calc(50% + 420px)', top: 'calc(50% - 60px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/bolsa_icon.png" 
                   alt="Bolsa Icon" 
@@ -145,7 +145,7 @@ export default function HomePage() {
             
             {/* Card extremo à esquerda */}
             <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 500px)', top: 'calc(50% + 180px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/oculos_icon.png" 
                   alt="Óculos Icon" 
@@ -156,7 +156,7 @@ export default function HomePage() {
             
             {/* Card extremo à direita */}
             <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 500px)', top: 'calc(50% + 180px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/maquiagem_icon.png" 
                   alt="Maquiagem Icon" 
@@ -167,7 +167,7 @@ export default function HomePage() {
             
             {/* Card inferior esquerdo-central */}
             <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-30" style={{ left: 'calc(50% - 260px)', top: 'calc(50% + 240px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/tenis_icon.png" 
                   alt="Tênis Icon" 
@@ -178,7 +178,7 @@ export default function HomePage() {
             
             {/* Card inferior direito-central */}
             <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-30" style={{ left: 'calc(50% + 260px)', top: 'calc(50% + 240px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/bone_icon.png" 
                   alt="Boné Icon" 
@@ -189,7 +189,7 @@ export default function HomePage() {
             
             {/* Novo Card extremo superior à esquerda */}
             <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 600px)', top: 'calc(50% - 40px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/creme_icon.png" 
                   alt="Creme Icon" 
@@ -199,7 +199,7 @@ export default function HomePage() {
             </div>
             {/* Novo Card extremo superior à direita */}
             <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 600px)', top: 'calc(50% - 40px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+              <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/camera_icon.jpeg" 
                   alt="Camera Icon" 
@@ -227,8 +227,8 @@ export default function HomePage() {
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-1 opacity-0 pointer-events-none" style={{ top: 'calc(50% + 40px)' }}></div>
             
             {/* Card com imagem da garrafa à esquerda */}
-            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 120px)', top: 'calc(50% + 40px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-1 w-[46px] h-[58px] flex items-center justify-center overflow-hidden">
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 160px)', top: 'calc(50% + 80px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/garrafa_card.png" 
                   alt="Garrafa Stanley" 
@@ -238,8 +238,8 @@ export default function HomePage() {
             </div>
             
             {/* Card sobreposto à esquerda, posicionado acima */}
-            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 140px)', top: 'calc(50% - 30px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-1 w-[46px] h-[58px] flex items-center justify-center overflow-hidden">
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 160px)', top: 'calc(50% - 20px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/ursopelucia_icon.png" 
                   alt="Urso Pelúcia" 
@@ -249,8 +249,8 @@ export default function HomePage() {
             </div>
             
             {/* Card com imagem da blusa à direita */}
-            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 120px)', top: 'calc(50% + 40px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-1 w-[46px] h-[58px] flex items-center justify-center overflow-hidden">
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 160px)', top: 'calc(50% + 80px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/blusa-creme.png" 
                   alt="Suéter de malha creme" 
@@ -260,8 +260,8 @@ export default function HomePage() {
             </div>
             
             {/* Card sobreposto à direita, posicionado acima */}
-            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-20" style={{ left: 'calc(50% + 140px)', top: 'calc(50% - 30px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-1 w-[46px] h-[58px] flex items-center justify-center overflow-hidden">
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-20" style={{ left: 'calc(50% + 160px)', top: 'calc(50% - 20px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/bolsa_icon.png" 
                   alt="Bolsa Icon" 
@@ -271,8 +271,8 @@ export default function HomePage() {
             </div>
             
             {/* Card extremo à esquerda */}
-            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 180px)', top: 'calc(50% + 90px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-1 w-[46px] h-[58px] flex items-center justify-center overflow-hidden">
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 200px)', top: 'calc(50% + 100px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/oculos_icon.png" 
                   alt="Óculos Icon" 
@@ -282,8 +282,8 @@ export default function HomePage() {
             </div>
             
             {/* Card extremo à direita */}
-            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 180px)', top: 'calc(50% + 90px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-1 w-[46px] h-[58px] flex items-center justify-center overflow-hidden">
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 200px)', top: 'calc(50% + 100px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/maquiagem_icon.png" 
                   alt="Maquiagem Icon" 
@@ -293,8 +293,8 @@ export default function HomePage() {
             </div>
             
             {/* Card inferior esquerdo-central */}
-            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-30" style={{ left: 'calc(50% - 80px)', top: 'calc(50% + 120px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-1 w-[46px] h-[58px] flex items-center justify-center overflow-hidden">
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-30" style={{ left: 'calc(50% - 100px)', top: 'calc(50% + 140px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/tenis_icon.png" 
                   alt="Tênis Icon" 
@@ -304,8 +304,8 @@ export default function HomePage() {
             </div>
             
             {/* Card inferior direito-central */}
-            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-30" style={{ left: 'calc(50% + 80px)', top: 'calc(50% + 120px)' }}>
-              <div className="bg-white rounded-2xl shadow-2xl p-1 w-[46px] h-[58px] flex items-center justify-center overflow-hidden">
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-30" style={{ left: 'calc(50% + 100px)', top: 'calc(50% + 140px)' }}>
+              <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/bone_icon.png" 
                   alt="Boné Icon" 

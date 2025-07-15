@@ -123,11 +123,20 @@
   
   /* Componente para cards de produtos */
   .product-card {
-    @apply bg-white rounded-2xl shadow-2xl p-2 flex items-center justify-center transition-all duration-300;
+    @apply bg-white/90 rounded-2xl shadow-2xl p-2 flex items-center justify-center transition-all duration-300;
   }
   
   .product-card:hover {
     @apply transform scale-105 shadow-3xl;
+  }
+  
+  /* Cards de produtos com transparência leve */
+  .product-card-transparent {
+    @apply bg-white rounded-2xl shadow-2xl p-2 flex items-center justify-center overflow-hidden transition-all duration-300;
+  }
+  
+  .product-card-transparent:hover {
+    @apply transform scale-105 shadow-2xl;
   }
   
   /* Grid responsivo para desktop */
