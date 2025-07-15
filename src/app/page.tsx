@@ -187,6 +187,27 @@ export default function HomePage() {
               </div>
             </div>
             
+            {/* Novo Card extremo superior à esquerda */}
+            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 600px)', top: 'calc(50% - 40px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/ursopelucia_icon.png" 
+                  alt="Urso Pelúcia Extra" 
+                  className="w-full h-full object-contain rounded-xl"
+                />
+              </div>
+            </div>
+            {/* Novo Card extremo superior à direita */}
+            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 600px)', top: 'calc(50% - 40px)' }}>
+              <div className="bg-white rounded-2xl shadow-2xl p-2 w-[81px] h-[104px] flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/bone_icon.png" 
+                  alt="Boné Icon Extra" 
+                  className="w-full h-full object-contain rounded-xl"
+                />
+              </div>
+            </div>
+            
             {/* Título Centralizado */}
             <div className="text-center max-w-3xl mx-auto px-4">
               <div className="flex justify-center mb-8">
