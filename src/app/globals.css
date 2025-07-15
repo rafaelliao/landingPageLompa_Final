@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans text-white;
+    background: linear-gradient(135deg, #E11BFF 0%, #8217E7 20%, #7D15E2 40%, #7111D4 60%, #5D0ABD 80%, #41019D 90%, #3D0099 100%);
+    min-height: 100vh;
+  }
+  
+  * {
+    @apply border-transparent;
+  }
+  
+  /* Prevenir bordas visíveis durante scroll */
+  nav, header, .navigation, .header {
+    border: none !important;
+    outline: none !important;
+  }
+  
+  /* Garantir que elementos fixos não tenham bordas */
+  .fixed, [class*="fixed"] {
+    border: none !important;
+  }
+  
+  /* Prevenir bordas durante scroll */
+  html, body {
+    border: none !important;
+    outline: none !important;
+  }
+  
+  /* Garantir que todos os elementos não tenham bordas por padrão */
+  *, *::before, *::after {
+    border-color: transparent !important;
+  }
+  
+  /* Prevenir problemas de renderização durante scroll */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Garantir que elementos com backdrop-blur não tenham bordas */
+  [class*="backdrop-blur"] {
+    border: none !important;
+    outline: none !important;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    border: none !important;
+    outline: none !important;
+  }
+  
+  .btn-primary {
+    @apply inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-[#E11BFF] to-[#3D0099] hover:from-[#D100E6] hover:to-[#2D0080] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E11BFF] transition-all duration-200 transform hover:scale-105;
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center px-6 py-3 border border-[#E11BFF] text-base font-medium rounded-lg text-[#E11BFF] bg-white hover:bg-[#E11BFF]/5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E11BFF] transition-all duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+  }
+  
+  .gradient-bg {
+    @apply bg-gradient-to-br from-[#E11BFF] via-[#7D15E2] to-[#3D0099];
+  }
+  
+  .gradient-bg-hero {
+    background: linear-gradient(135deg, #E11BFF 0%, #8217E7 20%, #7D15E2 40%, #7111D4 60%, #5D0ABD 80%, #3D0099 100%);
+  }
+  
+  .gradient-bg-full {
+    background: linear-gradient(135deg, #E11BFF 0%, #8217E7 15%, #7D15E2 30%, #7111D4 50%, #5D0ABD 70%, #41019D 85%, #3D0099 100%);
+    min-height: 100vh;
+  }
+  
+  .gradient-text-custom {
+    background: linear-gradient(135deg, #E11BFF 0%, #8217E7 25%, #7D15E2 50%, #7111D4 75%, #3D0099 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+} 
