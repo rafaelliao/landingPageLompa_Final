@@ -509,46 +509,55 @@ export default function HomePage() {
       // Função para animar cards (desktop e mobile)
       const animateCards = (cardsArray: Array<{ ref: HTMLElement, scale: number, zIndex: number, rotation: number }>, isMobile = false) => {
         cardsArray.forEach(({ ref, scale, zIndex, rotation }, index: number) => {
-          // Função para calcular posição centralizada com retry
+          // Função para calcular posição centralizada usando centro da página como referência
           const calculateCenteredPosition = () => {
-            // Calcular posição atual do card (PONTO A)
-            const cardRect = ref.getBoundingClientRect()
-            const cardCenterX = cardRect.left + cardRect.width / 2
-            const cardCenterY = cardRect.top + cardRect.height / 2
-            
-            // Usar a referência correta do retângulo baseado na versão
-            const targetRectangle = isMobile ? mobileRectangle : rectangle
-            if (!targetRectangle) {
-              console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
-              return { deltaX: 0, deltaY: 0 }
-            }
-            const rectRect = targetRectangle.getBoundingClientRect()
-            const rectCenterX = rectRect.left + rectRect.width / 2
-            const rectCenterY = rectRect.top + rectRect.height / 2
-            
-            // Calcular distância até o centro do retângulo (PONTO B)
-            let deltaX = rectCenterX - cardCenterX
-            let deltaY = rectCenterY - cardCenterY
-            
-            // Para a garrafa (index 0), garantir centralização perfeita
+            // Para a garrafa (index 0), usar centro da página como referência absoluta
             if (index === 0) {
+              // Calcular posição atual do card (PONTO A)
+              const cardRect = ref.getBoundingClientRect()
+              const cardCenterX = cardRect.left + cardRect.width / 2
+              const cardCenterY = cardRect.top + cardRect.height / 2
+              
+              // Usar centro da viewport como ponto de destino (PONTO B)
+              const viewportCenterX = window.innerWidth / 2
+              const viewportCenterY = window.innerHeight / 2
+              
+              // Calcular distância do centro do card ao centro da viewport
+              let deltaX = viewportCenterX - cardCenterX
+              let deltaY = viewportCenterY - cardCenterY
+              
               // Ajuste fino para centralização perfeita
-              deltaX = Math.round(deltaX) // Arredondar para evitar subpixels
+              deltaX = Math.round(deltaX)
               deltaY = Math.round(deltaY)
               
-              // Ajuste adicional para garantir centralização no Vercel
+              // Ajuste vertical específico para posicionar no centro do retângulo
               if (isMobile) {
-                // Ajuste específico para mobile no Vercel
-                deltaX += 2 // Pequeno ajuste horizontal
-                deltaY -= 5 // Pequeno ajuste vertical
+                deltaY -= 20 // Ajuste para mobile
               } else {
-                // Ajuste específico para desktop no Vercel
-                deltaX += 1 // Pequeno ajuste horizontal
-                deltaY -= 3 // Pequeno ajuste vertical
+                deltaY -= 30 // Ajuste para desktop
               }
+              
+              return { deltaX, deltaY }
+            } else {
+              // Para outros cards, usar a lógica original do retângulo
+              const cardRect = ref.getBoundingClientRect()
+              const cardCenterX = cardRect.left + cardRect.width / 2
+              const cardCenterY = cardRect.top + cardRect.height / 2
+              
+              const targetRectangle = isMobile ? mobileRectangle : rectangle
+              if (!targetRectangle) {
+                console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
+                return { deltaX: 0, deltaY: 0 }
+              }
+              const rectRect = targetRectangle.getBoundingClientRect()
+              const rectCenterX = rectRect.left + rectRect.width / 2
+              const rectCenterY = rectRect.top + rectRect.height / 2
+              
+              let deltaX = rectCenterX - cardCenterX
+              let deltaY = rectCenterY - cardCenterY
+              
+              return { deltaX, deltaY }
             }
-            
-            return { deltaX, deltaY }
           }
           
           // Calcular posição inicial
