@@ -126,7 +126,6 @@ export default function HomePage() {
   const mobileUrsopeluciaCardRef = useRef<HTMLDivElement>(null)
   const mobileBlusaCardRef = useRef<HTMLDivElement>(null)
   const mobileBolsaCardRef = useRef<HTMLDivElement>(null)
-  const mobileOculosCardRef = useRef<HTMLDivElement>(null)
   const mobileMaquiagemCardRef = useRef<HTMLDivElement>(null)
   const mobileTenisCardRef = useRef<HTMLDivElement>(null)
   const mobileBoneCardRef = useRef<HTMLDivElement>(null)
@@ -363,7 +362,6 @@ export default function HomePage() {
     const mobileUrsopeluciaCard = mobileUrsopeluciaCardRef.current
     const mobileBlusaCard = mobileBlusaCardRef.current
     const mobileBolsaCard = mobileBolsaCardRef.current
-    const mobileOculosCard = mobileOculosCardRef.current
     const mobileMaquiagemCard = mobileMaquiagemCardRef.current
     const mobileTenisCard = mobileTenisCardRef.current
     const mobileBoneCard = mobileBoneCardRef.current
@@ -384,18 +382,16 @@ export default function HomePage() {
     if (rectangle && garrafaCard && ursopeluciaCard && blusaCard && bolsaCard && 
         oculosCard && maquiagemCard && tenisCard && boneCard && cremeCard && cameraCard &&
         mobileGarrafaCard && mobileUrsopeluciaCard && mobileBlusaCard && mobileBolsaCard &&
-        mobileOculosCard && mobileMaquiagemCard && mobileTenisCard && mobileBoneCard &&
+        mobileMaquiagemCard && mobileTenisCard && mobileBoneCard &&
         mobileRelogioCard && mobileCameraCard) {
       
-      // Obter posição do centro do retângulo (DESTINO FINAL)
-      const rectRect = rectangle.getBoundingClientRect()
-      const rectCenterX = rectRect.left + rectRect.width / 2
-      const rectCenterY = rectRect.top + rectRect.height / 2
+      // Obter referência do retângulo mobile
+      const mobileRectangle = mobileRectangleRef.current
       
-      console.log('=== CENTRO DO RETÂNGULO ===')
-      console.log('Centro X:', rectCenterX)
-      console.log('Centro Y:', rectCenterY)
-      console.log('==========================')
+      console.log('=== CONFIGURAÇÃO DE ANIMAÇÃO ===')
+      console.log('Retângulo Desktop:', rectangle ? '✅ Encontrado' : '❌ Não encontrado')
+      console.log('Retângulo Mobile:', mobileRectangle ? '✅ Encontrado' : '❌ Não encontrado')
+      console.log('================================')
       
       // Array com todos os cards desktop
       const cards = [
@@ -417,7 +413,6 @@ export default function HomePage() {
         { ref: mobileUrsopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
         { ref: mobileBlusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
         { ref: mobileBolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
-        { ref: mobileOculosCard, scale: 0.7, zIndex: 50, rotation: -30 }, // Esquerda
         { ref: mobileMaquiagemCard, scale: 0.7, zIndex: 50, rotation: 35 }, // Direita
         { ref: mobileTenisCard, scale: 0.7, zIndex: 50, rotation: -20 }, // Esquerda
         { ref: mobileBoneCard, scale: 0.7, zIndex: 50, rotation: 20 }, // Direita
@@ -439,7 +434,6 @@ export default function HomePage() {
       
       // Pin do retângulo mobile (independente da animação dos cards) - USANDO KEYWORDS
       // Apenas para mobile - começa a partir de 400vh
-      const mobileRectangle = mobileRectangleRef.current
       if (mobileRectangle) {
         // Verificar se o elemento mobile está visível (usando CSS display)
         const mobileSection = mobileRectangle.closest('.lg\\:hidden')
@@ -514,17 +508,22 @@ export default function HomePage() {
           const cardCenterX = cardRect.left + cardRect.width / 2
           const cardCenterY = cardRect.top + cardRect.height / 2
           
+          // Usar a referência correta do retângulo baseado na versão
+          const targetRectangle = isMobile ? mobileRectangle : rectangle
+          if (!targetRectangle) {
+            console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
+            return
+          }
+          const rectRect = targetRectangle.getBoundingClientRect()
+          const rectCenterX = rectRect.left + rectRect.width / 2
+          const rectCenterY = rectRect.top + rectRect.height / 2
+          
           // Calcular distância até o centro do retângulo (PONTO B)
           let deltaX = rectCenterX - cardCenterX
           let deltaY = rectCenterY - cardCenterY
           
           // Para a garrafa (index 0), calcular posição para centralizar no retângulo
           if (index === 0) {
-            // Calcular o centro do retângulo
-            const rectRect = rectangle.getBoundingClientRect()
-            const rectCenterX = rectRect.left + rectRect.width / 2
-            const rectCenterY = rectRect.top + rectRect.height / 2
-            
             // Calcular o centro atual da garrafa
             const garrafaCenterX = cardRect.left + cardRect.width / 2
             const garrafaCenterY = cardRect.top + cardRect.height / 2
@@ -981,7 +980,7 @@ export default function HomePage() {
       });
 
       // ScrollTrigger para esconder/mostrar todos os cards mobile exceto a garrafa a partir de 500vh
-      const outrosCardsMobile = [mobileUrsopeluciaCard, mobileBlusaCard, mobileBolsaCard, mobileOculosCard, mobileMaquiagemCard, mobileTenisCard, mobileBoneCard, mobileRelogioCard, mobileCameraCard];
+      const outrosCardsMobile = [mobileUrsopeluciaCard, mobileBlusaCard, mobileBolsaCard, mobileMaquiagemCard, mobileTenisCard, mobileBoneCard, mobileRelogioCard, mobileCameraCard];
       ScrollTrigger.create({
         trigger: 'body',
         start: '+=500vh',
@@ -1034,7 +1033,7 @@ export default function HomePage() {
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-1 opacity-0 pointer-events-none" style={{ top: 'calc(50% + 80px)' }}></div>
         
         {/* Card com imagem da garrafa à esquerda */}
-            <div ref={garrafaCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 380px)', top: 'calc(50% + 80px)' }}>
+            <div ref={garrafaCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 400px)', top: 'calc(50% + 80px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
               <img 
                 src="/garrafa_card.png" 
@@ -1169,7 +1168,7 @@ export default function HomePage() {
                 className="text-4xl md:text-6xl lg:text-[60px] font-bold text-white leading-tight mb-2" 
                 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}
               >
-            O <span style={{ color: '#4807AD' }}>FUTURO</span> DAS VENDAS É SOCIAL, VISUAL E ACESSÍVEL. E ELE <span style={{ color: '#E321FF' }}>COMEÇA AQUI</span>
+            O <span style={{ color: '#4807AD' }}>FUTURO</span> DAS VENDAS É SOCIAL, VISUAL E ACESSÍVEL. E ELE <span style={{ color: '#4807AD' }}>COMEÇA AQUI</span>
           </h1>
         </div>
           </div>
@@ -1182,7 +1181,7 @@ export default function HomePage() {
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-1 opacity-0 pointer-events-none" style={{ top: 'calc(50% + 40px)' }}></div>
             
             {/* Card com imagem da garrafa à esquerda */}
-            <div ref={mobileGarrafaCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 160px)', top: 'calc(50% + 80px)' }}>
+            <div ref={mobileGarrafaCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 200px)', top: 'calc(50% + 80px)' }}>
               <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/garrafa_card.png" 
@@ -1193,7 +1192,7 @@ export default function HomePage() {
             </div>
             
             {/* Card sobreposto à esquerda, posicionado acima */}
-            <div ref={mobileUrsopeluciaCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 160px)', top: 'calc(50% - 20px)' }}>
+            <div ref={mobileUrsopeluciaCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 180px)', top: 'calc(50% - 20px)' }}>
               <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/ursopelucia_icon.png" 
@@ -1204,7 +1203,7 @@ export default function HomePage() {
             </div>
             
             {/* Novo Card 1 - No quadro amarelo esquerdo */}
-            <div ref={mobileRelogioCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 140px)', top: 'calc(50% - 60px)' }}>
+            <div ref={mobileRelogioCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 160px)', top: 'calc(50% - 60px)' }}>
               <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/relogio_card.png" 
@@ -1248,25 +1247,7 @@ export default function HomePage() {
               </div>
             </div>
             
-            {/* Card extremo à esquerda */}
-            <div ref={mobileOculosCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 200px)', top: 'calc(50% + 100px)' }}>
-              <div className="product-card-transparent w-[46px] h-[58px]">
-                <img 
-                  src="/oculos_icon.png" 
-                  alt="Óculos Icon" 
-                  className="w-full h-full object-contain rounded-lg"
-                />
-              </div>
-              {/* Ícone de like sobreposto à frente do card */}
-              <div className="absolute -top-3 -right-3 z-20">
-                <img 
-                  src="/icon_like.svg" 
-                  alt="Like" 
-                  className="w-12 h-12 drop-shadow-sm"
-                />
-              </div>
-
-            </div>
+            {/* Card extremo à esquerda - REMOVIDO */}
             
             {/* Card extremo à direita */}
             <div ref={mobileMaquiagemCardRef} className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 200px)', top: 'calc(50% + 100px)' }}>
@@ -1280,7 +1261,7 @@ export default function HomePage() {
             </div>
             
             {/* Card inferior esquerdo-central */}
-            <div ref={mobileTenisCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-30" style={{ left: 'calc(50% - 100px)', top: 'calc(50% + 140px)' }}>
+            <div ref={mobileTenisCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-30" style={{ left: 'calc(50% - 120px)', top: 'calc(50% + 140px)' }}>
               <div className="product-card-transparent w-[46px] h-[58px]">
                 <img 
                   src="/tenis_icon.png" 
@@ -1302,7 +1283,7 @@ export default function HomePage() {
             </div>
             
             {/* Título Centralizado */}
-            <div ref={mobileTitleContainerRef} className="text-center max-w-3xl mx-auto px-4">
+            <div ref={mobileTitleContainerRef} className="text-center max-w-3xl mx-auto px-4 relative z-50">
               <div ref={mobileHeartIconRef} className="flex justify-center mb-6">
                 <LogoIcon size="md" />
               </div>
@@ -1311,7 +1292,7 @@ export default function HomePage() {
                 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-4" 
                 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}
               >
-                O <span style={{ color: '#4807AD' }}>FUTURO</span> DAS VENDAS É SOCIAL, VISUAL E ACESSÍVEL. E ELE <span style={{ color: '#E321FF' }}>COMEÇA AQUI</span>
+                O <span style={{ color: '#4807AD' }}>FUTURO</span> DAS VENDAS É SOCIAL, VISUAL E ACESSÍVEL. E ELE <span style={{ color: '#4807AD' }}>COMEÇA AQUI</span>
               </h1>
             </div>
           </div>
