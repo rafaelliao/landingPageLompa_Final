@@ -1,7 +1,15 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import LogoIcon from '@/components/LogoIcon'
 import Logo from '@/components/Logo'
+import GSAPDemo from '@/components/GSAPDemo'
+import FloatingParticles from '@/components/FloatingParticles'
+import CursorGlow from '@/components/CursorGlow'
 import type { NavItem, Feature, FooterSection } from '@/types'
 
 // Dados de exemplo para a landing page
@@ -86,21 +94,345 @@ const footerSections: FooterSection[] = [
 ]
 
 export default function HomePage() {
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const mobileTitleRef = useRef<HTMLHeadingElement>(null)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const cardsRef = useRef<HTMLDivElement>(null)
+  const mobileCardsRef = useRef<HTMLDivElement>(null)
+    const heartIconRef = useRef<HTMLDivElement>(null)
+  const mobileHeartIconRef = useRef<HTMLDivElement>(null)
+  const rectangleRef = useRef<HTMLDivElement>(null)
+  const titleContainerRef = useRef<HTMLDivElement>(null)
+  const mobileTitleContainerRef = useRef<HTMLDivElement>(null)
+  
+  // Refs para os cards desktop
+  const garrafaCardRef = useRef<HTMLDivElement>(null)
+  const ursopeluciaCardRef = useRef<HTMLDivElement>(null)
+  const blusaCardRef = useRef<HTMLDivElement>(null)
+  const bolsaCardRef = useRef<HTMLDivElement>(null)
+  const oculosCardRef = useRef<HTMLDivElement>(null)
+  const maquiagemCardRef = useRef<HTMLDivElement>(null)
+  const tenisCardRef = useRef<HTMLDivElement>(null)
+  const boneCardRef = useRef<HTMLDivElement>(null)
+  const cremeCardRef = useRef<HTMLDivElement>(null)
+  const cameraCardRef = useRef<HTMLDivElement>(null)
+
+  // Registrar o plugin ScrollTrigger
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger)
+    }
+  }, [])
+
+  // Animação GSAP para o título (segura para cliques)
+  useEffect(() => {
+    const title = titleRef.current
+    const mobileTitle = mobileTitleRef.current
+
+    if (title) {
+      // Timeline para animação do título desktop
+      const tl = gsap.timeline()
+      
+      // Animação de entrada do título (sem transformações que interferem)
+      tl.fromTo(title, {
+        opacity: 0,
+        scale: 0.95
+      }, {
+        opacity: 1,
+        scale: 1,
+        duration: 1.2,
+        ease: 'power2.out',
+        delay: 0.5
+      })
+      // Efeito de brilho sutil
+      .to(title, {
+        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)',
+        backgroundSize: '200% 100%',
+        duration: 3,
+        ease: 'power2.inOut',
+        repeat: -1,
+        yoyo: true
+      }, '-=0.8')
+    }
+
+    if (mobileTitle) {
+      // Timeline para animação do título mobile
+      const tlMobile = gsap.timeline()
+      
+      // Animação de entrada do título mobile (sem transformações que interferem)
+      tlMobile.fromTo(mobileTitle, {
+        opacity: 0,
+        scale: 0.95
+      }, {
+        opacity: 1,
+        scale: 1,
+        duration: 1.2,
+        ease: 'power2.out',
+        delay: 0.5
+      })
+      // Efeito de brilho sutil
+      .to(mobileTitle, {
+        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)',
+        backgroundSize: '200% 100%',
+        duration: 3,
+        ease: 'power2.inOut',
+        repeat: -1,
+        yoyo: true
+      }, '-=0.8')
+    }
+  }, [])
+
+  // Animação GSAP para header, cards, ícone de coração e retângulo
+  useEffect(() => {
+    const header = headerRef.current
+    const cards = cardsRef.current
+    const mobileCards = mobileCardsRef.current
+    const heartIcon = heartIconRef.current
+    const mobileHeartIcon = mobileHeartIconRef.current
+    const rectangle = rectangleRef.current
+
+    // Animação do header (simplificada para não interferir com cliques)
+    if (header) {
+      gsap.fromTo(header, {
+        opacity: 0
+      }, {
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power2.out',
+        delay: 0.2
+      })
+    }
+
+    // Animação dos cards desktop (segura para cliques)
+    if (cards) {
+      const cardElements = cards.querySelectorAll('.product-card-transparent')
+      const iconElements = cards.querySelectorAll('img[src*="icon"]')
+      
+      // Timeline para cards
+      const tlCards = gsap.timeline()
+      
+      tlCards.fromTo(cardElements, {
+        opacity: 0,
+        scale: 0.8
+      }, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out',
+        delay: 1
+      })
+      .fromTo(iconElements, {
+        opacity: 0,
+        scale: 0.5,
+        rotation: -180
+      }, {
+        opacity: 1,
+        scale: 1,
+        rotation: 0,
+        duration: 0.6,
+        stagger: 0.05,
+        ease: 'back.out(1.7)'
+      }, '-=0.4')
+    }
+
+    // Animação dos cards mobile (segura para cliques)
+    if (mobileCards) {
+      const mobileCardElements = mobileCards.querySelectorAll('.product-card-transparent')
+      const mobileIconElements = mobileCards.querySelectorAll('img[src*="icon"]')
+      
+      // Timeline para cards mobile
+      const tlMobileCards = gsap.timeline()
+      
+      tlMobileCards.fromTo(mobileCardElements, {
+        opacity: 0,
+        scale: 0.8
+      }, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out',
+        delay: 1
+      })
+      .fromTo(mobileIconElements, {
+        opacity: 0,
+        scale: 0.5,
+        rotation: -180
+      }, {
+        opacity: 1,
+        scale: 1,
+        rotation: 0,
+        duration: 0.6,
+        stagger: 0.05,
+        ease: 'back.out(1.7)'
+      }, '-=0.4')
+    }
+
+    // Animação do ícone de coração desktop (segura para cliques)
+    if (heartIcon) {
+      const tlHeart = gsap.timeline()
+      
+      tlHeart.fromTo(heartIcon, {
+        opacity: 0,
+        scale: 0.3,
+        rotation: -180
+      }, {
+        opacity: 1,
+        scale: 1,
+        rotation: 0,
+        duration: 1.2,
+        ease: 'back.out(1.7)',
+        delay: 0.8
+      })
+      // Efeito de pulso contínuo
+      .to(heartIcon, {
+        scale: 1.1,
+        duration: 1.5,
+        ease: 'power2.inOut',
+        repeat: -1,
+        yoyo: true
+      }, '-=0.8')
+    }
+
+          // Animação do ícone de coração mobile (segura para cliques)
+    if (mobileHeartIcon) {
+      const tlMobileHeart = gsap.timeline()
+      
+      tlMobileHeart.fromTo(mobileHeartIcon, {
+        opacity: 0,
+        scale: 0.3,
+        rotation: -180
+      }, {
+        opacity: 1,
+        scale: 1,
+        rotation: 0,
+        duration: 1.2,
+        ease: 'back.out(1.7)',
+        delay: 0.8
+      })
+      // Efeito de pulso contínuo
+      .to(mobileHeartIcon, {
+        scale: 1.1,
+        duration: 1.5,
+        ease: 'power2.inOut',
+        repeat: -1,
+        yoyo: true
+      }, '-=0.8')
+    }
+
+
+  }, [])
+
+
+
+  // Efeito dos cards entrando no retângulo - VERSÃO SIMPLIFICADA
+  useEffect(() => {
+    // Limpar todos os ScrollTriggers existentes
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+    
+    const rectangle = rectangleRef.current
+    const garrafaCard = garrafaCardRef.current
+    const ursopeluciaCard = ursopeluciaCardRef.current
+    const blusaCard = blusaCardRef.current
+    const bolsaCard = bolsaCardRef.current
+    const oculosCard = oculosCardRef.current
+    const maquiagemCard = maquiagemCardRef.current
+    const tenisCard = tenisCardRef.current
+    const boneCard = boneCardRef.current
+    const cremeCard = cremeCardRef.current
+    const cameraCard = cameraCardRef.current
+
+    if (rectangle && garrafaCard && ursopeluciaCard && blusaCard && bolsaCard && 
+        oculosCard && maquiagemCard && tenisCard && boneCard && cremeCard && cameraCard) {
+      
+      // Criar uma timeline para a animação
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: rectangle.parentElement?.parentElement,
+          start: 'top -2%', // Começa quando o topo da seção está 2% acima da tela
+          end: 'bottom center',
+          scrub: 1,
+          pin: rectangle.parentElement, // Fixar o container do retângulo
+          pinSpacing: true
+        }
+      })
+      
+      // Array com todos os cards
+      const cards = [
+        { ref: garrafaCard, finalX: -20, finalY: 40 },
+        { ref: ursopeluciaCard, finalX: -20, finalY: 20 },
+        { ref: blusaCard, finalX: 20, finalY: 40 },
+        { ref: bolsaCard, finalX: 20, finalY: 20 },
+        { ref: oculosCard, finalX: -40, finalY: 60 },
+        { ref: maquiagemCard, finalX: 40, finalY: 60 },
+        { ref: tenisCard, finalX: -20, finalY: 80 },
+        { ref: boneCard, finalX: 20, finalY: 80 },
+        { ref: cremeCard, finalX: -40, finalY: 0 },
+        { ref: cameraCard, finalX: 40, finalY: 0 }
+      ]
+      
+      // Obter posição do centro do retângulo
+      const rectRect = rectangle.getBoundingClientRect()
+      const rectCenterX = rectRect.left + rectRect.width / 2
+      const rectCenterY = rectRect.top + rectRect.height / 2
+      
+      cards.forEach(({ ref, finalX, finalY }, index) => {
+        // Calcular posição atual do card
+        const cardRect = ref.getBoundingClientRect()
+        const cardCenterX = cardRect.left + cardRect.width / 2
+        const cardCenterY = cardRect.top + cardRect.height / 2
+        
+        // Calcular distância até o centro do retângulo
+        const distanceX = rectCenterX - cardCenterX
+        const distanceY = rectCenterY - cardCenterY
+        
+        // Aplicar delay baseado no índice
+        const delay = index * 0.1
+        
+        // Adicionar animação à timeline
+        tl.to(ref, {
+          x: distanceX + finalX,
+          y: distanceY + finalY,
+          scale: 0.7,
+          zIndex: 50 + (index * 2),
+          opacity: 1,
+          rotation: 90,
+          duration: 1,
+          ease: 'power3.out'
+        }, delay)
+      })
+    }
+    
+    // Cleanup function
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+    }
+  }, [])
+
   return (
     <main className="min-h-screen" style={{ border: 'none', outline: 'none' }}>
+      {/* Partículas flutuantes de fundo */}
+      <FloatingParticles />
+      
+      {/* Brilho do cursor */}
+      <CursorGlow />
+      
       {/* Navigation */}
-      <Navigation items={navigationItems} />
+      <div ref={headerRef}>
+        <Navigation items={navigationItems} />
+      </div>
       
       {/* Hero Section com Layout Responsivo */}
       <section className="relative pt-20 pb-12 overflow-hidden">
         {/* Layout Desktop - Título Centralizado com Cards ao Redor */}
-        <div className="hidden lg:block relative w-full max-w-7xl mx-auto px-4">
+        <div ref={cardsRef} className="hidden lg:block relative w-full max-w-7xl mx-auto px-4">
           <div className="flex justify-center pt-0 mt-24 lg:mt-28 relative">
             {/* Elemento invisível no centro para referência */}
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-1 opacity-0 pointer-events-none" style={{ top: 'calc(50% + 80px)' }}></div>
             
             {/* Card com imagem da garrafa à esquerda */}
-            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 380px)', top: 'calc(50% + 80px)' }}>
+            <div ref={garrafaCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-10" style={{ left: 'calc(50% - 380px)', top: 'calc(50% + 80px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/garrafa_card.png" 
@@ -111,7 +443,7 @@ export default function HomePage() {
             </div>
             
             {/* Card sobreposto à esquerda, posicionado acima */}
-            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 420px)', top: 'calc(50% - 60px)' }}>
+            <div ref={ursopeluciaCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-20" style={{ left: 'calc(50% - 420px)', top: 'calc(50% - 60px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/ursopelucia_icon.png" 
@@ -122,7 +454,7 @@ export default function HomePage() {
             </div>
             
             {/* Card com imagem da blusa à direita */}
-            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 380px)', top: 'calc(50% + 80px)' }}>
+            <div ref={blusaCardRef} className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-10" style={{ left: 'calc(50% + 380px)', top: 'calc(50% + 80px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/blusa-creme.png" 
@@ -141,7 +473,7 @@ export default function HomePage() {
             </div>
             
             {/* Card sobreposto à direita, posicionado acima */}
-            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-20" style={{ left: 'calc(50% + 420px)', top: 'calc(50% - 60px)' }}>
+            <div ref={bolsaCardRef} className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-20" style={{ left: 'calc(50% + 420px)', top: 'calc(50% - 60px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/bolsa_icon.png" 
@@ -152,7 +484,7 @@ export default function HomePage() {
             </div>
             
             {/* Card extremo à esquerda */}
-            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 500px)', top: 'calc(50% + 180px)' }}>
+            <div ref={oculosCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 500px)', top: 'calc(50% + 180px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/oculos_icon.png" 
@@ -172,7 +504,7 @@ export default function HomePage() {
             </div>
             
             {/* Card extremo à direita */}
-            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 500px)', top: 'calc(50% + 180px)' }}>
+            <div ref={maquiagemCardRef} className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 500px)', top: 'calc(50% + 180px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/maquiagem_icon.png" 
@@ -183,7 +515,7 @@ export default function HomePage() {
             </div>
             
             {/* Card inferior esquerdo-central */}
-            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-30" style={{ left: 'calc(50% - 260px)', top: 'calc(50% + 240px)' }}>
+            <div ref={tenisCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-30" style={{ left: 'calc(50% - 260px)', top: 'calc(50% + 240px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/tenis_icon.png" 
@@ -194,7 +526,7 @@ export default function HomePage() {
             </div>
             
             {/* Card inferior direito-central */}
-            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-30" style={{ left: 'calc(50% + 260px)', top: 'calc(50% + 240px)' }}>
+            <div ref={boneCardRef} className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-30" style={{ left: 'calc(50% + 260px)', top: 'calc(50% + 240px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/bone_icon.png" 
@@ -205,7 +537,7 @@ export default function HomePage() {
             </div>
             
             {/* Novo Card extremo superior à esquerda */}
-            <div className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 600px)', top: 'calc(50% - 40px)' }}>
+            <div ref={cremeCardRef} className="absolute left-1/2 transform -translate-x-full -translate-y-1/2 z-5" style={{ left: 'calc(50% - 600px)', top: 'calc(50% - 40px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/creme_icon.png" 
@@ -215,7 +547,7 @@ export default function HomePage() {
               </div>
             </div>
             {/* Novo Card extremo superior à direita */}
-            <div className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 600px)', top: 'calc(50% - 40px)' }}>
+            <div ref={cameraCardRef} className="absolute left-1/2 transform translate-x-0 -translate-y-1/2 z-5" style={{ left: 'calc(50% + 600px)', top: 'calc(50% - 40px)' }}>
               <div className="product-card-transparent w-[81px] h-[104px]">
                 <img 
                   src="/camera_icon.jpeg" 
@@ -226,11 +558,15 @@ export default function HomePage() {
             </div>
             
             {/* Título Centralizado */}
-            <div className="text-center max-w-3xl mx-auto px-4">
-              <div className="flex justify-center mb-8">
+            <div ref={titleContainerRef} className="text-center max-w-3xl mx-auto px-4 relative z-30">
+              <div ref={heartIconRef} className="flex justify-center mb-8">
                 <LogoIcon size="md" />
               </div>
-              <h1 className="text-4xl md:text-6xl lg:text-[60px] font-bold text-white leading-tight mb-2" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}>
+              <h1 
+                ref={titleRef}
+                className="text-4xl md:text-6xl lg:text-[60px] font-bold text-white leading-tight mb-2" 
+                style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}
+              >
                 O <span style={{ color: '#4807AD' }}>FUTURO</span> DAS VENDAS É SOCIAL, VISUAL E ACESSÍVEL. E ELE <span style={{ color: '#E321FF' }}>COMEÇA AQUI</span>
               </h1>
             </div>
@@ -238,7 +574,7 @@ export default function HomePage() {
         </div>
         
         {/* Layout Mobile - Cards ao Redor do Título Central */}
-        <div className="lg:hidden relative w-full max-w-7xl mx-auto px-4">
+        <div ref={mobileCardsRef} className="lg:hidden relative w-full max-w-7xl mx-auto px-4">
           <div className="flex justify-center pt-0 mt-16 relative">
             {/* Elemento invisível no centro para referência */}
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-1 opacity-0 pointer-events-none" style={{ top: 'calc(50% + 40px)' }}></div>
@@ -364,13 +700,42 @@ export default function HomePage() {
             </div>
             
             {/* Título Centralizado */}
-            <div className="text-center max-w-3xl mx-auto px-4">
-              <div className="flex justify-center mb-6">
+            <div ref={mobileTitleContainerRef} className="text-center max-w-3xl mx-auto px-4">
+              <div ref={mobileHeartIconRef} className="flex justify-center mb-6">
                 <LogoIcon size="md" />
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-4" style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}>
+              <h1 
+                ref={mobileTitleRef}
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-4" 
+                style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}
+              >
                 O <span style={{ color: '#4807AD' }}>FUTURO</span> DAS VENDAS É SOCIAL, VISUAL E ACESSÍVEL. E ELE <span style={{ color: '#E321FF' }}>COMEÇA AQUI</span>
               </h1>
+            </div>
+          </div>
+        </div>
+        
+        {/* Seção de Animação - Com GSAP Pin */}
+        <div className="hidden lg:block relative" style={{ height: '200vh' }}>
+          <div className="h-screen flex items-center justify-center">
+            <div
+              ref={rectangleRef}
+              className="rounded-[32px] border-2 bg-white/10 shadow-2xl w-[280px] h-[580px] sm:w-[320px] sm:h-[620px] md:w-[360px] md:h-[680px] lg:w-[380px] lg:h-[680px] transition-all duration-300 border-pink-transparent relative overflow-hidden flex items-center justify-center"
+            >
+              {/* Brilho animado no fundo */}
+              <div className="absolute left-0 top-0 w-full h-full rounded-[32px] pointer-events-none overflow-hidden z-0">
+                <div className="w-full h-full animate-shimmer bg-gradient-to-r from-[#4807AD11] via-[#E321FF22] to-[#4807AD11] opacity-20" style={{backgroundSize: '200% 100%'}}></div>
+              </div>
+              
+              {/* Ponto de referência invisível no centro do retângulo */}
+              <div className="absolute w-1 h-1 bg-transparent pointer-events-none" style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}></div>
+              
+              {/* Splash Screen SVG centralizado */}
+              <img 
+                src="/Splash_screen.svg" 
+                alt="Splash Screen" 
+                className="w-full h-full object-cover z-10 relative"
+              />
             </div>
           </div>
         </div>
@@ -402,110 +767,10 @@ export default function HomePage() {
             </svg>
           </div>
         </div>
+            </section>
         
-                {/* Retângulo tipo smartphone centralizado */}
-        <div className="flex justify-center items-center py-8 lg:py-12 px-4 relative z-10">
-          {/* Container do retângulo com badge */}
-          <div className="relative">
-            {/* Badge MARKETPLACE posicionado na borda superior */}
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-50">
-              <span className="bg-[#E321FF] text-white font-bold text-xs px-4 py-1 rounded-full shadow-lg tracking-wide border-2 border-white/30" style={{letterSpacing: 1}}>MARKETPLACE</span>
-            </div>
-          
-            <div
-              className="rounded-[32px] border-2 bg-white/10 shadow-2xl w-[280px] h-[580px] sm:w-[320px] sm:h-[620px] md:w-[360px] md:h-[680px] lg:w-[380px] lg:h-[680px] transition-all duration-300 border-pink-transparent flex flex-col items-center justify-start px-4 pb-6 relative overflow-hidden"
-            >
-              {/* Brilho animado no fundo */}
-              <div className="absolute left-0 top-0 w-full h-full rounded-[32px] pointer-events-none overflow-hidden z-0">
-                <div className="w-full h-full animate-shimmer bg-gradient-to-r from-[#4807AD11] via-[#E321FF22] to-[#4807AD11] opacity-20" style={{backgroundSize: '200% 100%'}}></div>
-              </div>
-              
-              {/* Logo no topo centralizado DENTRO do retângulo */}
-              <div className="w-full flex justify-center pt-6 lg:pt-8 pb-3">
-                <Logo size="lg" />
-              </div>
-              
-              {/* Conteúdo do retângulo compactado no topo */}
-              <div className="flex flex-col items-center w-full flex-1 justify-start px-2 pt-2">
-                {/* Texto superior compactado */}
-                <div className="flex flex-col items-center w-full flex-shrink-0">
-                  <h2 className="text-white font-bold text-xl sm:text-2xl mb-2 sm:mb-3 text-center w-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                    Um novo jeito de comprar e vender.
-                  </h2>
-                  <p className="text-white/90 leading-relaxed text-base sm:text-lg lg:text-xl mb-4 sm:mb-5 text-center w-full" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>
-                    O primeiro <span style={{ color: '#4807AD' }}>marketplace 100% brasileiro</span> feito para transformar como as pessoas compram e vendem no <span style={{ color: '#E321FF' }}>digital</span>
-                  </p>
-                </div>
-                
-                {/* Botões de Call to Action - Posicionados logo após o texto */}
-                <div className="flex flex-col items-center w-full gap-3 sm:gap-4 lg:gap-5 mt-4 sm:mt-6 flex-shrink-0">
-                  <button
-                    className="relative px-6 py-3 rounded-full text-sm sm:text-base font-semibold text-white shadow-xl bg-gradient-to-r from-[#4807AD] via-[#7B2FF2] to-[#E321FF] transition-all duration-300 ease-out
-                    hover:from-[#7B2FF2] hover:to-[#E321FF] hover:shadow-2xl hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#E321FF66] group w-full max-w-[180px] sm:max-w-[200px] lg:max-w-[220px]"
-                    style={{boxShadow: '0 4px 32px 0 #E321FF88, 0 2px 8px 0 #4807AD55'}}
-                  >
-                    <span className="relative z-10 tracking-wide drop-shadow-lg">BAIXAR AGORA</span>
-                    {/* Efeito de brilho ao hover */}
-                    <span className="absolute left-0 top-0 w-full h-full rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                      style={{background: 'linear-gradient(90deg, #fff3 0%, #fff8 50%, #fff3 100%)', filter: 'blur(8px)'}}>
-                    </span>
-                  </button>
-                  
-                  {/* QR Code centralizado */}
-                  <div className="flex flex-col items-center gap-2 mt-2">
-                    <div className="bg-white rounded-lg p-2 shadow-lg">
-                      <svg 
-                        width="60" 
-                        height="60" 
-                        viewBox="0 0 60 60" 
-                        className="w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] md:w-[80px] md:h-[80px]"
-                      >
-                        {/* QR Code pattern - versão simplificada */}
-                        <rect width="60" height="60" fill="white"/>
-                        <rect x="0" y="0" width="60" height="60" fill="black" opacity="0.1"/>
-                        
-                        {/* Padrão QR Code básico */}
-                        <rect x="8" y="8" width="8" height="8" fill="black"/>
-                        <rect x="20" y="8" width="8" height="8" fill="black"/>
-                        <rect x="32" y="8" width="8" height="8" fill="black"/>
-                        <rect x="44" y="8" width="8" height="8" fill="black"/>
-                        
-                        <rect x="8" y="20" width="8" height="8" fill="black"/>
-                        <rect x="20" y="20" width="8" height="8" fill="white"/>
-                        <rect x="32" y="20" width="8" height="8" fill="black"/>
-                        <rect x="44" y="20" width="8" height="8" fill="white"/>
-                        
-                        <rect x="8" y="32" width="8" height="8" fill="black"/>
-                        <rect x="20" y="32" width="8" height="8" fill="black"/>
-                        <rect x="32" y="32" width="8" height="8" fill="white"/>
-                        <rect x="44" y="32" width="8" height="8" fill="black"/>
-                        
-                        <rect x="8" y="44" width="8" height="8" fill="black"/>
-                        <rect x="20" y="44" width="8" height="8" fill="white"/>
-                        <rect x="32" y="44" width="8" height="8" fill="black"/>
-                        <rect x="44" y="44" width="8" height="8" fill="black"/>
-                        
-                        {/* Padrão interno */}
-                        <rect x="24" y="24" width="12" height="12" fill="black"/>
-                        <rect x="26" y="26" width="8" height="8" fill="white"/>
-                        <rect x="28" y="28" width="4" height="4" fill="black"/>
-                      </svg>
-                    </div>
-                    <p className="text-white/80 text-xs sm:text-sm text-center font-medium">Escaneie para baixar</p>
-                  </div>
-                  
-                  {/* Imagem dos botões de download Apple e Android */}
-                  <img 
-                    src="/Apple_Android_Download.svg" 
-                    alt="Download para Android e Apple" 
-                    className="w-[80px] sm:w-[90px] md:w-[100px] lg:w-[120px] h-auto mt-2" 
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        {/* GSAP Demo Section */}
+      <GSAPDemo />
       
       {/* Pricing Section - Placeholder */}
       <section id="pricing" className="py-20 bg-transparent">
@@ -554,6 +819,8 @@ export default function HomePage() {
       
       {/* Footer */}
       <Footer sections={footerSections} />
+      
+
     </main>
   )
 } 

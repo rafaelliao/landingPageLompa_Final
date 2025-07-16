@@ -43,12 +43,23 @@
   /* Prevenir problemas de renderização durante scroll */
   body {
     overflow-x: hidden;
+    overflow-y: auto;
   }
   
   /* Garantir que elementos com backdrop-blur não tenham bordas */
   [class*="backdrop-blur"] {
     border: none !important;
     outline: none !important;
+  }
+  
+  /* Garantir que botões tenham cursor pointer */
+  button, [role="button"] {
+    cursor: pointer !important;
+  }
+  
+  /* Garantir que links tenham cursor pointer */
+  a {
+    cursor: pointer !important;
   }
   
   /* Estilos para scroll horizontal no mobile */

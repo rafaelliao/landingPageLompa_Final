@@ -45,7 +45,7 @@ export default function Navigation({ items, className }: NavigationProps) {
   return (
     <motion.nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        'fixed top-0 left-0 right-0 z-[9999] transition-all duration-300',
         isScrolled 
           ? 'bg-white/10 backdrop-blur-md shadow-lg' 
           : 'bg-transparent',
@@ -94,7 +94,7 @@ export default function Navigation({ items, className }: NavigationProps) {
             variants={itemVariants}
           >
             <motion.button
-              className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 transform hover:scale-105 gap-2"
+              className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 transform hover:scale-105 gap-2 cursor-pointer"
               style={{ 
                 backgroundColor: '#4807AD',
                 fontFamily: 'Inter, sans-serif',
@@ -103,12 +103,19 @@ export default function Navigation({ items, className }: NavigationProps) {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                // Função para abrir suporte
+                console.log('Abrindo suporte...')
+                // Aqui você pode adicionar a lógica específica para suporte
+                // Por exemplo: window.open('/suporte', '_blank')
+                // Ou: router.push('/suporte')
+              }}
             >
               <HeadphonesIcon className="w-5 h-5" />
               Suporte
             </motion.button>
             <motion.button
-              className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 transform hover:scale-105"
+              className="flex items-center justify-center px-6 py-3 rounded-lg text-white transition-all duration-200 transform hover:scale-105 cursor-pointer"
               style={{ 
                 backgroundColor: '#4807AD',
                 fontFamily: 'Inter, sans-serif',
@@ -117,6 +124,13 @@ export default function Navigation({ items, className }: NavigationProps) {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                // Função para acesso vendedor
+                console.log('Abrindo acesso vendedor...')
+                // Aqui você pode adicionar a lógica específica para acesso vendedor
+                // Por exemplo: window.open('/vendedor', '_blank')
+                // Ou: router.push('/vendedor')
+              }}
             >
               Acesso Vendedor
             </motion.button>
@@ -167,7 +181,14 @@ export default function Navigation({ items, className }: NavigationProps) {
                     fontSize: '16px'
                   }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false)
+                    // Função para abrir suporte
+                    console.log('Abrindo suporte...')
+                    // Aqui você pode adicionar a lógica específica para suporte
+                    // Por exemplo: window.open('/suporte', '_blank')
+                    // Ou: router.push('/suporte')
+                  }}
                 >
                   <HeadphonesIcon className="w-5 h-5" />
                   Suporte
@@ -182,7 +203,14 @@ export default function Navigation({ items, className }: NavigationProps) {
                     fontSize: '16px'
                   }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false)
+                    // Função para acesso vendedor
+                    console.log('Abrindo acesso vendedor...')
+                    // Aqui você pode adicionar a lógica específica para acesso vendedor
+                    // Por exemplo: window.open('/vendedor', '_blank')
+                    // Ou: router.push('/vendedor')
+                  }}
                 >
                   Acesso Vendedor
                 </motion.button>
