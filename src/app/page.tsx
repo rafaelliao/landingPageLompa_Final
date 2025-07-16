@@ -476,11 +476,17 @@ export default function HomePage() {
           end: '+=800vh', // Dura 800vh (8x altura da viewport) de scroll para animação bem mais lenta
           scrub: 2, // Sincroniza com o scroll com suavização de 2 segundos
           onUpdate: (self) => {
-            console.log('=== SCROLL TRIGGER UPDATE ===')
+            // Calcular progresso em vh
+            const scrollY = window.scrollY
+            const viewportHeight = window.innerHeight
+            const scrollVh = scrollY / viewportHeight
+            
+            console.log('=== SCROLL STATUS ===')
+            console.log('Scroll VH:', scrollVh.toFixed(2) + 'vh')
+            console.log('Scroll Pixels:', Math.round(scrollY) + 'px')
             console.log('Progress:', Math.round(self.progress * 100) + '%')
             console.log('Direction:', self.direction)
-            console.log('Is Active:', self.isActive)
-            console.log('=============================')
+            console.log('=====================')
           },
           onEnter: () => {
             console.log('🎬 ANIMAÇÃO INICIADA - Cards começando a se mover')
@@ -532,19 +538,17 @@ export default function HomePage() {
             deltaX = rectCenterX - garrafaCenterX
             deltaY = rectCenterY - garrafaCenterY
             
-            console.log(`🎯 GARRAFA ${isMobile ? 'MOBILE' : 'DESKTOP'} - Centralização:`, {
-              retangulo: { x: rectCenterX, y: rectCenterY },
-              garrafa: { x: garrafaCenterX, y: garrafaCenterY },
-              delta: { x: deltaX, y: deltaY }
-            })
+            // Garantir que a garrafa mobile seja centralizada perfeitamente
+            if (isMobile) {
+              // Ajuste fino para centralização perfeita no mobile
+              deltaX = Math.round(deltaX) // Arredondar para evitar subpixels
+              deltaY = Math.round(deltaY)
+            }
+            
+            // Removido log de centralização da garrafa para manter console limpo
           }
           
-          console.log(`Card ${index + 1} ${isMobile ? 'MOBILE' : 'DESKTOP'}:`, {
-            atual: { x: cardCenterX, y: cardCenterY },
-            destino: { x: rectCenterX, y: rectCenterY },
-            delta: { x: deltaX, y: deltaY },
-            scale: scale
-          })
+          // Removido log de posicionamento dos cards para manter console limpo
           
           // Animação: PONTO A → PONTO B (centro do retângulo)
           tlCards.fromTo(ref, 
@@ -565,15 +569,7 @@ export default function HomePage() {
               zIndex: zIndex, // Usar o zIndex definido no array (1000 para garrafa)
               ease: 'power3.out',
               onUpdate: function() {
-                // Log a cada 25% do progresso para não sobrecarregar o console
-                const progress = this.progress()
-                if (progress % 0.25 < 0.01) {
-                  console.log(`📦 Card ${index + 1} ${isMobile ? 'MOBILE' : 'DESKTOP'} (${ref.querySelector('img')?.alt || 'Card'}):`)
-                  console.log(`   Progresso: ${Math.round(progress * 100)}%`)
-                  console.log(`   Posição: x=${Math.round(this.targets()[0]._gsap.x)}px, y=${Math.round(this.targets()[0]._gsap.y)}px`)
-                  console.log(`   Escala: ${this.targets()[0]._gsap.scale}`)
-                  console.log(`   Rotação: ${this.targets()[0]._gsap.rotation}°`)
-                }
+                // Removido logs detalhados dos cards para manter console limpo
               }
             },
             0 // Sem delay - todos começam juntos
@@ -616,17 +612,41 @@ export default function HomePage() {
         }
       })
 
-      // Pin específico para o card da garrafa mobile entre 500vh e 700vh
+      // Pin específico para o card da garrafa mobile - começa quando a animação termina (400vh) e vai até 700vh
       ScrollTrigger.create({
         trigger: 'body',
-        start: '+=500vh', // Começa em 500vh
+        start: '+=400vh', // Começa quando a animação dos cards termina
         end: '+=700vh', // Termina em 700vh
         pin: mobileGarrafaCard, // Fixa o card da garrafa mobile
         pinSpacing: true,
         onEnter: () => {
           // Garantir que a garrafa fique na frente durante o pin
           gsap.set(mobileGarrafaCard, { zIndex: 1000 })
-          console.log('📌 Card da garrafa MOBILE FIXADO - 500vh (z-index: 1000)')
+          
+          // Garantir que a garrafa mobile permaneça na posição final da animação
+          const mobileRectangle = mobileRectangleRef.current
+          if (mobileRectangle) {
+            const rectRect = mobileRectangle.getBoundingClientRect()
+            const rectCenterX = rectRect.left + rectRect.width / 2
+            const rectCenterY = rectRect.top + rectRect.height / 2
+            
+            const garrafaRect = mobileGarrafaCard.getBoundingClientRect()
+            const garrafaCenterX = garrafaRect.left + garrafaRect.width / 2
+            const garrafaCenterY = garrafaRect.top + garrafaRect.height / 2
+            
+            // Calcular a posição final para centralizar perfeitamente
+            const finalX = rectCenterX - garrafaCenterX
+            const finalY = rectCenterY - garrafaCenterY
+            
+            // Aplicar a posição final
+            gsap.set(mobileGarrafaCard, {
+              x: finalX,
+              y: finalY,
+              zIndex: 1000
+            })
+          }
+          
+          console.log('📌 Card da garrafa MOBILE FIXADO - 400vh (z-index: 1000) - Posição centralizada')
         },
         onLeave: () => {
           console.log('🔓 Card da garrafa MOBILE LIBERADO - 700vh')
@@ -634,10 +654,34 @@ export default function HomePage() {
         onEnterBack: () => {
           // Garantir que a garrafa fique na frente durante o pin
           gsap.set(mobileGarrafaCard, { zIndex: 1000 })
-          console.log('📌 Card da garrafa MOBILE FIXADO novamente - 700vh (z-index: 1000)')
+          
+          // Garantir que a garrafa mobile permaneça na posição final da animação
+          const mobileRectangle = mobileRectangleRef.current
+          if (mobileRectangle) {
+            const rectRect = mobileRectangle.getBoundingClientRect()
+            const rectCenterX = rectRect.left + rectRect.width / 2
+            const rectCenterY = rectRect.top + rectRect.height / 2
+            
+            const garrafaRect = mobileGarrafaCard.getBoundingClientRect()
+            const garrafaCenterX = garrafaRect.left + garrafaRect.width / 2
+            const garrafaCenterY = garrafaRect.top + garrafaRect.height / 2
+            
+            // Calcular a posição final para centralizar perfeitamente
+            const finalX = rectCenterX - garrafaCenterX
+            const finalY = rectCenterY - garrafaCenterY
+            
+            // Aplicar a posição final
+            gsap.set(mobileGarrafaCard, {
+              x: finalX,
+              y: finalY,
+              zIndex: 1000
+            })
+          }
+          
+          console.log('📌 Card da garrafa MOBILE FIXADO novamente - 700vh (z-index: 1000) - Posição centralizada')
         },
         onLeaveBack: () => {
-          console.log('🔓 Card da garrafa MOBILE LIBERADO novamente - 500vh')
+          console.log('🔓 Card da garrafa MOBILE LIBERADO novamente - 400vh')
         }
       })
 
