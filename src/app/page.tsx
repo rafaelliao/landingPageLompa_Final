@@ -326,7 +326,7 @@ export default function HomePage() {
 
 
 
-  // Efeito dos cards entrando no retângulo - VERSÃO SIMPLIFICADA
+  // Efeito dos cards entrando no retângulo - CENTRO EXATO
   useEffect(() => {
     // Limpar todos os ScrollTriggers existentes
     ScrollTrigger.getAll().forEach(trigger => trigger.kill())
@@ -346,61 +346,87 @@ export default function HomePage() {
     if (rectangle && garrafaCard && ursopeluciaCard && blusaCard && bolsaCard && 
         oculosCard && maquiagemCard && tenisCard && boneCard && cremeCard && cameraCard) {
       
-      // Criar uma timeline para a animação
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: rectangle.parentElement?.parentElement,
-          start: 'top -2%', // Começa quando o topo da seção está 2% acima da tela
-          end: 'bottom center',
-          scrub: 1,
-          pin: rectangle.parentElement, // Fixar o container do retângulo
-          pinSpacing: true
-        }
-      })
-      
-      // Array com todos os cards
-      const cards = [
-        { ref: garrafaCard, finalX: -20, finalY: 40 },
-        { ref: ursopeluciaCard, finalX: -20, finalY: 20 },
-        { ref: blusaCard, finalX: 20, finalY: 40 },
-        { ref: bolsaCard, finalX: 20, finalY: 20 },
-        { ref: oculosCard, finalX: -40, finalY: 60 },
-        { ref: maquiagemCard, finalX: 40, finalY: 60 },
-        { ref: tenisCard, finalX: -20, finalY: 80 },
-        { ref: boneCard, finalX: 20, finalY: 80 },
-        { ref: cremeCard, finalX: -40, finalY: 0 },
-        { ref: cameraCard, finalX: 40, finalY: 0 }
-      ]
-      
-      // Obter posição do centro do retângulo
+      // Obter posição do centro do retângulo (DESTINO FINAL)
       const rectRect = rectangle.getBoundingClientRect()
       const rectCenterX = rectRect.left + rectRect.width / 2
       const rectCenterY = rectRect.top + rectRect.height / 2
       
-      cards.forEach(({ ref, finalX, finalY }, index) => {
-        // Calcular posição atual do card
+      console.log('=== CENTRO DO RETÂNGULO ===')
+      console.log('Centro X:', rectCenterX)
+      console.log('Centro Y:', rectCenterY)
+      console.log('==========================')
+      
+      // Array com todos os cards
+      const cards = [
+        { ref: garrafaCard, scale: 1.8, zIndex: 100, rotation: 0 }, // Garrafa maior, 80% maior
+        { ref: ursopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
+        { ref: blusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
+        { ref: bolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
+        { ref: oculosCard, scale: 0.7, zIndex: 50, rotation: -30 }, // Esquerda
+        { ref: maquiagemCard, scale: 0.7, zIndex: 50, rotation: 35 }, // Direita
+        { ref: tenisCard, scale: 0.7, zIndex: 50, rotation: -20 }, // Esquerda
+        { ref: boneCard, scale: 0.7, zIndex: 50, rotation: 20 }, // Direita
+        { ref: cremeCard, scale: 0.7, zIndex: 50, rotation: -35 }, // Esquerda
+        { ref: cameraCard, scale: 0.7, zIndex: 50, rotation: 40 } // Direita
+      ]
+      
+      // Pin do retângulo (independente da animação dos cards)
+      ScrollTrigger.create({
+        trigger: rectangle.parentElement?.parentElement,
+        start: 'top -2%',
+        end: 'bottom center',
+        pin: rectangle.parentElement,
+        pinSpacing: true
+      })
+      
+      // Timeline para animação dos cards - COMEÇA DESDE O INÍCIO
+      const tlCards = gsap.timeline({
+        scrollTrigger: {
+          trigger: 'body', // Trigger no body para começar desde o início
+          start: 'top top', // Começa desde o topo da página
+          end: '+=1000', // Dura 1000px de scroll
+          scrub: true, // Sincroniza com o scroll
+        }
+      })
+      
+      // Calcular e animar cada card para o centro do retângulo
+      cards.forEach(({ ref, scale, zIndex, rotation }, index) => {
+        // Calcular posição atual do card (PONTO A)
         const cardRect = ref.getBoundingClientRect()
         const cardCenterX = cardRect.left + cardRect.width / 2
         const cardCenterY = cardRect.top + cardRect.height / 2
         
-        // Calcular distância até o centro do retângulo
-        const distanceX = rectCenterX - cardCenterX
-        const distanceY = rectCenterY - cardCenterY
+        // Calcular distância até o centro do retângulo (PONTO B)
+        const deltaX = rectCenterX - cardCenterX
+        const deltaY = rectCenterY - cardCenterY
         
-        // Aplicar delay baseado no índice
-        const delay = index * 0.1
+        console.log(`Card ${index + 1}:`, {
+          atual: { x: cardCenterX, y: cardCenterY },
+          destino: { x: rectCenterX, y: rectCenterY },
+          delta: { x: deltaX, y: deltaY }
+        })
         
-        // Adicionar animação à timeline
-        tl.to(ref, {
-          x: distanceX + finalX,
-          y: distanceY + finalY,
-          scale: 0.7,
-          zIndex: 50 + (index * 2),
-          opacity: 1,
-          rotation: 90,
-          duration: 1,
-          ease: 'power3.out'
-        }, delay)
+        // Animação: PONTO A → PONTO B (centro do retângulo)
+        tlCards.fromTo(ref, 
+          // PONTO A - Posição inicial
+          {
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotation: 0,
+            zIndex: 10 + index
+          },
+          // PONTO B - Centro do retângulo
+          {
+            x: deltaX,
+            y: deltaY,
+            scale: scale,
+            rotation: rotation, // Usar a rotação calculada
+            zIndex: zIndex,
+            ease: 'power3.out'
+          },
+          0 // Sem delay - todos começam juntos
+        )
       })
     }
     
