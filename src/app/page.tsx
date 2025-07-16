@@ -685,6 +685,90 @@ export default function HomePage() {
         }
       })
 
+      // Efeito para fazer outros cards desaparecerem aos 400vh (exceto garrafa)
+      ScrollTrigger.create({
+        trigger: 'body',
+        start: '+=400vh', // Começa aos 400vh
+        end: '+=410vh', // Dura 10vh para o fade out
+        scrub: 0.5, // Sincronização rápida
+        onEnter: () => {
+          console.log('👻 INICIANDO FADE OUT DOS OUTROS CARDS - 400vh')
+          // Fazer todos os cards exceto a garrafa desaparecerem
+          cards.forEach((card, index) => {
+            if (index !== 0) { // Não afetar a garrafa (index 0)
+              gsap.to(card.ref, {
+                opacity: 0,
+                scale: 0.8,
+                duration: 0.5,
+                ease: 'power2.out'
+              })
+            }
+          })
+        },
+        onLeave: () => {
+          console.log('✅ OUTROS CARDS DESAPARECERAM - 410vh')
+        },
+        onEnterBack: () => {
+          console.log('🔄 RETORNANDO OUTROS CARDS - 410vh')
+          // Fazer todos os cards exceto a garrafa retornarem
+          cards.forEach((card, index) => {
+            if (index !== 0) { // Não afetar a garrafa (index 0)
+              gsap.to(card.ref, {
+                opacity: 1,
+                scale: card.scale, // Retornar à escala original
+                duration: 0.5,
+                ease: 'power2.out'
+              })
+            }
+          })
+        },
+        onLeaveBack: () => {
+          console.log('✅ OUTROS CARDS RETORNARAM - 400vh')
+        }
+      })
+
+      // Efeito para fazer outros cards mobile desaparecerem aos 400vh (exceto garrafa)
+      ScrollTrigger.create({
+        trigger: 'body',
+        start: '+=400vh', // Começa aos 400vh
+        end: '+=410vh', // Dura 10vh para o fade out
+        scrub: 0.5, // Sincronização rápida
+        onEnter: () => {
+          console.log('👻 INICIANDO FADE OUT DOS OUTROS CARDS MOBILE - 400vh')
+          // Fazer todos os cards mobile exceto a garrafa desaparecerem
+          mobileCards.forEach((card, index) => {
+            if (index !== 0) { // Não afetar a garrafa (index 0)
+              gsap.to(card.ref, {
+                opacity: 0,
+                scale: 0.8,
+                duration: 0.5,
+                ease: 'power2.out'
+              })
+            }
+          })
+        },
+        onLeave: () => {
+          console.log('✅ OUTROS CARDS MOBILE DESAPARECERAM - 410vh')
+        },
+        onEnterBack: () => {
+          console.log('🔄 RETORNANDO OUTROS CARDS MOBILE - 410vh')
+          // Fazer todos os cards mobile exceto a garrafa retornarem
+          mobileCards.forEach((card, index) => {
+            if (index !== 0) { // Não afetar a garrafa (index 0)
+              gsap.to(card.ref, {
+                opacity: 1,
+                scale: card.scale, // Retornar à escala original
+                duration: 0.5,
+                ease: 'power2.out'
+              })
+            }
+          })
+        },
+        onLeaveBack: () => {
+          console.log('✅ OUTROS CARDS MOBILE RETORNARAM - 400vh')
+        }
+      })
+
       // Efeito de desintegração do card da garrafa desktop a partir de 600vh
       ScrollTrigger.create({
         trigger: 'body',
