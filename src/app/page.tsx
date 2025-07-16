@@ -577,11 +577,15 @@ export default function HomePage() {
         })
       }
 
-      // Animar cards desktop
-      animateCards(cards, false)
+      // Animar cards desktop com delay para garantir carregamento no Vercel
+      setTimeout(() => {
+        animateCards(cards, false)
+      }, 100)
       
-      // Animar cards mobile
-      animateCards(mobileCards, true)
+      // Animar cards mobile com delay para garantir carregamento no Vercel
+      setTimeout(() => {
+        animateCards(mobileCards, true)
+      }, 150)
       
       // Recalibrar ScrollTrigger após setup completo
       ScrollTrigger.refresh()
