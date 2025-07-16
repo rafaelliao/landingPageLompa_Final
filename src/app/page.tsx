@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useLayoutEffect } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navigation from '@/components/Navigation'
@@ -326,8 +326,8 @@ export default function HomePage() {
 
 
 
-  // Efeito dos cards entrando no retângulo - CENTRO EXATO
-  useEffect(() => {
+  // Efeito dos cards entrando no retângulo - VERSÃO OTIMIZADA
+  useLayoutEffect(() => {
     // Limpar todos os ScrollTriggers existentes
     ScrollTrigger.getAll().forEach(trigger => trigger.kill())
     
@@ -358,7 +358,7 @@ export default function HomePage() {
       
       // Array com todos os cards
       const cards = [
-        { ref: garrafaCard, scale: 1.8, zIndex: 100, rotation: 0 }, // Garrafa maior, 80% maior
+        { ref: garrafaCard, scale: 2.2, zIndex: 100, rotation: 0 }, // Garrafa maior, 120% maior
         { ref: ursopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
         { ref: blusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
         { ref: bolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
@@ -370,22 +370,47 @@ export default function HomePage() {
         { ref: cameraCard, scale: 0.7, zIndex: 50, rotation: 40 } // Direita
       ]
       
-      // Pin do retângulo (independente da animação dos cards)
+      // Pin do retângulo (independente da animação dos cards) - USANDO KEYWORDS
       ScrollTrigger.create({
         trigger: rectangle.parentElement?.parentElement,
-        start: 'top -2%',
-        end: 'bottom center',
+        start: 'top top', // Quando o topo da seção toca o topo da viewport
+        end: 'bottom center', // Quando a base da seção toca o centro da viewport
         pin: rectangle.parentElement,
-        pinSpacing: true
+        pinSpacing: true,
+        onRefresh: () => {
+          console.log('🔄 Pin do retângulo recarregado')
+        }
       })
       
-      // Timeline para animação dos cards - COMEÇA DESDE O INÍCIO
+      // Timeline para animação dos cards - USANDO VIEWPORT UNITS
       const tlCards = gsap.timeline({
         scrollTrigger: {
           trigger: 'body', // Trigger no body para começar desde o início
           start: 'top top', // Começa desde o topo da página
-          end: '+=1000', // Dura 1000px de scroll
-          scrub: true, // Sincroniza com o scroll
+          end: '+=800vh', // Dura 800vh (8x altura da viewport) de scroll para animação bem mais lenta
+          scrub: 2, // Sincroniza com o scroll com suavização de 2 segundos
+          onUpdate: (self) => {
+            console.log('=== SCROLL TRIGGER UPDATE ===')
+            console.log('Progress:', Math.round(self.progress * 100) + '%')
+            console.log('Direction:', self.direction)
+            console.log('Is Active:', self.isActive)
+            console.log('=============================')
+          },
+          onEnter: () => {
+            console.log('🎬 ANIMAÇÃO INICIADA - Cards começando a se mover')
+          },
+          onLeave: () => {
+            console.log('🏁 ANIMAÇÃO FINALIZADA - Cards chegaram ao destino')
+          },
+          onEnterBack: () => {
+            console.log('↩️ ANIMAÇÃO REVERTENDO - Scroll para cima')
+          },
+          onLeaveBack: () => {
+            console.log('🔄 ANIMAÇÃO RESETANDO - Voltando ao início')
+          },
+          onRefresh: () => {
+            console.log('🔄 Timeline dos cards recarregada')
+          }
         }
       })
       
@@ -423,18 +448,33 @@ export default function HomePage() {
             scale: scale,
             rotation: rotation, // Usar a rotação calculada
             zIndex: zIndex,
-            ease: 'power3.out'
+            ease: 'power3.out',
+            onUpdate: function() {
+              // Log a cada 25% do progresso para não sobrecarregar o console
+              const progress = this.progress()
+              if (progress % 0.25 < 0.01) {
+                console.log(`📦 Card ${index + 1} (${ref.querySelector('img')?.alt || 'Card'}):`)
+                console.log(`   Progresso: ${Math.round(progress * 100)}%`)
+                console.log(`   Posição: x=${Math.round(this.targets()[0]._gsap.x)}px, y=${Math.round(this.targets()[0]._gsap.y)}px`)
+                console.log(`   Escala: ${this.targets()[0]._gsap.scale}`)
+                console.log(`   Rotação: ${this.targets()[0]._gsap.rotation}°`)
+              }
+            }
           },
           0 // Sem delay - todos começam juntos
         )
       })
+      
+      // Recalibrar ScrollTrigger após setup completo
+      ScrollTrigger.refresh()
+      console.log('✅ ScrollTrigger recarregado e pronto')
     }
     
     // Cleanup function
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
     }
-  }, [])
+  }, []) // Dependências vazias - executa apenas uma vez após DOM estar pronto
 
   return (
     <main className="min-h-screen" style={{ border: 'none', outline: 'none' }}>
