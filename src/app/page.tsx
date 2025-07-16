@@ -518,24 +518,25 @@ export default function HomePage() {
               const cardCenterX = cardRect.left + cardRect.width / 2
               const cardCenterY = cardRect.top + cardRect.height / 2
               
-              // Usar centro da viewport como ponto de destino (PONTO B)
+              // Usar centro da viewport como ponto de destino horizontal (PONTO B)
               const viewportCenterX = window.innerWidth / 2
-              const viewportCenterY = window.innerHeight / 2
               
-              // Calcular distância do centro do card ao centro da viewport
+              // Calcular distância horizontal do centro do card ao centro da viewport
               let deltaX = viewportCenterX - cardCenterX
-              let deltaY = viewportCenterY - cardCenterY
-              
-              // Ajuste fino para centralização perfeita
               deltaX = Math.round(deltaX)
-              deltaY = Math.round(deltaY)
               
-              // Ajuste vertical específico para posicionar no centro do retângulo
-              if (isMobile) {
-                deltaY -= 20 // Ajuste para mobile
-              } else {
-                deltaY -= 30 // Ajuste para desktop
+              // Para o eixo Y, usar o centro do retângulo como referência
+              const targetRectangle = isMobile ? mobileRectangle : rectangle
+              if (!targetRectangle) {
+                console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
+                return { deltaX: 0, deltaY: 0 }
               }
+              const rectRect = targetRectangle.getBoundingClientRect()
+              const rectCenterY = rectRect.top + rectRect.height / 2
+              
+              // Calcular distância vertical do centro do card ao centro do retângulo
+              let deltaY = rectCenterY - cardCenterY
+              deltaY = Math.round(deltaY)
               
               return { deltaX, deltaY }
             } else {
