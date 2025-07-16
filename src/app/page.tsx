@@ -509,43 +509,59 @@ export default function HomePage() {
       // Função para animar cards (desktop e mobile)
       const animateCards = (cardsArray: Array<{ ref: HTMLElement, scale: number, zIndex: number, rotation: number }>, isMobile = false) => {
         cardsArray.forEach(({ ref, scale, zIndex, rotation }, index: number) => {
-          // Calcular posição atual do card (PONTO A)
-          const cardRect = ref.getBoundingClientRect()
-          const cardCenterX = cardRect.left + cardRect.width / 2
-          const cardCenterY = cardRect.top + cardRect.height / 2
-          
-          // Usar a referência correta do retângulo baseado na versão
-          const targetRectangle = isMobile ? mobileRectangle : rectangle
-          if (!targetRectangle) {
-            console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
-            return
-          }
-          const rectRect = targetRectangle.getBoundingClientRect()
-          const rectCenterX = rectRect.left + rectRect.width / 2
-          const rectCenterY = rectRect.top + rectRect.height / 2
-          
-          // Calcular distância até o centro do retângulo (PONTO B)
-          let deltaX = rectCenterX - cardCenterX
-          let deltaY = rectCenterY - cardCenterY
-          
-          // Para a garrafa (index 0), calcular posição para centralizar no retângulo
-          if (index === 0) {
-            // Calcular o centro atual da garrafa
-            const garrafaCenterX = cardRect.left + cardRect.width / 2
-            const garrafaCenterY = cardRect.top + cardRect.height / 2
+          // Função para calcular posição centralizada com retry
+          const calculateCenteredPosition = () => {
+            // Calcular posição atual do card (PONTO A)
+            const cardRect = ref.getBoundingClientRect()
+            const cardCenterX = cardRect.left + cardRect.width / 2
+            const cardCenterY = cardRect.top + cardRect.height / 2
             
-            // Calcular a distância direta do centro da garrafa ao centro do retângulo
-            deltaX = rectCenterX - garrafaCenterX
-            deltaY = rectCenterY - garrafaCenterY
+            // Usar a referência correta do retângulo baseado na versão
+            const targetRectangle = isMobile ? mobileRectangle : rectangle
+            if (!targetRectangle) {
+              console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
+              return { deltaX: 0, deltaY: 0 }
+            }
+            const rectRect = targetRectangle.getBoundingClientRect()
+            const rectCenterX = rectRect.left + rectRect.width / 2
+            const rectCenterY = rectRect.top + rectRect.height / 2
             
-            // Garantir que a garrafa mobile seja centralizada perfeitamente
-            if (isMobile) {
-              // Ajuste fino para centralização perfeita no mobile
+            // Calcular distância até o centro do retângulo (PONTO B)
+            let deltaX = rectCenterX - cardCenterX
+            let deltaY = rectCenterY - cardCenterY
+            
+            // Para a garrafa (index 0), garantir centralização perfeita
+            if (index === 0) {
+              // Ajuste fino para centralização perfeita
               deltaX = Math.round(deltaX) // Arredondar para evitar subpixels
               deltaY = Math.round(deltaY)
+              
+              // Ajuste adicional para garantir centralização no Vercel
+              if (isMobile) {
+                // Ajuste específico para mobile no Vercel
+                deltaX += 2 // Pequeno ajuste horizontal
+                deltaY -= 5 // Pequeno ajuste vertical
+              } else {
+                // Ajuste específico para desktop no Vercel
+                deltaX += 1 // Pequeno ajuste horizontal
+                deltaY -= 3 // Pequeno ajuste vertical
+              }
             }
             
-            // Removido log de centralização da garrafa para manter console limpo
+            return { deltaX, deltaY }
+          }
+          
+          // Calcular posição inicial
+          let { deltaX, deltaY } = calculateCenteredPosition()
+          
+          // Para a garrafa, fazer retry se necessário
+          if (index === 0) {
+            // Aguardar um frame adicional para garantir renderização completa
+            requestAnimationFrame(() => {
+              const retryPosition = calculateCenteredPosition()
+              deltaX = retryPosition.deltaX
+              deltaY = retryPosition.deltaY
+            })
           }
           
           // Removido log de posicionamento dos cards para manter console limpo
@@ -577,15 +593,15 @@ export default function HomePage() {
         })
       }
 
-      // Animar cards desktop com delay para garantir carregamento no Vercel
+      // Animar cards desktop com delay maior para garantir carregamento completo no Vercel
       setTimeout(() => {
         animateCards(cards, false)
-      }, 100)
+      }, 200)
       
-      // Animar cards mobile com delay para garantir carregamento no Vercel
+      // Animar cards mobile com delay maior para garantir carregamento completo no Vercel
       setTimeout(() => {
         animateCards(mobileCards, true)
-      }, 150)
+      }, 300)
       
       // Recalibrar ScrollTrigger após setup completo
       ScrollTrigger.refresh()
