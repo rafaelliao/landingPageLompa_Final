@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useLayoutEffect } from 'react'
+import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navigation from '@/components/Navigation'
@@ -99,11 +99,14 @@ export default function HomePage() {
   const headerRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
   const mobileCardsRef = useRef<HTMLDivElement>(null)
-    const heartIconRef = useRef<HTMLDivElement>(null)
+  const heartIconRef = useRef<HTMLDivElement>(null)
   const mobileHeartIconRef = useRef<HTMLDivElement>(null)
   const rectangleRef = useRef<HTMLDivElement>(null)
   const titleContainerRef = useRef<HTMLDivElement>(null)
   const mobileTitleContainerRef = useRef<HTMLDivElement>(null)
+  
+  // Estado para controlar o conteúdo do retângulo
+  const [rectangleContent, setRectangleContent] = useState<'splash' | 'final'>('splash')
   
   // Refs para os cards desktop
   const garrafaCardRef = useRef<HTMLDivElement>(null)
@@ -358,7 +361,7 @@ export default function HomePage() {
       
       // Array com todos os cards
       const cards = [
-        { ref: garrafaCard, scale: 2.2, zIndex: 100, rotation: 0 }, // Garrafa maior, 120% maior
+        { ref: garrafaCard, scale: 2.2, zIndex: 1000, rotation: 0 }, // Garrafa sempre na frente (z-index máximo)
         { ref: ursopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
         { ref: blusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
         { ref: bolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
@@ -439,7 +442,7 @@ export default function HomePage() {
             y: 0,
             scale: 1,
             rotation: 0,
-            zIndex: 10 + index
+            zIndex: index === 0 ? 1000 : 10 + index // Garrafa sempre com z-index máximo
           },
           // PONTO B - Centro do retângulo
           {
@@ -447,7 +450,7 @@ export default function HomePage() {
             y: deltaY,
             scale: scale,
             rotation: rotation, // Usar a rotação calculada
-            zIndex: zIndex,
+            zIndex: zIndex, // Usar o zIndex definido no array (1000 para garrafa)
             ease: 'power3.out',
             onUpdate: function() {
               // Log a cada 25% do progresso para não sobrecarregar o console
@@ -468,6 +471,231 @@ export default function HomePage() {
       // Recalibrar ScrollTrigger após setup completo
       ScrollTrigger.refresh()
       console.log('✅ ScrollTrigger recarregado e pronto')
+      
+      // Pin específico para o card da garrafa entre 500vh e 700vh
+      ScrollTrigger.create({
+        trigger: 'body',
+        start: '+=500vh', // Começa em 500vh
+        end: '+=700vh', // Termina em 700vh
+        pin: garrafaCard, // Fixa o card da garrafa
+        pinSpacing: true,
+        onEnter: () => {
+          // Garantir que a garrafa fique na frente durante o pin
+          gsap.set(garrafaCard, { zIndex: 1000 })
+          console.log('📌 Card da garrafa FIXADO - 500vh (z-index: 1000)')
+        },
+        onLeave: () => {
+          console.log('🔓 Card da garrafa LIBERADO - 700vh')
+        },
+        onEnterBack: () => {
+          // Garantir que a garrafa fique na frente durante o pin
+          gsap.set(garrafaCard, { zIndex: 1000 })
+          console.log('📌 Card da garrafa FIXADO novamente - 700vh (z-index: 1000)')
+        },
+        onLeaveBack: () => {
+          console.log('🔓 Card da garrafa LIBERADO novamente - 500vh')
+        }
+      })
+
+      // Efeito de desintegração do card da garrafa a partir de 500vh
+      ScrollTrigger.create({
+        trigger: 'body',
+        start: '+=500vh', // Começa a desintegração em 500vh
+        end: '+=515vh', // Dura 15vh para a desintegração (extremamente rápido)
+        scrub: 0.2, // Sincronização extremamente rápida
+        onEnter: () => {
+          console.log('✨ INICIANDO DESINTEGRAÇÃO DA GARRAFA - 500vh')
+          // Fallback para garantir estado inicial correto
+          if (garrafaCard.style.opacity === '' || garrafaCard.style.opacity === '0') {
+            console.log('🔄 Aplicando fallback de estado inicial')
+            garrafaCard.style.opacity = '1'
+            garrafaCard.style.transform = 'scale(1)'
+            garrafaCard.style.filter = 'blur(0px) brightness(1)'
+          }
+        },
+        onUpdate: (self) => {
+          // Efeito de desintegração progressiva
+          const progress = self.progress
+          
+          // Criar efeito de partículas flutuantes que se desprendem
+          if (progress > 0.05 && progress < 0.6) {
+            // Criar partículas extremamente frequentemente durante a desintegração
+            if (Math.random() < 0.6) { // 60% de chance a cada frame (extremamente mais partículas)
+              const particle = document.createElement('div')
+              particle.style.cssText = `
+                position: fixed;
+                width: 4px;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.8);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+              `
+              
+              // Posicionar partícula na borda da garrafa
+              const garrafaRect = garrafaCard.getBoundingClientRect()
+              const centerX = garrafaRect.left + garrafaRect.width / 2
+              const centerY = garrafaRect.top + garrafaRect.height / 2
+              
+              // Posição aleatória na borda da garrafa
+              const angle = Math.random() * Math.PI * 2
+              const radius = Math.min(garrafaRect.width, garrafaRect.height) / 2
+              const startX = centerX + Math.cos(angle) * radius
+              const startY = centerY + Math.sin(angle) * radius
+              
+              particle.style.left = startX + 'px'
+              particle.style.top = startY + 'px'
+              
+              document.body.appendChild(particle)
+              
+              // Animação da partícula flutuando para cima (extremamente rápida)
+              gsap.to(particle, {
+                y: -40 - Math.random() * 60,
+                x: (Math.random() - 0.5) * 40,
+                opacity: 0,
+                scale: 0,
+                duration: 0.3 + Math.random() * 0.3, // Duração extremamente reduzida
+                ease: 'power5.out', // Easing extremamente agressivo
+                onComplete: () => {
+                  if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle)
+                  }
+                }
+              })
+            }
+          }
+          
+          // Efeito de transparência progressiva (extremamente agressivo)
+          const opacity = 1 - (progress * 3.0) // Desaparece extremamente rapidamente
+          garrafaCard.style.opacity = Math.max(0, opacity).toString()
+          
+          // Efeito de escala extremamente agressivo
+          const scale = 1 - (progress * 1.0) // Reduz 100% do tamanho
+          garrafaCard.style.transform = `scale(${scale})`
+          
+          // Efeito de blur progressivo (extremamente intenso)
+          const blur = progress * 12 // Máximo 12px de blur
+          garrafaCard.style.filter = `blur(${blur}px)`
+          
+          // Efeito de brilho extremamente intenso
+          if (progress > 0.1) {
+            const brightness = 1 + (progress - 0.1) * 3.0
+            garrafaCard.style.filter += ` brightness(${brightness})`
+          }
+        },
+        onLeave: () => {
+          console.log('✨ DESINTEGRAÇÃO FINALIZADA - 515vh')
+          // Garantir que a garrafa esteja completamente transparente
+          garrafaCard.style.opacity = '0'
+          garrafaCard.style.transform = 'scale(0.7)'
+          garrafaCard.style.filter = 'blur(3px) brightness(1.25)'
+          
+          // Fallback para garantir estado final consistente
+          setTimeout(() => {
+            if (garrafaCard.style.opacity !== '0') {
+              console.log('🔄 Aplicando fallback de estado final')
+              garrafaCard.style.opacity = '0'
+              garrafaCard.style.transform = 'scale(0.7)'
+              garrafaCard.style.filter = 'blur(3px) brightness(1.25)'
+            }
+          }, 100)
+        },
+        onEnterBack: () => {
+          console.log('✨ REVERTENDO DESINTEGRAÇÃO - 515vh')
+          // Reverter desintegração ao rolar para cima
+          gsap.to(garrafaCard, {
+            opacity: 1,
+            scale: 1,
+            filter: 'blur(0px) brightness(1)',
+            duration: 0.15, // Duração extremamente reduzida
+            ease: 'power5.out', // Easing extremamente agressivo
+            onComplete: () => {
+              // Garantir que o estado seja completamente restaurado
+              garrafaCard.style.opacity = '1'
+              garrafaCard.style.transform = 'scale(1)'
+              garrafaCard.style.filter = 'blur(0px) brightness(1)'
+              console.log('✅ Estado da garrafa completamente restaurado')
+            }
+          })
+        },
+        onLeaveBack: () => {
+          console.log('✨ DESINTEGRAÇÃO REVERTIDA - 500vh')
+          // Fallback adicional para garantir estado correto
+          if (garrafaCard.style.opacity !== '1' || garrafaCard.style.transform !== 'scale(1)') {
+            console.log('🔄 Aplicando fallback de restauração')
+            garrafaCard.style.opacity = '1'
+            garrafaCard.style.transform = 'scale(1)'
+            garrafaCard.style.filter = 'blur(0px) brightness(1)'
+          }
+        }
+      })
+      
+      // ScrollTrigger para trocar o conteúdo do retângulo quando a animação terminar
+      ScrollTrigger.create({
+        trigger: 'body',
+        start: 'top top',
+        end: '+=800vh',
+        scrub: 2,
+        onUpdate: (self) => {
+          // Calcular o vh atual baseado no progresso
+          const currentVh = self.progress * 800
+          
+          // Log detalhado a cada 50vh para não sobrecarregar o console
+          if (Math.floor(currentVh) % 50 === 0 && currentVh > 0) {
+            console.log(`📏 VH ATUAL: ${Math.floor(currentVh)}vh (${Math.round(self.progress * 100)}% do progresso)`)
+          }
+          
+          // Log mais frequente quando estiver próximo do momento de mudança (após 600vh)
+          if (currentVh > 600 && Math.floor(currentVh) % 10 === 0) {
+            console.log(`🎯 VH PRÓXIMO: ${Math.floor(currentVh)}vh - MOMENTO DE MUDANÇA APROXIMANDO!`)
+          }
+          
+          // Quando chegar a 87.5% do progresso (700vh), trocar o conteúdo
+          if (self.progress >= 0.875) {
+            setRectangleContent('final')
+            console.log('🎯 Conteúdo do retângulo alterado para FINAL')
+          } else {
+            setRectangleContent('splash')
+          }
+        },
+        onEnter: () => {
+          console.log('🔄 Iniciando detecção de troca de conteúdo')
+        },
+        onLeave: () => {
+          console.log('✅ Animação completa - conteúdo final ativo')
+        },
+        onEnterBack: () => {
+          console.log('↩️ Voltando para conteúdo splash')
+        },
+        onLeaveBack: () => {
+          console.log('🔄 Resetando para conteúdo splash')
+        }
+      })
+
+      // ScrollTrigger para esconder/mostrar todos os cards exceto a garrafa a partir de 500vh
+      const outrosCards = [ursopeluciaCard, blusaCard, bolsaCard, oculosCard, maquiagemCard, tenisCard, boneCard, cremeCard, cameraCard];
+      ScrollTrigger.create({
+        trigger: 'body',
+        start: '+=500vh',
+        end: '+=800vh', // Mantém até o final do scroll
+        onEnter: () => {
+          outrosCards.forEach(card => {
+            if (card) {
+              gsap.set(card, { opacity: 0, pointerEvents: 'none' });
+            }
+          });
+          console.log('🚫 Outros cards ocultos a partir de 500vh');
+        },
+        onLeaveBack: () => {
+          outrosCards.forEach(card => {
+            if (card) {
+              gsap.set(card, { opacity: 1, pointerEvents: 'auto' });
+            }
+          });
+          console.log('✅ Outros cards visíveis novamente ao voltar antes de 500vh');
+        }
+      });
     }
     
     // Cleanup function
@@ -796,12 +1024,26 @@ export default function HomePage() {
               {/* Ponto de referência invisível no centro do retângulo */}
               <div className="absolute w-1 h-1 bg-transparent pointer-events-none" style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}></div>
               
-              {/* Splash Screen SVG centralizado */}
-              <img 
-                src="/Splash_screen.svg" 
-                alt="Splash Screen" 
-                className="w-full h-full object-cover z-10 relative"
-              />
+              {/* Conteúdo condicional do retângulo */}
+              {rectangleContent === 'splash' ? (
+                // Conteúdo inicial - Splash Screen
+                <img 
+                  src="/Splash_screen.svg" 
+                  alt="Splash Screen" 
+                  className="w-full h-full object-cover z-10 relative transition-opacity duration-500"
+                />
+              ) : (
+                // Conteúdo final - Garrafa Reels
+                <video 
+                  src="/Garrafa_Reels.mp4" 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  className="w-full h-full object-cover z-10 relative transition-opacity duration-500 rounded-[32px]"
+                  style={{ objectPosition: 'center' }}
+                />
+              )}
             </div>
           </div>
         </div>
