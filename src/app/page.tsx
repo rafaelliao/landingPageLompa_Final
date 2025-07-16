@@ -425,13 +425,36 @@ export default function HomePage() {
         const cardCenterY = cardRect.top + cardRect.height / 2
         
         // Calcular distância até o centro do retângulo (PONTO B)
-        const deltaX = rectCenterX - cardCenterX
-        const deltaY = rectCenterY - cardCenterY
+        let deltaX = rectCenterX - cardCenterX
+        let deltaY = rectCenterY - cardCenterY
+        
+        // Para a garrafa (index 0), calcular posição para centralizar no retângulo
+        if (index === 0) {
+          // Calcular o centro do retângulo
+          const rectRect = rectangle.getBoundingClientRect()
+          const rectCenterX = rectRect.left + rectRect.width / 2
+          const rectCenterY = rectRect.top + rectRect.height / 2
+          
+          // Calcular o centro atual da garrafa
+          const garrafaCenterX = cardRect.left + cardRect.width / 2
+          const garrafaCenterY = cardRect.top + cardRect.height / 2
+          
+          // Calcular a distância direta do centro da garrafa ao centro do retângulo
+          deltaX = rectCenterX - garrafaCenterX
+          deltaY = rectCenterY - garrafaCenterY
+          
+          console.log('🎯 GARRAFA - Centralização:', {
+            retangulo: { x: rectCenterX, y: rectCenterY },
+            garrafa: { x: garrafaCenterX, y: garrafaCenterY },
+            delta: { x: deltaX, y: deltaY }
+          })
+        }
         
         console.log(`Card ${index + 1}:`, {
           atual: { x: cardCenterX, y: cardCenterY },
           destino: { x: rectCenterX, y: rectCenterY },
-          delta: { x: deltaX, y: deltaY }
+          delta: { x: deltaX, y: deltaY },
+          scale: scale
         })
         
         // Animação: PONTO A → PONTO B (centro do retângulo)
@@ -497,21 +520,19 @@ export default function HomePage() {
         }
       })
 
-      // Efeito de desintegração do card da garrafa a partir de 500vh
+      // Efeito de desintegração do card da garrafa a partir de 600vh
       ScrollTrigger.create({
         trigger: 'body',
-        start: '+=500vh', // Começa a desintegração em 500vh
-        end: '+=515vh', // Dura 15vh para a desintegração (extremamente rápido)
+        start: '+=600vh', // Começa a desintegração em 600vh
+        end: '+=615vh', // Dura 15vh para a desintegração (extremamente rápido)
         scrub: 0.2, // Sincronização extremamente rápida
         onEnter: () => {
-          console.log('✨ INICIANDO DESINTEGRAÇÃO DA GARRAFA - 500vh')
-          // Fallback para garantir estado inicial correto
-          if (garrafaCard.style.opacity === '' || garrafaCard.style.opacity === '0') {
-            console.log('🔄 Aplicando fallback de estado inicial')
-            garrafaCard.style.opacity = '1'
-            garrafaCard.style.transform = 'scale(1)'
-            garrafaCard.style.filter = 'blur(0px) brightness(1)'
-          }
+          console.log('✨ INICIANDO DESINTEGRAÇÃO DA GARRAFA - 600vh')
+          // Garantir que a garrafa esteja visível antes de começar a desintegração
+          garrafaCard.style.opacity = '1'
+          garrafaCard.style.transform = 'scale(1)'
+          garrafaCard.style.filter = 'blur(0px) brightness(1)'
+          console.log('🔄 Estado inicial da garrafa garantido para desintegração')
         },
         onUpdate: (self) => {
           // Efeito de desintegração progressiva
@@ -585,7 +606,7 @@ export default function HomePage() {
           }
         },
         onLeave: () => {
-          console.log('✨ DESINTEGRAÇÃO FINALIZADA - 515vh')
+          console.log('✨ DESINTEGRAÇÃO FINALIZADA - 615vh')
           // Garantir que a garrafa esteja completamente transparente
           garrafaCard.style.opacity = '0'
           garrafaCard.style.transform = 'scale(0.7)'
@@ -602,25 +623,15 @@ export default function HomePage() {
           }, 100)
         },
         onEnterBack: () => {
-          console.log('✨ REVERTENDO DESINTEGRAÇÃO - 515vh')
-          // Reverter desintegração ao rolar para cima
-          gsap.to(garrafaCard, {
-            opacity: 1,
-            scale: 1,
-            filter: 'blur(0px) brightness(1)',
-            duration: 0.15, // Duração extremamente reduzida
-            ease: 'power5.out', // Easing extremamente agressivo
-            onComplete: () => {
-              // Garantir que o estado seja completamente restaurado
-              garrafaCard.style.opacity = '1'
-              garrafaCard.style.transform = 'scale(1)'
-              garrafaCard.style.filter = 'blur(0px) brightness(1)'
-              console.log('✅ Estado da garrafa completamente restaurado')
-            }
-          })
+          console.log('✨ REVERTENDO DESINTEGRAÇÃO - 615vh')
+          // Restaurar estado da garrafa imediatamente
+          garrafaCard.style.opacity = '1'
+          garrafaCard.style.transform = 'scale(1)'
+          garrafaCard.style.filter = 'blur(0px) brightness(1)'
+          console.log('✅ Estado da garrafa restaurado imediatamente')
         },
         onLeaveBack: () => {
-          console.log('✨ DESINTEGRAÇÃO REVERTIDA - 500vh')
+          console.log('✨ DESINTEGRAÇÃO REVERTIDA - 600vh')
           // Fallback adicional para garantir estado correto
           if (garrafaCard.style.opacity !== '1' || garrafaCard.style.transform !== 'scale(1)') {
             console.log('🔄 Aplicando fallback de restauração')
@@ -654,7 +665,14 @@ export default function HomePage() {
           // Quando chegar a 87.5% do progresso (700vh), trocar o conteúdo
           if (self.progress >= 0.875) {
             setRectangleContent('final')
-            console.log('🎯 Conteúdo do retângulo alterado para FINAL')
+            // Garantir que a garrafa esteja completamente invisível quando o conteúdo mudar
+            if (garrafaCard) {
+              garrafaCard.style.opacity = '0'
+              garrafaCard.style.transform = 'scale(0)'
+              garrafaCard.style.filter = 'blur(20px) brightness(0)'
+              garrafaCard.style.pointerEvents = 'none'
+            }
+            console.log('🎯 Conteúdo do retângulo alterado para FINAL - Garrafa oculta')
           } else {
             setRectangleContent('splash')
           }
@@ -670,6 +688,13 @@ export default function HomePage() {
         },
         onLeaveBack: () => {
           console.log('🔄 Resetando para conteúdo splash')
+          // Restaurar a garrafa quando voltar para splash
+          if (garrafaCard) {
+            garrafaCard.style.opacity = '1'
+            garrafaCard.style.transform = 'scale(1)'
+            garrafaCard.style.filter = 'blur(0px) brightness(1)'
+            garrafaCard.style.pointerEvents = 'auto'
+          }
         }
       })
 
