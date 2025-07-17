@@ -495,10 +495,34 @@ export default function HomePage() {
             console.log('🏁 ANIMAÇÃO FINALIZADA - Cards chegaram ao destino')
           },
           onEnterBack: () => {
-            console.log('↩️ ANIMAÇÃO REVERTENDO - Scroll para cima')
+            console.log('🔄 ANIMAÇÃO REVERTENDO - Scroll para cima')
           },
           onLeaveBack: () => {
             console.log('🔄 ANIMAÇÃO RESETANDO - Voltando ao início')
+            // Resetar todos os cards desktop
+            cards.forEach(card => {
+              gsap.set(card.ref, {
+                x: 0,
+                y: 0,
+                scale: 1,
+                rotation: 0,
+                opacity: 1,
+                pointerEvents: 'auto',
+                zIndex: card.zIndex
+              })
+            })
+            // Resetar todos os cards mobile
+            mobileCards.forEach(card => {
+              gsap.set(card.ref, {
+                x: 0,
+                y: 0,
+                scale: 1,
+                rotation: 0,
+                opacity: 1,
+                pointerEvents: 'auto',
+                zIndex: card.zIndex
+              })
+            })
           },
           onRefresh: () => {
             console.log('🔄 Timeline dos cards recarregada')
@@ -603,15 +627,11 @@ export default function HomePage() {
         })
       }
 
-      // Animar cards desktop com delay maior para garantir carregamento completo no Vercel
-      setTimeout(() => {
-        animateCards(cards, false)
-      }, 500)
+      // Animar cards desktop
+      animateCards(cards, false)
       
-      // Animar cards mobile com delay maior para garantir carregamento completo no Vercel
-      setTimeout(() => {
-        animateCards(mobileCards, true)
-      }, 600)
+      // Animar cards mobile
+      animateCards(mobileCards, true)
       
       // Recalibrar ScrollTrigger após setup completo
       ScrollTrigger.refresh()
