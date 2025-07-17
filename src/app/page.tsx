@@ -432,8 +432,19 @@ export default function HomePage() {
         }
       })
       
-      // Pin do retângulo mobile REMOVIDO - Mantendo consistência com desktop
-      // O retângulo mobile agora segue a mesma lógica do desktop sem pin
+      // Pin do retângulo mobile (independente da animação dos cards)
+      if (mobileRectangle) {
+        ScrollTrigger.create({
+          trigger: mobileRectangle.parentElement?.parentElement,
+          start: 'top top', // Quando o topo da seção toca o topo da viewport
+          end: 'bottom center', // Quando a base da seção toca o centro da viewport
+          pin: mobileRectangle.parentElement,
+          pinSpacing: true,
+          onRefresh: () => {
+            console.log('🔄 Pin do retângulo MOBILE recarregado')
+          }
+        })
+      }
       
       // Timeline para animação dos cards - USANDO VIEWPORT UNITS
       const tlCards = gsap.timeline({
