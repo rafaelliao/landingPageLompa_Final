@@ -432,49 +432,16 @@ export default function HomePage() {
         }
       })
       
-      // Pin do retângulo mobile (independente da animação dos cards) - USANDO KEYWORDS
-      // Apenas para mobile - começa a partir de 400vh
-      if (mobileRectangle) {
-        // Verificar se o elemento mobile está visível (usando CSS display)
-        const mobileSection = mobileRectangle.closest('.lg\\:hidden')
-        if (mobileSection && window.getComputedStyle(mobileSection).display !== 'none') {
-          console.log('📱 Configurando pin do retângulo MOBILE - Largura:', window.innerWidth)
-          ScrollTrigger.create({
-            trigger: 'body',
-            start: '+=400vh', // Começa a partir de 400vh no mobile
-            end: '+=600vh', // Dura 200vh de pin
-            pin: mobileRectangle.parentElement,
-            pinSpacing: true,
-            onEnter: () => {
-              console.log('📌 Pin do retângulo MOBILE ATIVADO - 400vh')
-            },
-            onLeave: () => {
-              console.log('🔓 Pin do retângulo MOBILE LIBERADO - 600vh')
-            },
-            onEnterBack: () => {
-              console.log('📌 Pin do retângulo MOBILE ATIVADO novamente - 600vh')
-            },
-            onLeaveBack: () => {
-              console.log('🔓 Pin do retângulo MOBILE LIBERADO novamente - 400vh')
-            },
-            onRefresh: () => {
-              console.log('🔄 Pin do retângulo MOBILE recarregado')
-            }
-          })
-        } else {
-          console.log('🖥️ Desktop detectado - Pin do retângulo mobile não aplicado (elemento oculto)')
-        }
-      } else {
-        console.log('⚠️ Referência do retângulo mobile não encontrada')
-      }
+      // Pin do retângulo mobile REMOVIDO - Mantendo consistência com desktop
+      // O retângulo mobile agora segue a mesma lógica do desktop sem pin
       
       // Timeline para animação dos cards - USANDO VIEWPORT UNITS
       const tlCards = gsap.timeline({
         scrollTrigger: {
           trigger: 'body', // Trigger no body para começar desde o início
           start: 'top top', // Começa desde o topo da página
-          end: '+=800vh', // Dura 800vh (8x altura da viewport) de scroll para animação bem mais lenta
-          scrub: 2, // Sincroniza com o scroll com suavização de 2 segundos
+          end: window.innerWidth <= 768 ? '+=500vh' : '+=700vh', // 500vh para mobile, 700vh para desktop
+          scrub: 3.5, // Sincroniza com o scroll com suavização de 3.5 segundos (mais lento)
           onUpdate: (self) => {
             // Calcular progresso em vh
             const scrollY = window.scrollY
@@ -510,6 +477,10 @@ export default function HomePage() {
                 pointerEvents: 'auto',
                 zIndex: card.zIndex
               })
+              // Resetar também o estilo inline para garantir
+              card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+              card.ref.style.opacity = '1'
+              card.ref.style.filter = 'none'
             })
             // Resetar todos os cards mobile
             mobileCards.forEach(card => {
@@ -522,6 +493,10 @@ export default function HomePage() {
                 pointerEvents: 'auto',
                 zIndex: card.zIndex
               })
+              // Resetar também o estilo inline para garantir
+              card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+              card.ref.style.opacity = '1'
+              card.ref.style.filter = 'none'
             })
           },
           onRefresh: () => {
@@ -637,67 +612,19 @@ export default function HomePage() {
       ScrollTrigger.refresh()
       console.log('✅ ScrollTrigger recarregado e pronto')
       
-      // Pin específico para o card da garrafa desktop entre 500vh e 700vh
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: '+=500vh', // Começa em 500vh
-        end: '+=700vh', // Termina em 700vh
-        pin: garrafaCard, // Fixa o card da garrafa
-        pinSpacing: true,
-        onEnter: () => {
-          // Garantir que a garrafa fique na frente durante o pin
-          gsap.set(garrafaCard, { zIndex: 1000 })
-          console.log('📌 Card da garrafa DESKTOP FIXADO - 500vh (z-index: 1000)')
-        },
-        onLeave: () => {
-          console.log('🔓 Card da garrafa DESKTOP LIBERADO - 700vh')
-        },
-        onEnterBack: () => {
-          // Garantir que a garrafa fique na frente durante o pin
-          gsap.set(garrafaCard, { zIndex: 1000 })
-          console.log('📌 Card da garrafa DESKTOP FIXADO novamente - 700vh (z-index: 1000)')
-        },
-        onLeaveBack: () => {
-          console.log('🔓 Card da garrafa DESKTOP LIBERADO novamente - 500vh')
-        }
-      })
 
-      // Pin específico para o card da garrafa mobile - começa quando a animação termina (400vh) e vai até 700vh
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: '+=400vh', // Começa quando a animação dos cards termina
-        end: '+=700vh', // Termina em 700vh
-        pin: mobileGarrafaCard, // Fixa o card da garrafa mobile
-        pinSpacing: true,
-        onEnter: () => {
-          // Garantir que a garrafa fique na frente durante o pin
-          gsap.set(mobileGarrafaCard, { zIndex: 1000 })
-          console.log('📌 Card da garrafa MOBILE FIXADO - 400vh (z-index: 1000)')
-        },
-        onLeave: () => {
-          console.log('🔓 Card da garrafa MOBILE LIBERADO - 700vh')
-        },
-        onEnterBack: () => {
-          // Garantir que a garrafa fique na frente durante o pin
-          gsap.set(mobileGarrafaCard, { zIndex: 1000 })
-          console.log('📌 Card da garrafa MOBILE FIXADO novamente - 700vh (z-index: 1000)')
-        },
-        onLeaveBack: () => {
-          console.log('🔓 Card da garrafa MOBILE LIBERADO novamente - 400vh')
-        }
-      })
 
-      // Efeito para fazer outros cards desaparecerem aos 400vh (exceto garrafa)
+      // Efeito para fazer todos os cards desaparecerem aos 400vh (incluindo garrafa)
       ScrollTrigger.create({
         trigger: 'body',
         start: '+=400vh', // Começa aos 400vh
         end: '+=410vh', // Dura 10vh para o fade out
         scrub: 0.5, // Sincronização rápida
         onEnter: () => {
-          console.log('👻 INICIANDO FADE OUT DOS OUTROS CARDS - 400vh')
-          // Fazer todos os cards exceto a garrafa desaparecerem
+          console.log('👻 INICIANDO FADE OUT DE TODOS OS CARDS - 400vh')
+          // Fazer todos os cards exceto a garrafa desaparecerem primeiro
           cards.forEach((card, index) => {
-            if (index !== 0) { // Não afetar a garrafa (index 0)
+            if (index !== 0) { // Não é a garrafa
               gsap.to(card.ref, {
                 opacity: 0,
                 scale: 0.8,
@@ -706,40 +633,103 @@ export default function HomePage() {
               })
             }
           })
+          
+          // Fazer a garrafa desaparecer com atraso
+          setTimeout(() => {
+            gsap.to(cards[0].ref, {
+              opacity: 0,
+              scale: 0.8,
+              duration: 0.5,
+              ease: 'power2.out'
+            })
+          }, 300) // 300ms de atraso
         },
         onLeave: () => {
-          console.log('✅ OUTROS CARDS DESAPARECERAM - 410vh')
+          console.log('✅ TODOS OS CARDS DESAPARECERAM - 410vh')
         },
         onEnterBack: () => {
-          console.log('🔄 RETORNANDO OUTROS CARDS - 410vh')
-          // Fazer todos os cards exceto a garrafa retornarem
-          cards.forEach((card, index) => {
-            if (index !== 0) { // Não afetar a garrafa (index 0)
-              gsap.to(card.ref, {
-                opacity: 1,
-                scale: card.scale, // Retornar à escala original
-                duration: 0.5,
-                ease: 'power2.out'
-              })
+          console.log('🔄 RETORNANDO TODOS OS CARDS - 410vh')
+          // Fazer a garrafa aparecer primeiro
+          gsap.to(cards[0].ref, {
+            opacity: 1,
+            scale: 1, // Retornar à escala original (1)
+            duration: 0.5,
+            ease: 'power2.out',
+            onComplete: () => {
+              // Garantir que o estilo inline esteja correto após a animação
+              cards[0].ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+              cards[0].ref.style.opacity = '1'
+              cards[0].ref.style.filter = 'none'
             }
           })
+          
+          // Fazer os outros cards aparecerem com atraso
+          setTimeout(() => {
+            cards.forEach((card, index) => {
+              if (index !== 0) { // Não é a garrafa
+                gsap.to(card.ref, {
+                  opacity: 1,
+                  scale: 1, // Retornar à escala original (1)
+                  duration: 0.5,
+                  ease: 'power2.out',
+                  onComplete: () => {
+                    // Garantir que o estilo inline esteja correto após a animação
+                    card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+                    card.ref.style.opacity = '1'
+                    card.ref.style.filter = 'none'
+                  }
+                })
+              }
+            })
+          }, 200) // 200ms de atraso para os outros cards
         },
         onLeaveBack: () => {
-          console.log('✅ OUTROS CARDS RETORNARAM - 400vh')
+          console.log('✅ TODOS OS CARDS RETORNARAM - 400vh')
         }
       })
 
-      // Efeito para fazer outros cards mobile desaparecerem aos 400vh (exceto garrafa)
+      // ScrollTrigger para controlar o reaparecimento dos cards no fallback - REGRA GLOBAL
+      ScrollTrigger.create({
+        trigger: 'body',
+        start: 'top top', // Monitora desde o início
+        end: window.innerWidth <= 768 ? '+=500vh' : '+=700vh', // 500vh para mobile, 700vh para desktop
+        scrub: 0.5,
+        onUpdate: (self) => {
+          // Calcular o vh atual
+          const scrollY = window.scrollY
+          const viewportHeight = window.innerHeight
+          const scrollVh = scrollY / viewportHeight
+          
+          // Se estamos em fallback (direction === -1) e ainda na zona de vídeo ou além
+          if (self.direction === -1 && scrollVh >= 400) {
+            console.log('🚫 FALLBACK DETECTADO - MANTENDO CARDS OCULTOS em', scrollVh.toFixed(1) + 'vh')
+            cards.forEach(card => {
+              gsap.set(card.ref, {
+                opacity: 0,
+                scale: 0.8
+              })
+            })
+          }
+        },
+        onEnter: () => {
+          console.log('👀 MONITORAMENTO GLOBAL DE FALLBACK ATIVADO')
+        },
+        onLeave: () => {
+          console.log('✅ MONITORAMENTO GLOBAL DE FALLBACK FINALIZADO')
+        }
+      })
+
+      // Efeito para fazer todos os cards mobile desaparecerem aos 400vh (incluindo garrafa)
       ScrollTrigger.create({
         trigger: 'body',
         start: '+=400vh', // Começa aos 400vh
         end: '+=410vh', // Dura 10vh para o fade out
         scrub: 0.5, // Sincronização rápida
         onEnter: () => {
-          console.log('👻 INICIANDO FADE OUT DOS OUTROS CARDS MOBILE - 400vh')
-          // Fazer todos os cards mobile exceto a garrafa desaparecerem
+          console.log('👻 INICIANDO FADE OUT DE TODOS OS CARDS MOBILE - 400vh')
+          // Fazer todos os cards mobile exceto a garrafa desaparecerem primeiro
           mobileCards.forEach((card, index) => {
-            if (index !== 0) { // Não afetar a garrafa (index 0)
+            if (index !== 0) { // Não é a garrafa
               gsap.to(card.ref, {
                 opacity: 0,
                 scale: 0.8,
@@ -748,294 +738,117 @@ export default function HomePage() {
               })
             }
           })
+          
+          // Fazer a garrafa mobile desaparecer com atraso
+          setTimeout(() => {
+            gsap.to(mobileCards[0].ref, {
+              opacity: 0,
+              scale: 0.8,
+              duration: 0.5,
+              ease: 'power2.out'
+            })
+          }, 300) // 300ms de atraso
         },
         onLeave: () => {
-          console.log('✅ OUTROS CARDS MOBILE DESAPARECERAM - 410vh')
+          console.log('✅ TODOS OS CARDS MOBILE DESAPARECERAM - 410vh')
         },
         onEnterBack: () => {
-          console.log('🔄 RETORNANDO OUTROS CARDS MOBILE - 410vh')
-          // Fazer todos os cards mobile exceto a garrafa retornarem
-          mobileCards.forEach((card, index) => {
-            if (index !== 0) { // Não afetar a garrafa (index 0)
-              gsap.to(card.ref, {
-                opacity: 1,
-                scale: card.scale, // Retornar à escala original
-                duration: 0.5,
-                ease: 'power2.out'
-              })
+          console.log('🔄 RETORNANDO TODOS OS CARDS MOBILE - 410vh')
+          // Fazer a garrafa mobile aparecer primeiro
+          gsap.to(mobileCards[0].ref, {
+            opacity: 1,
+            scale: 1, // Retornar à escala original (1)
+            duration: 0.5,
+            ease: 'power2.out',
+            onComplete: () => {
+              // Garantir que o estilo inline esteja correto após a animação
+              mobileCards[0].ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+              mobileCards[0].ref.style.opacity = '1'
+              mobileCards[0].ref.style.filter = 'none'
             }
           })
+          
+          // Fazer os outros cards mobile aparecerem com atraso
+          setTimeout(() => {
+            mobileCards.forEach((card, index) => {
+              if (index !== 0) { // Não é a garrafa
+                gsap.to(card.ref, {
+                  opacity: 1,
+                  scale: 1, // Retornar à escala original (1)
+                  duration: 0.5,
+                  ease: 'power2.out',
+                  onComplete: () => {
+                    // Garantir que o estilo inline esteja correto após a animação
+                    card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+                    card.ref.style.opacity = '1'
+                    card.ref.style.filter = 'none'
+                  }
+                })
+              }
+            })
+          }, 200) // 200ms de atraso para os outros cards
         },
         onLeaveBack: () => {
-          console.log('✅ OUTROS CARDS MOBILE RETORNARAM - 400vh')
+          console.log('✅ TODOS OS CARDS MOBILE RETORNARAM - 400vh')
         }
       })
 
-      // Efeito de desintegração do card da garrafa desktop a partir de 600vh
+      // ScrollTrigger para controlar o reaparecimento dos cards mobile no fallback - REGRA GLOBAL
       ScrollTrigger.create({
         trigger: 'body',
-        start: '+=600vh', // Começa a desintegração em 600vh
-        end: '+=615vh', // Dura 15vh para a desintegração (extremamente rápido)
-        scrub: 0.2, // Sincronização extremamente rápida
-        onEnter: () => {
-          console.log('✨ INICIANDO DESINTEGRAÇÃO DA GARRAFA DESKTOP - 600vh')
-          // Garantir que a garrafa esteja visível antes de começar a desintegração
-          garrafaCard.style.opacity = '1'
-          garrafaCard.style.transform = 'scale(1)'
-          garrafaCard.style.filter = 'blur(0px) brightness(1)'
-          console.log('🔄 Estado inicial da garrafa DESKTOP garantido para desintegração')
-        },
+        start: 'top top', // Monitora desde o início
+        end: window.innerWidth <= 768 ? '+=500vh' : '+=700vh', // 500vh para mobile, 700vh para desktop
+        scrub: 0.5,
         onUpdate: (self) => {
-          // Efeito de desintegração progressiva
-          const progress = self.progress
+          // Calcular o vh atual
+          const scrollY = window.scrollY
+          const viewportHeight = window.innerHeight
+          const scrollVh = scrollY / viewportHeight
           
-          // Criar efeito de partículas flutuantes que se desprendem
-          if (progress > 0.05 && progress < 0.6) {
-            // Criar partículas extremamente frequentemente durante a desintegração
-            if (Math.random() < 0.6) { // 60% de chance a cada frame (extremamente mais partículas)
-              const particle = document.createElement('div')
-              particle.style.cssText = `
-                position: fixed;
-                width: 4px;
-                height: 4px;
-                background: rgba(255, 255, 255, 0.8);
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 9999;
-                box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
-              `
-              
-              // Posicionar partícula na borda da garrafa
-              const garrafaRect = garrafaCard.getBoundingClientRect()
-              const centerX = garrafaRect.left + garrafaRect.width / 2
-              const centerY = garrafaRect.top + garrafaRect.height / 2
-              
-              // Posição aleatória na borda da garrafa
-              const angle = Math.random() * Math.PI * 2
-              const radius = Math.min(garrafaRect.width, garrafaRect.height) / 2
-              const startX = centerX + Math.cos(angle) * radius
-              const startY = centerY + Math.sin(angle) * radius
-              
-              particle.style.left = startX + 'px'
-              particle.style.top = startY + 'px'
-              
-              document.body.appendChild(particle)
-              
-              // Animação da partícula flutuando para cima (extremamente rápida)
-              gsap.to(particle, {
-                y: -40 - Math.random() * 60,
-                x: (Math.random() - 0.5) * 40,
+          // Se estamos em fallback (direction === -1) e ainda na zona de vídeo ou além
+          if (self.direction === -1 && scrollVh >= 400) {
+            console.log('🚫 FALLBACK MOBILE DETECTADO - MANTENDO CARDS OCULTOS em', scrollVh.toFixed(1) + 'vh')
+            mobileCards.forEach(card => {
+              gsap.set(card.ref, {
                 opacity: 0,
-                scale: 0,
-                duration: 0.3 + Math.random() * 0.3, // Duração extremamente reduzida
-                ease: 'power5.out', // Easing extremamente agressivo
-                onComplete: () => {
-                  if (particle.parentNode) {
-                    particle.parentNode.removeChild(particle)
-                  }
-                }
+                scale: 0.8
               })
-            }
+            })
           }
-          
-          // Efeito de transparência progressiva (extremamente agressivo)
-          const opacity = 1 - (progress * 3.0) // Desaparece extremamente rapidamente
-          garrafaCard.style.opacity = Math.max(0, opacity).toString()
-          
-          // Efeito de escala extremamente agressivo
-          const scale = 1 - (progress * 1.0) // Reduz 100% do tamanho
-          garrafaCard.style.transform = `scale(${scale})`
-          
-          // Efeito de blur progressivo (extremamente intenso)
-          const blur = progress * 12 // Máximo 12px de blur
-          garrafaCard.style.filter = `blur(${blur}px)`
-          
-          // Efeito de brilho extremamente intenso
-          if (progress > 0.1) {
-            const brightness = 1 + (progress - 0.1) * 3.0
-            garrafaCard.style.filter += ` brightness(${brightness})`
-          }
+        },
+        onEnter: () => {
+          console.log('👀 MONITORAMENTO GLOBAL DE FALLBACK MOBILE ATIVADO')
         },
         onLeave: () => {
-          console.log('✨ DESINTEGRAÇÃO FINALIZADA - 615vh')
-          // Garantir que a garrafa esteja completamente transparente
-          garrafaCard.style.opacity = '0'
-          garrafaCard.style.transform = 'scale(0.7)'
-          garrafaCard.style.filter = 'blur(3px) brightness(1.25)'
-          
-          // Fallback para garantir estado final consistente
-          setTimeout(() => {
-            if (garrafaCard.style.opacity !== '0') {
-              console.log('🔄 Aplicando fallback de estado final')
-              garrafaCard.style.opacity = '0'
-              garrafaCard.style.transform = 'scale(0.7)'
-              garrafaCard.style.filter = 'blur(3px) brightness(1.25)'
-            }
-          }, 100)
-        },
-        onEnterBack: () => {
-          console.log('✨ REVERTENDO DESINTEGRAÇÃO - 615vh')
-          // Restaurar estado da garrafa imediatamente
-          garrafaCard.style.opacity = '1'
-          garrafaCard.style.transform = 'scale(1)'
-          garrafaCard.style.filter = 'blur(0px) brightness(1)'
-          console.log('✅ Estado da garrafa restaurado imediatamente')
-        },
-        onLeaveBack: () => {
-          console.log('✨ DESINTEGRAÇÃO DESKTOP REVERTIDA - 600vh')
-          // Fallback adicional para garantir estado correto
-          if (garrafaCard.style.opacity !== '1' || garrafaCard.style.transform !== 'scale(1)') {
-            console.log('🔄 Aplicando fallback de restauração DESKTOP')
-            garrafaCard.style.opacity = '1'
-            garrafaCard.style.transform = 'scale(1)'
-            garrafaCard.style.filter = 'blur(0px) brightness(1)'
-          }
+          console.log('✅ MONITORAMENTO GLOBAL DE FALLBACK MOBILE FINALIZADO')
         }
       })
 
-      // Efeito de desintegração do card da garrafa mobile a partir de 600vh
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: '+=600vh', // Começa a desintegração em 600vh
-        end: '+=615vh', // Dura 15vh para a desintegração (extremamente rápido)
-        scrub: 0.2, // Sincronização extremamente rápida
-        onEnter: () => {
-          console.log('✨ INICIANDO DESINTEGRAÇÃO DA GARRAFA MOBILE - 600vh')
-          // Garantir que a garrafa esteja visível antes de começar a desintegração
-          mobileGarrafaCard.style.opacity = '1'
-          mobileGarrafaCard.style.transform = 'scale(1)'
-          mobileGarrafaCard.style.filter = 'blur(0px) brightness(1)'
-          console.log('🔄 Estado inicial da garrafa MOBILE garantido para desintegração')
-        },
-        onUpdate: (self) => {
-          // Efeito de desintegração progressiva
-          const progress = self.progress
-          
-          // Criar efeito de partículas flutuantes que se desprendem
-          if (progress > 0.05 && progress < 0.6) {
-            // Criar partículas extremamente frequentemente durante a desintegração
-            if (Math.random() < 0.6) { // 60% de chance a cada frame (extremamente mais partículas)
-              const particle = document.createElement('div')
-              particle.style.cssText = `
-                position: fixed;
-                width: 4px;
-                height: 4px;
-                background: rgba(255, 255, 255, 0.8);
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 9999;
-                box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
-              `
-              
-              // Posicionar partícula na borda da garrafa
-              const garrafaRect = mobileGarrafaCard.getBoundingClientRect()
-              const centerX = garrafaRect.left + garrafaRect.width / 2
-              const centerY = garrafaRect.top + garrafaRect.height / 2
-              
-              // Posição aleatória na borda da garrafa
-              const angle = Math.random() * Math.PI * 2
-              const radius = Math.min(garrafaRect.width, garrafaRect.height) / 2
-              const startX = centerX + Math.cos(angle) * radius
-              const startY = centerY + Math.sin(angle) * radius
-              
-              particle.style.left = startX + 'px'
-              particle.style.top = startY + 'px'
-              
-              document.body.appendChild(particle)
-              
-              // Animação da partícula flutuando para cima (extremamente rápida)
-              gsap.to(particle, {
-                y: -40 - Math.random() * 60,
-                x: (Math.random() - 0.5) * 40,
-                opacity: 0,
-                scale: 0,
-                duration: 0.3 + Math.random() * 0.3, // Duração extremamente reduzida
-                ease: 'power5.out', // Easing extremamente agressivo
-                onComplete: () => {
-                  if (particle.parentNode) {
-                    particle.parentNode.removeChild(particle)
-                  }
-                }
-              })
-            }
-          }
-          
-          // Efeito de transparência progressiva (extremamente agressivo)
-          const opacity = 1 - (progress * 3.0) // Desaparece extremamente rapidamente
-          mobileGarrafaCard.style.opacity = Math.max(0, opacity).toString()
-          
-          // Efeito de escala extremamente agressivo
-          const scale = 1 - (progress * 1.0) // Reduz 100% do tamanho
-          mobileGarrafaCard.style.transform = `scale(${scale})`
-          
-          // Efeito de blur progressivo (extremamente intenso)
-          const blur = progress * 12 // Máximo 12px de blur
-          mobileGarrafaCard.style.filter = `blur(${blur}px)`
-          
-          // Efeito de brilho extremamente intenso
-          if (progress > 0.1) {
-            const brightness = 1 + (progress - 0.1) * 3.0
-            mobileGarrafaCard.style.filter += ` brightness(${brightness})`
-          }
-        },
-        onLeave: () => {
-          console.log('✨ DESINTEGRAÇÃO MOBILE FINALIZADA - 615vh')
-          // Garantir que a garrafa esteja completamente transparente
-          mobileGarrafaCard.style.opacity = '0'
-          mobileGarrafaCard.style.transform = 'scale(0.7)'
-          mobileGarrafaCard.style.filter = 'blur(3px) brightness(1.25)'
-          
-          // Fallback para garantir estado final consistente
-          setTimeout(() => {
-            if (mobileGarrafaCard.style.opacity !== '0') {
-              console.log('🔄 Aplicando fallback de estado final MOBILE')
-              mobileGarrafaCard.style.opacity = '0'
-              mobileGarrafaCard.style.transform = 'scale(0.7)'
-              mobileGarrafaCard.style.filter = 'blur(3px) brightness(1.25)'
-            }
-          }, 100)
-        },
-        onEnterBack: () => {
-          console.log('✨ REVERTENDO DESINTEGRAÇÃO MOBILE - 615vh')
-          // Restaurar estado da garrafa imediatamente
-          mobileGarrafaCard.style.opacity = '1'
-          mobileGarrafaCard.style.transform = 'scale(1)'
-          mobileGarrafaCard.style.filter = 'blur(0px) brightness(1)'
-          console.log('✅ Estado da garrafa MOBILE restaurado imediatamente')
-        },
-        onLeaveBack: () => {
-          console.log('✨ DESINTEGRAÇÃO MOBILE REVERTIDA - 600vh')
-          // Fallback adicional para garantir estado correto
-          if (mobileGarrafaCard.style.opacity !== '1' || mobileGarrafaCard.style.transform !== 'scale(1)') {
-            console.log('🔄 Aplicando fallback de restauração MOBILE')
-            mobileGarrafaCard.style.opacity = '1'
-            mobileGarrafaCard.style.transform = 'scale(1)'
-            mobileGarrafaCard.style.filter = 'blur(0px) brightness(1)'
-          }
-        }
-      })
+
       
       // ScrollTrigger para trocar o conteúdo do retângulo quando a animação terminar
       ScrollTrigger.create({
         trigger: 'body',
         start: 'top top',
-        end: '+=800vh',
+        end: window.innerWidth <= 768 ? '+=500vh' : '+=700vh', // 500vh para mobile, 700vh para desktop
         scrub: 2,
         onUpdate: (self) => {
-          // Calcular o vh atual baseado no progresso
-          const currentVh = self.progress * 800
+          // Calcular o vh atual baseado no progresso (responsivo)
+          const maxVh = window.innerWidth <= 768 ? 500 : 700
+          const currentVh = self.progress * maxVh
           
           // Log detalhado a cada 50vh para não sobrecarregar o console
           if (Math.floor(currentVh) % 50 === 0 && currentVh > 0) {
             console.log(`📏 VH ATUAL: ${Math.floor(currentVh)}vh (${Math.round(self.progress * 100)}% do progresso)`)
           }
           
-          // Log mais frequente quando estiver próximo do momento de mudança (após 600vh)
-          if (currentVh > 600 && Math.floor(currentVh) % 10 === 0) {
+          // Log mais frequente quando estiver próximo do momento de mudança
+          const thresholdVh = window.innerWidth <= 768 ? 400 : 600
+          if (currentVh > thresholdVh && Math.floor(currentVh) % 10 === 0) {
             console.log(`🎯 VH PRÓXIMO: ${Math.floor(currentVh)}vh - MOMENTO DE MUDANÇA APROXIMANDO!`)
           }
           
-          // Quando chegar a 87.5% do progresso (700vh), trocar o conteúdo
+          // Quando chegar a 87.5% do progresso, trocar o conteúdo
           if (self.progress >= 0.875) {
             setRectangleContent('final')
             // Garantir que a garrafa desktop esteja completamente invisível quando o conteúdo mudar
@@ -1068,70 +881,11 @@ export default function HomePage() {
         },
         onLeaveBack: () => {
           console.log('🔄 Resetando para conteúdo splash')
-          // Restaurar a garrafa desktop quando voltar para splash
-          if (garrafaCard) {
-            garrafaCard.style.opacity = '1'
-            garrafaCard.style.transform = 'scale(1)'
-            garrafaCard.style.filter = 'blur(0px) brightness(1)'
-            garrafaCard.style.pointerEvents = 'auto'
-          }
-          // Restaurar a garrafa mobile quando voltar para splash
-          if (mobileGarrafaCard) {
-            mobileGarrafaCard.style.opacity = '1'
-            mobileGarrafaCard.style.transform = 'scale(1)'
-            mobileGarrafaCard.style.filter = 'blur(0px) brightness(1)'
-            mobileGarrafaCard.style.pointerEvents = 'auto'
-          }
+          // Não restaurar a garrafa - ela deve permanecer oculta conforme a lógica dos cards
         }
       })
 
-      // ScrollTrigger para esconder/mostrar todos os cards desktop exceto a garrafa a partir de 500vh
-      const outrosCards = [ursopeluciaCard, blusaCard, bolsaCard, oculosCard, maquiagemCard, tenisCard, boneCard, cremeCard, cameraCard];
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: '+=500vh',
-        end: '+=800vh', // Mantém até o final do scroll
-        onEnter: () => {
-          outrosCards.forEach(card => {
-            if (card) {
-              gsap.set(card, { opacity: 0, pointerEvents: 'none' });
-            }
-          });
-          console.log('🚫 Outros cards DESKTOP ocultos a partir de 500vh');
-        },
-        onLeaveBack: () => {
-          outrosCards.forEach(card => {
-            if (card) {
-              gsap.set(card, { opacity: 1, pointerEvents: 'auto' });
-            }
-          });
-          console.log('✅ Outros cards DESKTOP visíveis novamente ao voltar antes de 500vh');
-        }
-      });
 
-      // ScrollTrigger para esconder/mostrar todos os cards mobile exceto a garrafa a partir de 500vh
-      const outrosCardsMobile = [mobileUrsopeluciaCard, mobileBlusaCard, mobileBolsaCard, mobileMaquiagemCard, mobileTenisCard, mobileBoneCard, mobileRelogioCard, mobileCameraCard];
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: '+=500vh',
-        end: '+=800vh', // Mantém até o final do scroll
-        onEnter: () => {
-          outrosCardsMobile.forEach(card => {
-            if (card) {
-              gsap.set(card, { opacity: 0, pointerEvents: 'none' });
-            }
-          });
-          console.log('🚫 Outros cards MOBILE ocultos a partir de 500vh');
-        },
-        onLeaveBack: () => {
-          outrosCardsMobile.forEach(card => {
-            if (card) {
-              gsap.set(card, { opacity: 1, pointerEvents: 'auto' });
-            }
-          });
-          console.log('✅ Outros cards MOBILE visíveis novamente ao voltar antes de 500vh');
-        }
-      });
     }
     
     // Cleanup function
