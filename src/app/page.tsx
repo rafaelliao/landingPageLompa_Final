@@ -107,7 +107,10 @@ export default function HomePage() {
   const mobileTitleContainerRef = useRef<HTMLDivElement>(null)
   
   // Estado para controlar o conteúdo do retângulo
-  const [rectangleContent, setRectangleContent] = useState<'splash' | 'final'>('splash')
+  const [rectangleContent, setRectangleContent] = useState<'splash' | 'garrafa-overlay' | 'final'>('splash')
+  const [garrafaOpacity, setGarrafaOpacity] = useState(0)
+  const [garrafaScale, setGarrafaScale] = useState(0)
+  const [garrafaRotation, setGarrafaRotation] = useState(180)
   
   // Refs para os cards desktop
   const garrafaCardRef = useRef<HTMLDivElement>(null)
@@ -395,7 +398,7 @@ export default function HomePage() {
       
       // Array com todos os cards desktop
       const cards = [
-        { ref: garrafaCard, scale: 2.2, zIndex: 1000, rotation: 0 }, // Garrafa sempre na frente (z-index máximo)
+        { ref: garrafaCard, scale: 1, zIndex: 1000, rotation: -25 }, // Garrafa sempre na frente (z-index máximo) - Rotação como cards da esquerda
         { ref: ursopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
         { ref: blusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
         { ref: bolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
@@ -409,7 +412,7 @@ export default function HomePage() {
 
       // Array com todos os cards mobile
       const mobileCards = [
-        { ref: mobileGarrafaCard, scale: 2.2, zIndex: 1000, rotation: 0 }, // Garrafa sempre na frente (z-index máximo)
+        { ref: mobileGarrafaCard, scale: 1, zIndex: 1000, rotation: -25 }, // Garrafa sempre na frente (z-index máximo) - Rotação como cards da esquerda
         { ref: mobileUrsopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
         { ref: mobileBlusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
         { ref: mobileBolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
@@ -451,7 +454,7 @@ export default function HomePage() {
         scrollTrigger: {
           trigger: 'body', // Trigger no body para começar desde o início
           start: 'top top', // Começa desde o topo da página
-          end: window.innerWidth <= 768 ? '+=500vh' : '+=700vh', // 500vh para mobile, 700vh para desktop
+          end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
           scrub: 3.5, // Sincroniza com o scroll com suavização de 3.5 segundos (mais lento)
           onUpdate: (self) => {
             // Calcular progresso em vh
@@ -625,7 +628,7 @@ export default function HomePage() {
       
 
 
-      // Efeito para fazer todos os cards desaparecerem aos 400vh (incluindo garrafa)
+      // Efeito para fazer todos os cards desaparecerem aos 400vh
       ScrollTrigger.create({
         trigger: 'body',
         start: '+=400vh', // Começa aos 400vh
@@ -633,66 +636,59 @@ export default function HomePage() {
         scrub: 0.5, // Sincronização rápida
         onEnter: () => {
           console.log('👻 INICIANDO FADE OUT DE TODOS OS CARDS - 400vh')
-          // Fazer todos os cards exceto a garrafa desaparecerem primeiro
-          cards.forEach((card, index) => {
-            if (index !== 0) { // Não é a garrafa
-              gsap.to(card.ref, {
-                opacity: 0,
-                scale: 0.8,
-                duration: 0.5,
-                ease: 'power2.out'
-              })
-            }
-          })
-          
-          // Fazer a garrafa desaparecer com atraso
-          setTimeout(() => {
-            gsap.to(cards[0].ref, {
+          // Fazer todos os cards desaparecerem juntos
+          cards.forEach((card) => {
+            gsap.to(card.ref, {
               opacity: 0,
               scale: 0.8,
               duration: 0.5,
               ease: 'power2.out'
             })
-          }, 300) // 300ms de atraso
+          })
+          
+          // Alterar conteúdo do retângulo para mostrar garrafa sobreposta ao splash
+          setRectangleContent('garrafa-overlay')
+          
+          // Animar entrada da garrafa com delay - ANIMAÇÃO IMPACTANTE
+          setTimeout(() => {
+            gsap.to({}, {
+              duration: 0.4, // Mais rápida
+              onUpdate: function() {
+                const progress = this.progress()
+                setGarrafaOpacity(progress)
+                setGarrafaScale(progress) // Escala de 0 a 1
+                setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
+              },
+              ease: 'back.out(1.7)' // Easing mais dramático
+            })
+          }, 100) // Delay reduzido para 100ms
         },
         onLeave: () => {
           console.log('✅ TODOS OS CARDS DESAPARECERAM - 410vh')
         },
         onEnterBack: () => {
           console.log('🔄 RETORNANDO TODOS OS CARDS - 410vh')
-          // Fazer a garrafa aparecer primeiro
-          gsap.to(cards[0].ref, {
-            opacity: 1,
-            scale: 1, // Retornar à escala original (1)
-            duration: 0.5,
-            ease: 'power2.out',
-            onComplete: () => {
-              // Garantir que o estilo inline esteja correto após a animação
-              cards[0].ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
-              cards[0].ref.style.opacity = '1'
-              cards[0].ref.style.filter = 'none'
-            }
-          })
-          
-          // Fazer os outros cards aparecerem com atraso
-          setTimeout(() => {
-            cards.forEach((card, index) => {
-              if (index !== 0) { // Não é a garrafa
-                gsap.to(card.ref, {
-                  opacity: 1,
-                  scale: 1, // Retornar à escala original (1)
-                  duration: 0.5,
-                  ease: 'power2.out',
-                  onComplete: () => {
-                    // Garantir que o estilo inline esteja correto após a animação
-                    card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
-                    card.ref.style.opacity = '1'
-                    card.ref.style.filter = 'none'
-                  }
-                })
+          // Fazer todos os cards aparecerem juntos
+          cards.forEach((card) => {
+            gsap.to(card.ref, {
+              opacity: 1,
+              scale: 1, // Retornar à escala original (1)
+              duration: 0.5,
+              ease: 'power2.out',
+              onComplete: () => {
+                // Garantir que o estilo inline esteja correto após a animação
+                card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+                card.ref.style.opacity = '1'
+                card.ref.style.filter = 'none'
               }
             })
-          }, 200) // 200ms de atraso para os outros cards
+          })
+          
+          // Voltar para o conteúdo splash original e ocultar garrafa
+          setRectangleContent('splash')
+          setGarrafaOpacity(0)
+          setGarrafaScale(0)
+          setGarrafaRotation(180)
         },
         onLeaveBack: () => {
           console.log('✅ TODOS OS CARDS RETORNARAM - 400vh')
@@ -703,7 +699,7 @@ export default function HomePage() {
       ScrollTrigger.create({
         trigger: 'body',
         start: 'top top', // Monitora desde o início
-        end: window.innerWidth <= 768 ? '+=500vh' : '+=700vh', // 500vh para mobile, 700vh para desktop
+        end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
         scrub: 0.5,
         onUpdate: (self) => {
           // Calcular o vh atual
@@ -730,77 +726,80 @@ export default function HomePage() {
         }
       })
 
-      // Efeito para fazer todos os cards mobile desaparecerem aos 400vh (incluindo garrafa)
+      // Efeito para fazer todos os cards mobile desaparecerem aos 250vh
       ScrollTrigger.create({
         trigger: 'body',
-        start: '+=400vh', // Começa aos 400vh
-        end: '+=410vh', // Dura 10vh para o fade out
+        start: '+=250vh', // Começa aos 250vh (antes da mudança do vídeo)
+        end: '+=260vh', // Dura 10vh para o fade out
         scrub: 0.5, // Sincronização rápida
         onEnter: () => {
-          console.log('👻 INICIANDO FADE OUT DE TODOS OS CARDS MOBILE - 400vh')
-          // Fazer todos os cards mobile exceto a garrafa desaparecerem primeiro
-          mobileCards.forEach((card, index) => {
-            if (index !== 0) { // Não é a garrafa
-              gsap.to(card.ref, {
-                opacity: 0,
-                scale: 0.8,
-                duration: 0.5,
-                ease: 'power2.out'
-              })
-            }
-          })
-          
-          // Fazer a garrafa mobile desaparecer com atraso
-          setTimeout(() => {
-            gsap.to(mobileCards[0].ref, {
+          console.log('👻 INICIANDO FADE OUT DE TODOS OS CARDS MOBILE - 250vh')
+          // Fazer todos os cards mobile desaparecerem juntos
+          mobileCards.forEach((card) => {
+            gsap.to(card.ref, {
               opacity: 0,
               scale: 0.8,
               duration: 0.5,
               ease: 'power2.out'
             })
-          }, 300) // 300ms de atraso
-        },
-        onLeave: () => {
-          console.log('✅ TODOS OS CARDS MOBILE DESAPARECERAM - 410vh')
-        },
-        onEnterBack: () => {
-          console.log('🔄 RETORNANDO TODOS OS CARDS MOBILE - 410vh')
-          // Fazer a garrafa mobile aparecer primeiro
-          gsap.to(mobileCards[0].ref, {
-            opacity: 1,
-            scale: 1, // Retornar à escala original (1)
-            duration: 0.5,
-            ease: 'power2.out',
-            onComplete: () => {
-              // Garantir que o estilo inline esteja correto após a animação
-              mobileCards[0].ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
-              mobileCards[0].ref.style.opacity = '1'
-              mobileCards[0].ref.style.filter = 'none'
-            }
           })
           
-          // Fazer os outros cards mobile aparecerem com atraso
+          // Alterar conteúdo do retângulo para mostrar garrafa sobreposta ao splash
+          setRectangleContent('garrafa-overlay')
+          
+          // Animar entrada da garrafa mobile com delay - ANIMAÇÃO IMPACTANTE
           setTimeout(() => {
-            mobileCards.forEach((card, index) => {
-              if (index !== 0) { // Não é a garrafa
-                gsap.to(card.ref, {
-                  opacity: 1,
-                  scale: 1, // Retornar à escala original (1)
-                  duration: 0.5,
-                  ease: 'power2.out',
-                  onComplete: () => {
-                    // Garantir que o estilo inline esteja correto após a animação
-                    card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
-                    card.ref.style.opacity = '1'
-                    card.ref.style.filter = 'none'
-                  }
-                })
-              }
+            gsap.to({}, {
+              duration: 0.4, // Mais rápida
+              onUpdate: function() {
+                const progress = this.progress()
+                setGarrafaOpacity(progress)
+                setGarrafaScale(progress) // Escala de 0 a 1
+                setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
+              },
+              ease: 'back.out(1.7)' // Easing mais dramático
             })
-          }, 200) // 200ms de atraso para os outros cards
+          }, 100) // Delay reduzido para 100ms
+        },
+        onLeave: () => {
+          console.log('✅ TODOS OS CARDS MOBILE DESAPARECERAM - 260vh')
+        },
+        onEnterBack: () => {
+          console.log('🔄 RETORNANDO TODOS OS CARDS MOBILE - 260vh')
+          // Verificar se estamos na posição correta para retornar os cards
+          const scrollY = window.scrollY
+          const viewportHeight = window.innerHeight
+          const scrollVh = scrollY / viewportHeight
+          
+          // Só retornar os cards se estivermos abaixo de 260vh (onde eles desapareceram)
+          if (scrollVh < 260) {
+            // Fazer todos os cards mobile aparecerem juntos
+            mobileCards.forEach((card) => {
+              gsap.to(card.ref, {
+                opacity: 1,
+                scale: 1, // Retornar à escala original (1)
+                duration: 0.5,
+                ease: 'power2.out',
+                onComplete: () => {
+                  // Garantir que o estilo inline esteja correto após a animação
+                  card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+                  card.ref.style.opacity = '1'
+                  card.ref.style.filter = 'none'
+                }
+              })
+            })
+            
+            // Voltar para o conteúdo splash original e ocultar garrafa
+            setRectangleContent('splash')
+            setGarrafaOpacity(0)
+            setGarrafaScale(0)
+            setGarrafaRotation(180)
+          } else {
+            console.log('🚫 CARDS MOBILE PERMANECEM OCULTOS - Ainda em zona de vídeo (', scrollVh.toFixed(1) + 'vh)')
+          }
         },
         onLeaveBack: () => {
-          console.log('✅ TODOS OS CARDS MOBILE RETORNARAM - 400vh')
+          console.log('✅ TODOS OS CARDS MOBILE RETORNARAM - 250vh')
         }
       })
 
@@ -808,7 +807,7 @@ export default function HomePage() {
       ScrollTrigger.create({
         trigger: 'body',
         start: 'top top', // Monitora desde o início
-        end: window.innerWidth <= 768 ? '+=500vh' : '+=700vh', // 500vh para mobile, 700vh para desktop
+        end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
         scrub: 0.5,
         onUpdate: (self) => {
           // Calcular o vh atual
@@ -816,8 +815,8 @@ export default function HomePage() {
           const viewportHeight = window.innerHeight
           const scrollVh = scrollY / viewportHeight
           
-          // Se estamos em fallback (direction === -1) e ainda na zona de vídeo ou além
-          if (self.direction === -1 && scrollVh >= 400) {
+          // Se estamos em fallback (direction === -1) e ainda na zona onde os cards devem estar ocultos
+          if (self.direction === -1 && scrollVh >= 260) {
             console.log('🚫 FALLBACK MOBILE DETECTADO - MANTENDO CARDS OCULTOS em', scrollVh.toFixed(1) + 'vh')
             mobileCards.forEach(card => {
               gsap.set(card.ref, {
@@ -841,11 +840,11 @@ export default function HomePage() {
       ScrollTrigger.create({
         trigger: 'body',
         start: 'top top',
-        end: window.innerWidth <= 768 ? '+=500vh' : '+=700vh', // 500vh para mobile, 700vh para desktop
+        end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
         scrub: 2,
         onUpdate: (self) => {
           // Calcular o vh atual baseado no progresso (responsivo)
-          const maxVh = window.innerWidth <= 768 ? 500 : 700
+          const maxVh = window.innerWidth <= 768 ? 300 : 700
           const currentVh = self.progress * maxVh
           
           // Log detalhado a cada 50vh para não sobrecarregar o console
@@ -854,31 +853,25 @@ export default function HomePage() {
           }
           
           // Log mais frequente quando estiver próximo do momento de mudança
-          const thresholdVh = window.innerWidth <= 768 ? 400 : 600
+          const thresholdVh = window.innerWidth <= 768 ? 300 : 700
           if (currentVh > thresholdVh && Math.floor(currentVh) % 10 === 0) {
             console.log(`🎯 VH PRÓXIMO: ${Math.floor(currentVh)}vh - MOMENTO DE MUDANÇA APROXIMANDO!`)
           }
           
-          // Quando chegar a 87.5% do progresso, trocar o conteúdo
-          if (self.progress >= 0.875) {
+          // Quando chegar a 98% do progresso, trocar o conteúdo
+          if (self.progress >= 0.98) {
             setRectangleContent('final')
-            // Garantir que a garrafa desktop esteja completamente invisível quando o conteúdo mudar
-            if (garrafaCard) {
-              garrafaCard.style.opacity = '0'
-              garrafaCard.style.transform = 'scale(0)'
-              garrafaCard.style.filter = 'blur(20px) brightness(0)'
-              garrafaCard.style.pointerEvents = 'none'
-            }
-            // Garantir que a garrafa mobile esteja completamente invisível quando o conteúdo mudar
-            if (mobileGarrafaCard) {
-              mobileGarrafaCard.style.opacity = '0'
-              mobileGarrafaCard.style.transform = 'scale(0)'
-              mobileGarrafaCard.style.filter = 'blur(20px) brightness(0)'
-              mobileGarrafaCard.style.pointerEvents = 'none'
-            }
-            console.log('🎯 Conteúdo do retângulo alterado para FINAL - Garrafas ocultas')
+            setGarrafaOpacity(0)
+            console.log('🎯 Conteúdo do retângulo alterado para FINAL')
+          } else if (self.progress >= 0.6) {
+            // Manter garrafa-overlay entre 60% e 98% do progresso
+            setRectangleContent('garrafa-overlay')
+            // Não alterar a opacidade aqui - ela é controlada pela animação de entrada
           } else {
             setRectangleContent('splash')
+            setGarrafaOpacity(0)
+            setGarrafaScale(0)
+            setGarrafaRotation(180)
           }
         },
         onEnter: () => {
@@ -1216,6 +1209,30 @@ export default function HomePage() {
                   alt="Splash Screen" 
                   className="w-full h-full object-cover z-10 relative transition-opacity duration-500"
                 />
+              ) : rectangleContent === 'garrafa-overlay' ? (
+                // Conteúdo intermediário - Splash Screen com Garrafa sobreposta
+                <div className="w-full h-full relative">
+                  <img 
+                    src="/Splash_screen.svg" 
+                    alt="Splash Screen" 
+                    className="w-full h-full object-cover z-10 transition-opacity duration-500"
+                  />
+                  <div 
+                    className="absolute top-1/2 left-1/2 z-20"
+                    style={{ 
+                      opacity: garrafaOpacity,
+                      transform: `translate(-50%, -50%) scale(${garrafaScale}) rotate(${garrafaRotation}deg)`
+                    }}
+                  >
+                    <div className="product-card-transparent w-48 h-64">
+                      <img 
+                        src="/garrafa_card.png" 
+                        alt="Garrafa Stanley" 
+                        className="w-full h-full object-contain rounded-xl"
+                      />
+                    </div>
+                  </div>
+                </div>
               ) : (
                 // Conteúdo final - Garrafa Reels
                 <video 
@@ -1263,6 +1280,30 @@ export default function HomePage() {
                   alt="Splash Screen" 
                   className="w-full h-full object-cover z-10 relative transition-opacity duration-500"
                 />
+              ) : rectangleContent === 'garrafa-overlay' ? (
+                // Conteúdo intermediário - Splash Screen com Garrafa sobreposta
+                <div className="w-full h-full relative">
+                  <img 
+                    src="/Splash_screen.svg" 
+                    alt="Splash Screen" 
+                    className="w-full h-full object-cover z-10 transition-opacity duration-500"
+                  />
+                  <div 
+                    className="absolute top-1/2 left-1/2 z-20"
+                    style={{ 
+                      opacity: garrafaOpacity,
+                      transform: `translate(-50%, -50%) scale(${garrafaScale}) rotate(${garrafaRotation}deg)`
+                    }}
+                  >
+                    <div className="product-card-transparent w-40 h-48">
+                      <img 
+                        src="/garrafa_card.png" 
+                        alt="Garrafa Stanley" 
+                        className="w-full h-full object-contain rounded-lg"
+                      />
+                    </div>
+                  </div>
+                </div>
               ) : (
                 // Conteúdo final - Garrafa Reels
                 <video 
