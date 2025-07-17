@@ -647,32 +647,7 @@ export default function HomePage() {
         onEnter: () => {
           // Garantir que a garrafa fique na frente durante o pin
           gsap.set(garrafaCard, { zIndex: 1000 })
-          
-          // Garantir que a garrafa desktop permaneça na posição final da animação
-          const rectangle = rectangleRef.current
-          if (rectangle) {
-            const garrafaRect = garrafaCard.getBoundingClientRect()
-            const garrafaCenterX = garrafaRect.left + garrafaRect.width / 2
-            const garrafaCenterY = garrafaRect.top + garrafaRect.height / 2
-            
-            // Usar centro da viewport para X e centro do retângulo para Y
-            const viewportCenterX = window.innerWidth / 2
-            const rectRect = rectangle.getBoundingClientRect()
-            const rectCenterY = rectRect.top + rectRect.height / 2
-            
-            // Calcular a posição final para centralizar perfeitamente
-            const finalX = viewportCenterX - garrafaCenterX
-            const finalY = rectCenterY - garrafaCenterY
-            
-            // Aplicar a posição final
-            gsap.set(garrafaCard, {
-              x: finalX,
-              y: finalY,
-              zIndex: 1000
-            })
-          }
-          
-          console.log('📌 Card da garrafa DESKTOP FIXADO - 500vh (z-index: 1000) - Posição centralizada')
+          console.log('📌 Card da garrafa DESKTOP FIXADO - 500vh (z-index: 1000)')
         },
         onLeave: () => {
           console.log('🔓 Card da garrafa DESKTOP LIBERADO - 700vh')
@@ -680,32 +655,7 @@ export default function HomePage() {
         onEnterBack: () => {
           // Garantir que a garrafa fique na frente durante o pin
           gsap.set(garrafaCard, { zIndex: 1000 })
-          
-          // Garantir que a garrafa desktop permaneça na posição final da animação
-          const rectangle = rectangleRef.current
-          if (rectangle) {
-            const garrafaRect = garrafaCard.getBoundingClientRect()
-            const garrafaCenterX = garrafaRect.left + garrafaRect.width / 2
-            const garrafaCenterY = garrafaRect.top + garrafaRect.height / 2
-            
-            // Usar centro da viewport para X e centro do retângulo para Y
-            const viewportCenterX = window.innerWidth / 2
-            const rectRect = rectangle.getBoundingClientRect()
-            const rectCenterY = rectRect.top + rectRect.height / 2
-            
-            // Calcular a posição final para centralizar perfeitamente
-            const finalX = viewportCenterX - garrafaCenterX
-            const finalY = rectCenterY - garrafaCenterY
-            
-            // Aplicar a posição final
-            gsap.set(garrafaCard, {
-              x: finalX,
-              y: finalY,
-              zIndex: 1000
-            })
-          }
-          
-          console.log('📌 Card da garrafa DESKTOP FIXADO novamente - 700vh (z-index: 1000) - Posição centralizada')
+          console.log('📌 Card da garrafa DESKTOP FIXADO novamente - 700vh (z-index: 1000)')
         },
         onLeaveBack: () => {
           console.log('🔓 Card da garrafa DESKTOP LIBERADO novamente - 500vh')
@@ -722,32 +672,7 @@ export default function HomePage() {
         onEnter: () => {
           // Garantir que a garrafa fique na frente durante o pin
           gsap.set(mobileGarrafaCard, { zIndex: 1000 })
-          
-          // Garantir que a garrafa mobile permaneça na posição final da animação
-          const mobileRectangle = mobileRectangleRef.current
-          if (mobileRectangle) {
-            const garrafaRect = mobileGarrafaCard.getBoundingClientRect()
-            const garrafaCenterX = garrafaRect.left + garrafaRect.width / 2
-            const garrafaCenterY = garrafaRect.top + garrafaRect.height / 2
-            
-            // Usar centro da viewport para X e centro do retângulo para Y
-            const viewportCenterX = window.innerWidth / 2
-            const rectRect = mobileRectangle.getBoundingClientRect()
-            const rectCenterY = rectRect.top + rectRect.height / 2
-            
-            // Calcular a posição final para centralizar perfeitamente
-            const finalX = viewportCenterX - garrafaCenterX
-            const finalY = rectCenterY - garrafaCenterY
-            
-            // Aplicar a posição final
-            gsap.set(mobileGarrafaCard, {
-              x: finalX,
-              y: finalY,
-              zIndex: 1000
-            })
-          }
-          
-          console.log('📌 Card da garrafa MOBILE FIXADO - 400vh (z-index: 1000) - Posição centralizada')
+          console.log('📌 Card da garrafa MOBILE FIXADO - 400vh (z-index: 1000)')
         },
         onLeave: () => {
           console.log('🔓 Card da garrafa MOBILE LIBERADO - 700vh')
@@ -755,32 +680,7 @@ export default function HomePage() {
         onEnterBack: () => {
           // Garantir que a garrafa fique na frente durante o pin
           gsap.set(mobileGarrafaCard, { zIndex: 1000 })
-          
-          // Garantir que a garrafa mobile permaneça na posição final da animação
-          const mobileRectangle = mobileRectangleRef.current
-          if (mobileRectangle) {
-            const garrafaRect = mobileGarrafaCard.getBoundingClientRect()
-            const garrafaCenterX = garrafaRect.left + garrafaRect.width / 2
-            const garrafaCenterY = garrafaRect.top + garrafaRect.height / 2
-            
-            // Usar centro da viewport para X e centro do retângulo para Y
-            const viewportCenterX = window.innerWidth / 2
-            const rectRect = mobileRectangle.getBoundingClientRect()
-            const rectCenterY = rectRect.top + rectRect.height / 2
-            
-            // Calcular a posição final para centralizar perfeitamente
-            const finalX = viewportCenterX - garrafaCenterX
-            const finalY = rectCenterY - garrafaCenterY
-            
-            // Aplicar a posição final
-            gsap.set(mobileGarrafaCard, {
-              x: finalX,
-              y: finalY,
-              zIndex: 1000
-            })
-          }
-          
-          console.log('📌 Card da garrafa MOBILE FIXADO novamente - 700vh (z-index: 1000) - Posição centralizada')
+          console.log('📌 Card da garrafa MOBILE FIXADO novamente - 700vh (z-index: 1000)')
         },
         onLeaveBack: () => {
           console.log('🔓 Card da garrafa MOBILE LIBERADO novamente - 400vh')
