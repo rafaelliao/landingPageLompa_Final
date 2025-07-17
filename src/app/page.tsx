@@ -111,6 +111,8 @@ export default function HomePage() {
   const [garrafaOpacity, setGarrafaOpacity] = useState(0)
   const [garrafaScale, setGarrafaScale] = useState(0)
   const [garrafaRotation, setGarrafaRotation] = useState(180)
+  const [videoOpacity, setVideoOpacity] = useState(0)
+  const [videoScale, setVideoScale] = useState(0.8)
   
   // Refs para os cards desktop
   const garrafaCardRef = useRef<HTMLDivElement>(null)
@@ -862,6 +864,20 @@ export default function HomePage() {
           if (self.progress >= 0.98) {
             setRectangleContent('final')
             setGarrafaOpacity(0)
+            
+            // Animar entrada do vídeo em desktop e mobile
+            setTimeout(() => {
+              gsap.to({}, {
+                duration: 0.6,
+                onUpdate: function() {
+                  const progress = this.progress()
+                  setVideoOpacity(progress)
+                  setVideoScale(0.8 + (progress * 0.2)) // Escala de 0.8 a 1
+                },
+                ease: 'power2.out'
+              })
+            }, 100)
+            
             console.log('🎯 Conteúdo do retângulo alterado para FINAL')
           } else if (self.progress >= 0.6) {
             // Manter garrafa-overlay entre 60% e 98% do progresso
@@ -872,6 +888,8 @@ export default function HomePage() {
             setGarrafaOpacity(0)
             setGarrafaScale(0)
             setGarrafaRotation(180)
+            setVideoOpacity(0)
+            setVideoScale(0.8)
           }
         },
         onEnter: () => {
@@ -1191,7 +1209,7 @@ export default function HomePage() {
           <div className="h-screen flex items-center justify-center">
             <div
               ref={rectangleRef}
-              className="rounded-[32px] border-2 bg-white/10 shadow-2xl w-[280px] h-[580px] sm:w-[320px] sm:h-[620px] md:w-[360px] md:h-[680px] lg:w-[380px] lg:h-[680px] transition-all duration-300 border-pink-transparent relative overflow-hidden flex items-center justify-center"
+              className="rounded-[32px] border-2 bg-white/10 shadow-2xl w-[280px] h-[560px] sm:w-[320px] sm:h-[640px] md:w-[360px] md:h-[720px] lg:w-[380px] lg:h-[760px] transition-all duration-300 border-pink-transparent relative overflow-hidden flex items-center justify-center"
             >
               {/* Brilho animado no fundo */}
               <div className="absolute left-0 top-0 w-full h-full rounded-[32px] pointer-events-none overflow-hidden z-0">
@@ -1242,8 +1260,12 @@ export default function HomePage() {
                   muted 
                   playsInline
                   preload="auto"
-                  className="w-full h-full object-cover z-10 relative transition-opacity duration-500 rounded-[32px]"
-                  style={{ objectPosition: 'center' }}
+                  className="w-full h-full object-cover z-10 relative rounded-[32px]"
+                  style={{ 
+                    objectPosition: 'center',
+                    opacity: videoOpacity,
+                    transform: `scale(${videoScale})`
+                  }}
                   onLoadedData={(e) => {
                     // Forçar play quando o vídeo estiver carregado
                     const video = e.target as HTMLVideoElement;
@@ -1262,7 +1284,7 @@ export default function HomePage() {
           <div className="h-screen flex items-center justify-center">
             <div
               ref={mobileRectangleRef}
-              className="rounded-[24px] border-2 bg-white/10 shadow-2xl w-[240px] h-[480px] sm:w-[280px] sm:h-[520px] transition-all duration-300 border-pink-transparent relative overflow-hidden flex items-center justify-center"
+              className="rounded-[24px] border-2 bg-white/10 shadow-2xl w-[280px] h-[560px] sm:w-[320px] sm:h-[640px] transition-all duration-300 border-pink-transparent relative overflow-hidden flex items-center justify-center"
             >
               {/* Brilho animado no fundo */}
               <div className="absolute left-0 top-0 w-full h-full rounded-[24px] pointer-events-none overflow-hidden z-0">
@@ -1313,8 +1335,12 @@ export default function HomePage() {
                   muted 
                   playsInline
                   preload="auto"
-                  className="w-full h-full object-cover z-10 relative transition-opacity duration-500 rounded-[24px]"
-                  style={{ objectPosition: 'center' }}
+                  className="w-full h-full object-cover z-10 relative rounded-[24px]"
+                  style={{ 
+                    objectPosition: 'center',
+                    opacity: videoOpacity,
+                    transform: `scale(${videoScale})`
+                  }}
                   onLoadedData={(e) => {
                     // Forçar play quando o vídeo estiver carregado
                     const video = e.target as HTMLVideoElement;
