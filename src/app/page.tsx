@@ -1213,8 +1213,16 @@ export default function HomePage() {
                   loop 
                   muted 
                   playsInline
+                  preload="auto"
                   className="w-full h-full object-cover z-10 relative transition-opacity duration-500 rounded-[32px]"
                   style={{ objectPosition: 'center' }}
+                  onLoadedData={(e) => {
+                    // Forçar play quando o vídeo estiver carregado
+                    const video = e.target as HTMLVideoElement;
+                    video.play().catch(err => {
+                      console.log('Erro ao reproduzir vídeo desktop:', err);
+                    });
+                  }}
                 />
               )}
             </div>
@@ -1252,8 +1260,16 @@ export default function HomePage() {
                   loop 
                   muted 
                   playsInline
+                  preload="auto"
                   className="w-full h-full object-cover z-10 relative transition-opacity duration-500 rounded-[24px]"
                   style={{ objectPosition: 'center' }}
+                  onLoadedData={(e) => {
+                    // Forçar play quando o vídeo estiver carregado
+                    const video = e.target as HTMLVideoElement;
+                    video.play().catch(err => {
+                      console.log('Erro ao reproduzir vídeo mobile:', err);
+                    });
+                  }}
                 />
               )}
             </div>
