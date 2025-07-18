@@ -113,7 +113,11 @@ export default function HomePage() {
   const [garrafaRotation, setGarrafaRotation] = useState(180)
   const [videoOpacity, setVideoOpacity] = useState(0)
   const [videoScale, setVideoScale] = useState(0.8)
-  const [currentVideo, setCurrentVideo] = useState<'garrafa' | 'bolsa'>('garrafa')
+  const [currentVideo, setCurrentVideo] = useState<'garrafa' | 'bolsa' | 'parafusadeira'>('garrafa')
+  
+  // Estados para transição TikTok
+  const [videoTransform, setVideoTransform] = useState('translateY(0vh)')
+  const [videoTransitionProgress, setVideoTransitionProgress] = useState(0)
   
   // Refs para os cards desktop
   const garrafaCardRef = useRef<HTMLDivElement>(null)
@@ -691,19 +695,17 @@ export default function HomePage() {
             // Alterar conteúdo do retângulo para mostrar garrafa sobreposta ao splash
             setRectangleContent('garrafa-overlay')
             
-            // Animar entrada da garrafa com delay - ANIMAÇÃO IMPACTANTE
-            setTimeout(() => {
-              gsap.to({}, {
-                duration: 0.4, // Mais rápida
-                onUpdate: function() {
-                  const progress = this.progress()
-                  setGarrafaOpacity(1) // Manter opacidade sempre em 1
-                  setGarrafaScale(progress) // Escala de 0 a 1
-                  setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
-                },
-                ease: 'back.out(1.7)' // Easing mais dramático
-              })
-            }, 100) // Delay reduzido para 100ms
+            // Animar entrada da garrafa IMEDIATAMENTE - ANIMAÇÃO IMPACTANTE
+            gsap.to({}, {
+              duration: 0.4, // Mais rápida
+              onUpdate: function() {
+                const progress = this.progress()
+                setGarrafaOpacity(1) // Manter opacidade sempre em 1
+                setGarrafaScale(progress) // Escala de 0 a 1
+                setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
+              },
+              ease: 'back.out(1.7)' // Easing mais dramático
+            })
           },
           onLeave: () => {
             console.log('✅ TODOS OS CARDS DESAPARECERAM - 410vh')
@@ -779,19 +781,17 @@ export default function HomePage() {
             // Alterar conteúdo do retângulo para mostrar garrafa sobreposta ao splash
             setRectangleContent('garrafa-overlay')
             
-            // Animar entrada da garrafa mobile com delay - ANIMAÇÃO IMPACTANTE
-            setTimeout(() => {
-              gsap.to({}, {
-                duration: 0.4, // Mais rápida
-                onUpdate: function() {
-                  const progress = this.progress()
-                  setGarrafaOpacity(1) // Manter opacidade sempre em 1
-                  setGarrafaScale(progress) // Escala de 0 a 1
-                  setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
-                },
-                ease: 'back.out(1.7)' // Easing mais dramático
-              })
-            }, 100) // Delay reduzido para 100ms
+            // Animar entrada da garrafa mobile IMEDIATAMENTE - ANIMAÇÃO IMPACTANTE
+            gsap.to({}, {
+              duration: 0.4, // Mais rápida
+              onUpdate: function() {
+                const progress = this.progress()
+                setGarrafaOpacity(1) // Manter opacidade sempre em 1
+                setGarrafaScale(progress) // Escala de 0 a 1
+                setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
+              },
+              ease: 'back.out(1.7)' // Easing mais dramático
+            })
           },
           onLeave: () => {
             console.log('✅ TODOS OS CARDS MOBILE DESAPARECERAM - 260vh')
@@ -823,11 +823,8 @@ export default function HomePage() {
                 })
               })
               
-              // Voltar para o conteúdo splash original e ocultar garrafa
-              setRectangleContent('splash')
-              setGarrafaOpacity(0)
-              setGarrafaScale(0)
-              setGarrafaRotation(180)
+              // NÃO alterar o conteúdo do retângulo aqui - deixar que o ScrollTrigger principal controle
+              // Isso evita conflitos com a animação da garrafa
             } else {
               console.log('🚫 CARDS MOBILE PERMANECEM OCULTOS - Ainda em zona de vídeo (', scrollVh.toFixed(1) + 'vh)')
               // Forçar cards ocultos mesmo no retorno se ainda estiver acima de 300vh
@@ -909,12 +906,12 @@ export default function HomePage() {
           }
         })
 
-        // ScrollTrigger para trocar o conteúdo do retângulo quando a animação terminar
+        // ScrollTrigger OTIMIZADO para trocar o conteúdo do retângulo - SEM CONFLITOS
         ScrollTrigger.create({
           trigger: 'body',
           start: 'top top',
           end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
-          scrub: 2,
+          scrub: 1, // Reduzido para 1 para evitar conflitos
           onUpdate: (self) => {
             // Calcular o vh atual baseado no progresso (responsivo)
             const maxVh = window.innerWidth <= 768 ? 300 : 700
@@ -931,98 +928,63 @@ export default function HomePage() {
               console.log(`🎯 VH PRÓXIMO: ${Math.floor(currentVh)}vh - MOMENTO DE MUDANÇA APROXIMANDO!`)
             }
             
-            // Quando chegar a 98% do progresso, trocar o conteúdo
+            // LÓGICA SIMPLIFICADA E OTIMIZADA - SEM CONFLITOS
             if (self.progress >= 0.98) {
+              // Fase final: vídeo ativo
               setRectangleContent('final')
               setGarrafaOpacity(0)
-              setCurrentVideo('garrafa') // Definir o primeiro vídeo como ativo
-              
-              // Ativar vídeo imediatamente sem delay
+              setCurrentVideo('garrafa')
               setVideoOpacity(1)
               setVideoScale(1)
-              
               console.log('🎯 Conteúdo do retângulo alterado para FINAL - Vídeo da garrafa ativo IMEDIATAMENTE')
             } else if (self.progress >= 0.95) {
-              // Pré-ativar o vídeo um pouco antes para evitar delay
+              // Pré-carregamento do vídeo
+              setRectangleContent('final')
               setCurrentVideo('garrafa')
-              setVideoOpacity(0.1) // Pré-carregar com opacidade baixa
+              setVideoOpacity(0.1)
               setVideoScale(0.8)
+              setGarrafaOpacity(0) // Garantir que garrafa está oculta
               console.log('🔄 PRÉ-CARREGANDO vídeo da garrafa em', Math.round(self.progress * 100) + '%')
             } else if (self.progress >= 0.6) {
-              // Manter garrafa-overlay entre 60% e 98% do progresso
+              // Fase da garrafa: transição suave
               setRectangleContent('garrafa-overlay')
+              setVideoOpacity(0) // Garantir que vídeo está oculto
+              setVideoScale(0.8)
               
-              // Animar a saída da garrafa aumentando seu tamanho sem alterar posição
+              // Animar a entrada da garrafa de forma suave
               const garrafaProgress = (self.progress - 0.6) / 0.38 // Normalizar progresso entre 60% e 98%
               if (garrafaProgress > 0) {
-                // Manter opacidade em 1 e aumentar escala gradualmente de forma proporcional
-                setGarrafaOpacity(1)
-                setGarrafaScale(1 + (garrafaProgress * 0.8)) // Escala de 1 a 1.8 (80% de aumento - mais sutil)
-                setGarrafaRotation(0) // Manter rotação em 0
+                // Transição suave: opacidade de 0 a 1, escala de 0.8 a 1.8
+                setGarrafaOpacity(Math.min(1, garrafaProgress * 1.5)) // Entrada mais suave
+                setGarrafaScale(0.8 + (garrafaProgress * 1.0)) // Escala de 0.8 a 1.8
+                setGarrafaRotation(0)
               }
             } else {
+              // Fase inicial: splash screen
               setRectangleContent('splash')
               setGarrafaOpacity(0)
-              setGarrafaScale(0)
+              setGarrafaScale(0.8)
               setGarrafaRotation(180)
               setVideoOpacity(0)
               setVideoScale(0.8)
             }
           },
           onEnter: () => {
-            console.log('🔄 Iniciando detecção de troca de conteúdo')
+            console.log('🔄 Iniciando detecção de troca de conteúdo OTIMIZADA')
           },
           onLeave: () => {
             console.log('✅ Animação completa - conteúdo final ativo')
-          },
-          onEnterBack: () => {
-            console.log('↩️ Voltando para conteúdo splash')
-          },
-          onLeaveBack: () => {
-            console.log('🔄 Resetando para conteúdo splash')
-            // Não restaurar a garrafa - ela deve permanecer oculta conforme a lógica dos cards
           }
+          // REMOVIDOS onEnterBack e onLeaveBack para evitar conflitos
         })
 
-        // ScrollTrigger para transição entre vídeos (após +600vh do primeiro vídeo)
+
+
+        // ScrollTrigger de FALLBACK para transição entre vídeos com TIKTOK - PROTEÇÃO CONTRA SCROLL INVERSO - SEM ZONA MORTA (3 VÍDEOS)
         ScrollTrigger.create({
           trigger: 'body',
           start: 'top top',
-          end: window.innerWidth <= 768 ? '+=1000vh' : '+=1300vh', // 1000vh para mobile, 1300vh para desktop
-          scrub: 1,
-          onUpdate: (self) => {
-            // Calcular o vh atual baseado no progresso total
-            const maxVh = window.innerWidth <= 768 ? 1000 : 1300
-            const currentVh = self.progress * maxVh
-            
-            // Primeiro vídeo inicia em 98% do progresso (294vh mobile, 686vh desktop)
-            const firstVideoStartVh = window.innerWidth <= 768 ? 300 * 0.98 : 700 * 0.98
-            
-            // Segundo vídeo deve iniciar 600vh depois do primeiro vídeo (aumentado de 400vh para 600vh)
-            const secondVideoStartVh = firstVideoStartVh + 600
-            
-            // Lógica simples: se estamos após o ponto de início do segundo vídeo, mostrar bolsa
-            if (currentVh >= secondVideoStartVh) {
-              setCurrentVideo('bolsa')
-              console.log('🎬 SEGUNDO VÍDEO ATIVO - VH atual:', Math.floor(currentVh), 'VH início segundo vídeo:', Math.floor(secondVideoStartVh))
-            } else if (currentVh >= firstVideoStartVh) {
-              setCurrentVideo('garrafa')
-              console.log('🎬 PRIMEIRO VÍDEO ATIVO - VH atual:', Math.floor(currentVh), 'VH início primeiro vídeo:', Math.floor(firstVideoStartVh))
-            }
-          },
-          onEnter: () => {
-            console.log('🎬 Iniciando controle de transição entre vídeos')
-          },
-          onLeave: () => {
-            console.log('✅ Transição entre vídeos finalizada')
-          }
-        })
-
-        // ScrollTrigger de FALLBACK para transição entre vídeos - PROTEÇÃO CONTRA SCROLL INVERSO
-        ScrollTrigger.create({
-          trigger: 'body',
-          start: 'top top',
-          end: window.innerWidth <= 768 ? '+=1000vh' : '+=1300vh',
+          end: window.innerWidth <= 768 ? '+=1600vh' : '+=1900vh', // Aumentado para acomodar 3 vídeos
           scrub: 0.5,
           onUpdate: (self) => {
             // Calcular o vh atual
@@ -1033,90 +995,281 @@ export default function HomePage() {
             // Primeiro vídeo inicia em 98% do progresso
             const firstVideoStartVh = window.innerWidth <= 768 ? 300 * 0.98 : 700 * 0.98
             const secondVideoStartVh = firstVideoStartVh + 600
+            const thirdVideoStartVh = secondVideoStartVh + 600 // Terceiro vídeo 600vh após o segundo
+            
+            // Zona de transição TikTok entre primeiro e segundo vídeo
+            const firstTransitionStartVh = secondVideoStartVh - 200
+            const firstTransitionEndVh = secondVideoStartVh
+            
+            // Zona de transição TikTok entre segundo e terceiro vídeo
+            const secondTransitionStartVh = thirdVideoStartVh - 200
+            const secondTransitionEndVh = thirdVideoStartVh
             
             // Se estamos em fallback (direction === -1) e na zona dos vídeos
             if (self.direction === -1) {
-              if (scrollVh >= secondVideoStartVh) {
+              if (scrollVh >= secondTransitionEndVh) {
+                // Manter terceiro vídeo ativo durante fallback
+                setCurrentVideo('parafusadeira')
+                setVideoTransform('translateY(0vh)')
+                setVideoTransitionProgress(1)
+                setVideoOpacity(1)
+                setVideoScale(1)
+                console.log('🔄 FALLBACK - MANTENDO TERCEIRO VÍDEO em', scrollVh.toFixed(1) + 'vh')
+              } else if (scrollVh >= secondTransitionStartVh) {
+                // Manter transição TikTok entre segundo e terceiro vídeo durante fallback
+                const transitionProgress = (scrollVh - secondTransitionStartVh) / 200
+                setVideoTransitionProgress(transitionProgress)
+                
+                // TRANSIÇÃO CONTÍNUA NO FALLBACK 2-3
+                if (transitionProgress < 0.5) {
+                  setCurrentVideo('bolsa')
+                  const translateY = -100 * transitionProgress * 2
+                  setVideoTransform(`translateY(${translateY}vh)`)
+                  setVideoOpacity(1)
+                  setVideoScale(1)
+                } else {
+                  setCurrentVideo('parafusadeira')
+                  const translateY = 100 - (100 * (transitionProgress - 0.5) * 2)
+                  setVideoTransform(`translateY(${translateY}vh)`)
+                  setVideoOpacity(1)
+                  setVideoScale(1)
+                }
+                
+                // PROTEÇÃO CONTRA ZONA MORTA NO FALLBACK 2-3
+                if (transitionProgress >= 0.4 && transitionProgress <= 0.6) {
+                  const criticalProgress = (transitionProgress - 0.4) / 0.2
+                  
+                  if (criticalProgress < 0.5) {
+                    setCurrentVideo('bolsa')
+                    const translateY = -100 + (100 * criticalProgress * 2)
+                    setVideoTransform(`translateY(${translateY}vh)`)
+                  } else {
+                    setCurrentVideo('parafusadeira')
+                    const translateY = 100 - (100 * (criticalProgress - 0.5) * 2)
+                    setVideoTransform(`translateY(${translateY}vh)`)
+                  }
+                  
+                  setVideoOpacity(1)
+                  setVideoScale(1)
+                }
+                
+                console.log('🔄 FALLBACK - MANTENDO TRANSITION TIKTOK 2-3 SEM ZONA MORTA em', scrollVh.toFixed(1) + 'vh')
+              } else if (scrollVh >= firstTransitionEndVh) {
                 // Manter segundo vídeo ativo durante fallback
                 setCurrentVideo('bolsa')
+                setVideoTransform('translateY(0vh)')
+                setVideoTransitionProgress(0)
+                setVideoOpacity(1)
+                setVideoScale(1)
                 console.log('🔄 FALLBACK - MANTENDO SEGUNDO VÍDEO em', scrollVh.toFixed(1) + 'vh')
+              } else if (scrollVh >= firstTransitionStartVh) {
+                // Manter transição TikTok entre primeiro e segundo vídeo durante fallback
+                const transitionProgress = (scrollVh - firstTransitionStartVh) / 200
+                setVideoTransitionProgress(transitionProgress)
+                
+                // TRANSIÇÃO CONTÍNUA NO FALLBACK 1-2
+                if (transitionProgress < 0.5) {
+                  setCurrentVideo('garrafa')
+                  const translateY = -100 * transitionProgress * 2
+                  setVideoTransform(`translateY(${translateY}vh)`)
+                  setVideoOpacity(1)
+                  setVideoScale(1)
+                } else {
+                  setCurrentVideo('bolsa')
+                  const translateY = 100 - (100 * (transitionProgress - 0.5) * 2)
+                  setVideoTransform(`translateY(${translateY}vh)`)
+                  setVideoOpacity(1)
+                  setVideoScale(1)
+                }
+                
+                // PROTEÇÃO CONTRA ZONA MORTA NO FALLBACK 1-2
+                if (transitionProgress >= 0.4 && transitionProgress <= 0.6) {
+                  const criticalProgress = (transitionProgress - 0.4) / 0.2
+                  
+                  if (criticalProgress < 0.5) {
+                    setCurrentVideo('garrafa')
+                    const translateY = -100 + (100 * criticalProgress * 2)
+                    setVideoTransform(`translateY(${translateY}vh)`)
+                  } else {
+                    setCurrentVideo('bolsa')
+                    const translateY = 100 - (100 * (criticalProgress - 0.5) * 2)
+                    setVideoTransform(`translateY(${translateY}vh)`)
+                  }
+                  
+                  setVideoOpacity(1)
+                  setVideoScale(1)
+                }
+                
+                console.log('🔄 FALLBACK - MANTENDO TRANSITION TIKTOK 1-2 SEM ZONA MORTA em', scrollVh.toFixed(1) + 'vh')
               } else if (scrollVh >= firstVideoStartVh) {
                 // Manter primeiro vídeo ativo durante fallback
                 setCurrentVideo('garrafa')
+                setVideoTransform('translateY(0vh)')
+                setVideoTransitionProgress(0)
+                setVideoOpacity(1)
+                setVideoScale(1)
                 console.log('🔄 FALLBACK - MANTENDO PRIMEIRO VÍDEO em', scrollVh.toFixed(1) + 'vh')
               }
             }
           },
           onEnter: () => {
-            console.log('🔄 FALLBACK DE VÍDEOS ATIVADO')
+            console.log('🔄 FALLBACK DE 3 VÍDEOS COM TIKTOK ATIVADO - SEM ZONA MORTA')
           },
           onLeave: () => {
-            console.log('✅ FALLBACK DE VÍDEOS FINALIZADO')
+            console.log('✅ FALLBACK DE 3 VÍDEOS FINALIZADO')
           }
         })
 
-        // ScrollTrigger ADICIONAL para garantir estabilidade dos vídeos durante fallback
+        // ScrollTrigger UNIFICADO para transição entre vídeos com ANIMAÇÃO TIKTOK - SEM ZONA MORTA (3 VÍDEOS)
         ScrollTrigger.create({
           trigger: 'body',
           start: 'top top',
-          end: window.innerWidth <= 768 ? '+=1000vh' : '+=1300vh',
-          scrub: 0.1,
+          end: window.innerWidth <= 768 ? '+=1600vh' : '+=1900vh', // Aumentado para acomodar 3 vídeos
+          scrub: 1,
           onUpdate: (self) => {
-            // Calcular o vh atual
-            const scrollY = window.scrollY
-            const viewportHeight = window.innerHeight
-            const scrollVh = scrollY / viewportHeight
+            // Calcular o vh atual baseado no progresso total
+            const maxVh = window.innerWidth <= 768 ? 1600 : 1900
+            const currentVh = self.progress * maxVh
             
-            // Primeiro vídeo inicia em 98% do progresso
+            // Primeiro vídeo inicia em 98% do progresso (294vh mobile, 686vh desktop)
             const firstVideoStartVh = window.innerWidth <= 768 ? 300 * 0.98 : 700 * 0.98
             const secondVideoStartVh = firstVideoStartVh + 600
+            const thirdVideoStartVh = secondVideoStartVh + 600 // Terceiro vídeo 600vh após o segundo
             
-            // Proteção adicional para garantir que os vídeos permaneçam estáveis
-            if (scrollVh >= secondVideoStartVh) {
-              setCurrentVideo('bolsa')
-            } else if (scrollVh >= firstVideoStartVh) {
-              setCurrentVideo('garrafa')
-            }
-          }
-        })
-
-        // ScrollTrigger ESPECÍFICO para rolagem reversa - MELHORADO
-        ScrollTrigger.create({
-          trigger: 'body',
-          start: 'top top',
-          end: window.innerWidth <= 768 ? '+=1000vh' : '+=1300vh',
-          scrub: 0.3,
-          onUpdate: (self) => {
-            // Calcular o vh atual
-            const scrollY = window.scrollY
-            const viewportHeight = window.innerHeight
-            const scrollVh = scrollY / viewportHeight
+            // Zona de transição TikTok entre primeiro e segundo vídeo
+            const firstTransitionStartVh = secondVideoStartVh - 200
+            const firstTransitionEndVh = secondVideoStartVh
             
-            // Primeiro vídeo inicia em 98% do progresso
-            const firstVideoStartVh = window.innerWidth <= 768 ? 300 * 0.98 : 700 * 0.98
-            const secondVideoStartVh = firstVideoStartVh + 600
+            // Zona de transição TikTok entre segundo e terceiro vídeo
+            const secondTransitionStartVh = thirdVideoStartVh - 200
+            const secondTransitionEndVh = thirdVideoStartVh
             
-            // Detectar rolagem reversa e aplicar proteção específica
-            if (self.direction === -1) {
-              // Durante rolagem reversa, usar margem de segurança
-              const safetyMargin = 50 // 50vh de margem de segurança
+            // LÓGICA COMPLETA PARA 3 VÍDEOS COM TRANSIÇÃO TIKTOK
+            if (currentVh >= secondTransitionEndVh) {
+              // Terceiro vídeo totalmente ativo
+              setCurrentVideo('parafusadeira')
+              setVideoTransform('translateY(0vh)')
+              setVideoTransitionProgress(1)
+              setVideoOpacity(1)
+              setVideoScale(1)
+              console.log('🎬 TERCEIRO VÍDEO ATIVO - VH atual:', Math.floor(currentVh), 'VH início terceiro vídeo:', Math.floor(thirdVideoStartVh))
+            } else if (currentVh >= secondTransitionStartVh) {
+              // Zona de transição TikTok entre segundo e terceiro vídeo
+              const transitionProgress = (currentVh - secondTransitionStartVh) / 200 // 0 a 1 em 200vh
+              setVideoTransitionProgress(transitionProgress)
               
-              if (scrollVh >= (secondVideoStartVh - safetyMargin)) {
-                setCurrentVideo('bolsa')
-                console.log('🔄 ROLAGEM REVERSA - MANTENDO BOLSA com margem de segurança em', scrollVh.toFixed(1) + 'vh')
-              } else if (scrollVh >= (firstVideoStartVh - safetyMargin)) {
-                setCurrentVideo('garrafa')
-                console.log('🔄 ROLAGEM REVERSA - MANTENDO GARRAFA com margem de segurança em', scrollVh.toFixed(1) + 'vh')
+              // TRANSIÇÃO CONTÍNUA: Ambos os vídeos sempre ativos durante a transição
+              if (transitionProgress < 0.5) {
+                // Primeira metade: segundo vídeo sobe, terceiro vídeo já está posicionado embaixo
+                setCurrentVideo('bolsa') // Segundo vídeo visível
+                const translateYSecond = -100 * transitionProgress * 2 // 0vh a -100vh
+                setVideoTransform(`translateY(${translateYSecond}vh)`)
+                setVideoOpacity(1)
+                setVideoScale(1)
+                console.log('📱 TIKTOK TRANSITION 2-3 - Segundo vídeo subindo:', Math.round(translateYSecond) + 'vh')
+              } else {
+                // Segunda metade: terceiro vídeo sobe para ocupar o espaço
+                setCurrentVideo('parafusadeira') // Terceiro vídeo visível
+                const translateYThird = 100 - (100 * (transitionProgress - 0.5) * 2) // 100vh a 0vh
+                setVideoTransform(`translateY(${translateYThird}vh)`)
+                setVideoOpacity(1)
+                setVideoScale(1)
+                console.log('📱 TIKTOK TRANSITION 2-3 - Terceiro vídeo subindo:', Math.round(translateYThird) + 'vh')
               }
+              
+              // PROTEÇÃO CONTRA ZONA MORTA: Garantir transição suave no ponto crítico
+              if (transitionProgress >= 0.4 && transitionProgress <= 0.6) {
+                // Zona crítica expandida: ambos os vídeos devem estar ativos para transição suave
+                const criticalProgress = (transitionProgress - 0.4) / 0.2 // 0 a 1 na zona crítica expandida
+                
+                if (criticalProgress < 0.5) {
+                  // Ainda mostrando segundo vídeo, mas preparando terceiro
+                  setCurrentVideo('bolsa')
+                  const translateY = -100 + (100 * criticalProgress * 2) // -100vh a 0vh
+                  setVideoTransform(`translateY(${translateY}vh)`)
+                } else {
+                  // Transição para terceiro vídeo
+                  setCurrentVideo('parafusadeira')
+                  const translateY = 100 - (100 * (criticalProgress - 0.5) * 2) // 100vh a 0vh
+                  setVideoTransform(`translateY(${translateY}vh)`)
+                }
+                
+                setVideoOpacity(1)
+                setVideoScale(1)
+                console.log('🔄 ZONA CRÍTICA EXPANDIDA 2-3 - Transição suave em progresso:', Math.round(criticalProgress * 100) + '%')
+              }
+            } else if (currentVh >= firstTransitionEndVh) {
+              // Segundo vídeo totalmente ativo (sem transição)
+              setCurrentVideo('bolsa')
+              setVideoTransform('translateY(0vh)')
+              setVideoTransitionProgress(0)
+              setVideoOpacity(1)
+              setVideoScale(1)
+              console.log('🎬 SEGUNDO VÍDEO ATIVO - VH atual:', Math.floor(currentVh), 'VH início segundo vídeo:', Math.floor(secondVideoStartVh))
+            } else if (currentVh >= firstTransitionStartVh) {
+              // Zona de transição TikTok entre primeiro e segundo vídeo
+              const transitionProgress = (currentVh - firstTransitionStartVh) / 200 // 0 a 1 em 200vh
+              setVideoTransitionProgress(transitionProgress)
+              
+              // TRANSIÇÃO CONTÍNUA: Ambos os vídeos sempre ativos durante a transição
+              if (transitionProgress < 0.5) {
+                // Primeira metade: primeiro vídeo sobe, segundo vídeo já está posicionado embaixo
+                setCurrentVideo('garrafa') // Primeiro vídeo visível
+                const translateYFirst = -100 * transitionProgress * 2 // 0vh a -100vh
+                setVideoTransform(`translateY(${translateYFirst}vh)`)
+                setVideoOpacity(1)
+                setVideoScale(1)
+                console.log('📱 TIKTOK TRANSITION 1-2 - Primeiro vídeo subindo:', Math.round(translateYFirst) + 'vh')
+              } else {
+                // Segunda metade: segundo vídeo sobe para ocupar o espaço
+                setCurrentVideo('bolsa') // Segundo vídeo visível
+                const translateYSecond = 100 - (100 * (transitionProgress - 0.5) * 2) // 100vh a 0vh
+                setVideoTransform(`translateY(${translateYSecond}vh)`)
+                setVideoOpacity(1)
+                setVideoScale(1)
+                console.log('📱 TIKTOK TRANSITION 1-2 - Segundo vídeo subindo:', Math.round(translateYSecond) + 'vh')
+              }
+              
+              // PROTEÇÃO CONTRA ZONA MORTA: Garantir transição suave no ponto crítico
+              if (transitionProgress >= 0.4 && transitionProgress <= 0.6) {
+                // Zona crítica expandida: ambos os vídeos devem estar ativos para transição suave
+                const criticalProgress = (transitionProgress - 0.4) / 0.2 // 0 a 1 na zona crítica expandida
+                
+                if (criticalProgress < 0.5) {
+                  // Ainda mostrando primeiro vídeo, mas preparando segundo
+                  setCurrentVideo('garrafa')
+                  const translateY = -100 + (100 * criticalProgress * 2) // -100vh a 0vh
+                  setVideoTransform(`translateY(${translateY}vh)`)
+                } else {
+                  // Transição para segundo vídeo
+                  setCurrentVideo('bolsa')
+                  const translateY = 100 - (100 * (criticalProgress - 0.5) * 2) // 100vh a 0vh
+                  setVideoTransform(`translateY(${translateY}vh)`)
+                }
+                
+                setVideoOpacity(1)
+                setVideoScale(1)
+                console.log('🔄 ZONA CRÍTICA EXPANDIDA 1-2 - Transição suave em progresso:', Math.round(criticalProgress * 100) + '%')
+              }
+            } else if (currentVh >= firstVideoStartVh) {
+              // Primeiro vídeo ativo (sem transição)
+              setCurrentVideo('garrafa')
+              setVideoTransform('translateY(0vh)')
+              setVideoTransitionProgress(0)
+              setVideoOpacity(1)
+              setVideoScale(1)
+              console.log('🎬 PRIMEIRO VÍDEO ATIVO - VH atual:', Math.floor(currentVh), 'VH início primeiro vídeo:', Math.floor(firstVideoStartVh))
             }
           },
           onEnter: () => {
-            console.log('🔄 SISTEMA DE ROLAGEM REVERSA ATIVADO')
+            console.log('🎬 Iniciando controle de transição entre vídeos com ANIMAÇÃO TIKTOK - SEM ZONA MORTA (3 VÍDEOS)')
           },
           onLeave: () => {
-            console.log('✅ SISTEMA DE ROLAGEM REVERSA FINALIZADO')
+            console.log('✅ Transição entre vídeos finalizada')
           }
         })
+
+
         
         // Cleanup function
         return () => {
@@ -1470,9 +1623,9 @@ export default function HomePage() {
                   </div>
                 </div>
               ) : (
-                // Conteúdo final - Vídeos com transição
+                // Conteúdo final - Vídeos com transição SEM ZONA MORTA
                 <div className="w-full h-full relative">
-                  {/* Vídeo da Garrafa */}
+                  {/* Vídeo da Garrafa - SEMPRE ATIVO DURANTE TRANSIÇÃO */}
                   <video 
                     src="/Garrafa_Reels.mp4" 
                     autoPlay 
@@ -1483,8 +1636,9 @@ export default function HomePage() {
                     className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[32px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
-                      opacity: currentVideo === 'garrafa' ? videoOpacity : 0,
-                      transform: `scale(${videoScale})`
+                      opacity: videoTransitionProgress > 0 ? Math.max(0, 1 - videoTransitionProgress) * videoOpacity : (currentVideo === 'garrafa' ? videoOpacity : 0),
+                      transform: `${videoTransform} scale(${videoScale})`,
+                      willChange: 'transform, opacity' as const
                     }}
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
@@ -1495,7 +1649,7 @@ export default function HomePage() {
                     }}
                   />
                   
-                  {/* Vídeo da Bolsa */}
+                  {/* Vídeo da Bolsa - SEMPRE ATIVO DURANTE TRANSIÇÃO */}
                   <video 
                     src="/bolsa_reels_final.mp4" 
                     autoPlay 
@@ -1503,17 +1657,42 @@ export default function HomePage() {
                     muted 
                     playsInline
                     preload="auto"
-                    className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[32px] transition-opacity duration-500"
+                    className="w-full h-full object-cover z-20 absolute top-0 left-0 rounded-[32px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
-                      opacity: currentVideo === 'bolsa' ? videoOpacity : 0,
-                      transform: `scale(${videoScale})`
+                      opacity: videoTransitionProgress > 0 ? Math.min(1, videoTransitionProgress) * videoOpacity : (currentVideo === 'bolsa' ? videoOpacity : 0),
+                      transform: `${videoTransform} scale(${videoScale})`,
+                      willChange: 'transform, opacity' as const
                     }}
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
                       const video = e.target as HTMLVideoElement;
                       video.play().catch(err => {
                         console.log('Erro ao reproduzir vídeo bolsa desktop:', err);
+                      });
+                    }}
+                  />
+                  
+                  {/* Vídeo da Parafusadeira */}
+                  <video 
+                    src="/parafusadeira_reels.mp4" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    preload="auto"
+                    className="w-full h-full object-cover z-30 absolute top-0 left-0 rounded-[32px] transition-opacity duration-500"
+                    style={{ 
+                      objectPosition: 'center',
+                      opacity: currentVideo === 'parafusadeira' ? videoOpacity : 0,
+                      transform: `${videoTransform} scale(${videoScale})`,
+                      willChange: 'transform, opacity' as const
+                    }}
+                    onLoadedData={(e) => {
+                      // Forçar play quando o vídeo estiver carregado
+                      const video = e.target as HTMLVideoElement;
+                      video.play().catch(err => {
+                        console.log('Erro ao reproduzir vídeo parafusadeira desktop:', err);
                       });
                     }}
                   />
@@ -1571,9 +1750,9 @@ export default function HomePage() {
                   </div>
                 </div>
               ) : (
-                // Conteúdo final - Vídeos com transição
+                // Conteúdo final - Vídeos com transição SEM ZONA MORTA
                 <div className="w-full h-full relative">
-                  {/* Vídeo da Garrafa */}
+                  {/* Vídeo da Garrafa - SEMPRE ATIVO DURANTE TRANSIÇÃO */}
                   <video 
                     src="/Garrafa_Reels.mp4" 
                     autoPlay 
@@ -1584,8 +1763,9 @@ export default function HomePage() {
                     className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[24px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
-                      opacity: currentVideo === 'garrafa' ? videoOpacity : 0,
-                      transform: `scale(${videoScale})`
+                      opacity: videoTransitionProgress > 0 ? Math.max(0, 1 - videoTransitionProgress) * videoOpacity : (currentVideo === 'garrafa' ? videoOpacity : 0),
+                      transform: `${videoTransform} scale(${videoScale})`,
+                      willChange: 'transform, opacity' as const
                     }}
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
@@ -1596,7 +1776,7 @@ export default function HomePage() {
                     }}
                   />
                   
-                  {/* Vídeo da Bolsa */}
+                  {/* Vídeo da Bolsa - SEMPRE ATIVO DURANTE TRANSIÇÃO */}
                   <video 
                     src="/bolsa_reels_final.mp4" 
                     autoPlay 
@@ -1604,17 +1784,42 @@ export default function HomePage() {
                     muted 
                     playsInline
                     preload="auto"
-                    className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[24px] transition-opacity duration-500"
+                    className="w-full h-full object-cover z-20 absolute top-0 left-0 rounded-[24px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
-                      opacity: currentVideo === 'bolsa' ? videoOpacity : 0,
-                      transform: `scale(${videoScale})`
+                      opacity: videoTransitionProgress > 0 ? Math.min(1, videoTransitionProgress) * videoOpacity : (currentVideo === 'bolsa' ? videoOpacity : 0),
+                      transform: `${videoTransform} scale(${videoScale})`,
+                      willChange: 'transform, opacity' as const
                     }}
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
                       const video = e.target as HTMLVideoElement;
                       video.play().catch(err => {
                         console.log('Erro ao reproduzir vídeo bolsa mobile:', err);
+                      });
+                    }}
+                  />
+                  
+                  {/* Vídeo da Parafusadeira */}
+                  <video 
+                    src="/parafusadeira_reels.mp4" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    preload="auto"
+                    className="w-full h-full object-cover z-30 absolute top-0 left-0 rounded-[24px] transition-opacity duration-500"
+                    style={{ 
+                      objectPosition: 'center',
+                      opacity: currentVideo === 'parafusadeira' ? videoOpacity : 0,
+                      transform: `${videoTransform} scale(${videoScale})`,
+                      willChange: 'transform, opacity' as const
+                    }}
+                    onLoadedData={(e) => {
+                      // Forçar play quando o vídeo estiver carregado
+                      const video = e.target as HTMLVideoElement;
+                      video.play().catch(err => {
+                        console.log('Erro ao reproduzir vídeo parafusadeira mobile:', err);
                       });
                     }}
                   />
