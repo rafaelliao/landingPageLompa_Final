@@ -113,6 +113,7 @@ export default function HomePage() {
   const [garrafaRotation, setGarrafaRotation] = useState(180)
   const [videoOpacity, setVideoOpacity] = useState(0)
   const [videoScale, setVideoScale] = useState(0.8)
+  const [currentVideo, setCurrentVideo] = useState<'garrafa' | 'bolsa'>('garrafa')
   
   // Refs para os cards desktop
   const garrafaCardRef = useRef<HTMLDivElement>(null)
@@ -696,7 +697,7 @@ export default function HomePage() {
                 duration: 0.4, // Mais rápida
                 onUpdate: function() {
                   const progress = this.progress()
-                  setGarrafaOpacity(progress)
+                  setGarrafaOpacity(1) // Manter opacidade sempre em 1
                   setGarrafaScale(progress) // Escala de 0 a 1
                   setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
                 },
@@ -784,7 +785,7 @@ export default function HomePage() {
                 duration: 0.4, // Mais rápida
                 onUpdate: function() {
                   const progress = this.progress()
-                  setGarrafaOpacity(progress)
+                  setGarrafaOpacity(1) // Manter opacidade sempre em 1
                   setGarrafaScale(progress) // Escala de 0 a 1
                   setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
                 },
@@ -934,25 +935,31 @@ export default function HomePage() {
             if (self.progress >= 0.98) {
               setRectangleContent('final')
               setGarrafaOpacity(0)
+              setCurrentVideo('garrafa') // Definir o primeiro vídeo como ativo
               
-              // Animar entrada do vídeo em desktop e mobile
-              setTimeout(() => {
-                gsap.to({}, {
-                  duration: 0.6,
-                  onUpdate: function() {
-                    const progress = this.progress()
-                    setVideoOpacity(progress)
-                    setVideoScale(0.8 + (progress * 0.2)) // Escala de 0.8 a 1
-                  },
-                  ease: 'power2.out'
-                })
-              }, 100)
+              // Ativar vídeo imediatamente sem delay
+              setVideoOpacity(1)
+              setVideoScale(1)
               
-              console.log('🎯 Conteúdo do retângulo alterado para FINAL')
+              console.log('🎯 Conteúdo do retângulo alterado para FINAL - Vídeo da garrafa ativo IMEDIATAMENTE')
+            } else if (self.progress >= 0.95) {
+              // Pré-ativar o vídeo um pouco antes para evitar delay
+              setCurrentVideo('garrafa')
+              setVideoOpacity(0.1) // Pré-carregar com opacidade baixa
+              setVideoScale(0.8)
+              console.log('🔄 PRÉ-CARREGANDO vídeo da garrafa em', Math.round(self.progress * 100) + '%')
             } else if (self.progress >= 0.6) {
               // Manter garrafa-overlay entre 60% e 98% do progresso
               setRectangleContent('garrafa-overlay')
-              // Não alterar a opacidade aqui - ela é controlada pela animação de entrada
+              
+              // Animar a saída da garrafa aumentando seu tamanho sem alterar posição
+              const garrafaProgress = (self.progress - 0.6) / 0.38 // Normalizar progresso entre 60% e 98%
+              if (garrafaProgress > 0) {
+                // Manter opacidade em 1 e aumentar escala gradualmente de forma proporcional
+                setGarrafaOpacity(1)
+                setGarrafaScale(1 + (garrafaProgress * 0.8)) // Escala de 1 a 1.8 (80% de aumento - mais sutil)
+                setGarrafaRotation(0) // Manter rotação em 0
+              }
             } else {
               setRectangleContent('splash')
               setGarrafaOpacity(0)
@@ -974,6 +981,140 @@ export default function HomePage() {
           onLeaveBack: () => {
             console.log('🔄 Resetando para conteúdo splash')
             // Não restaurar a garrafa - ela deve permanecer oculta conforme a lógica dos cards
+          }
+        })
+
+        // ScrollTrigger para transição entre vídeos (após +600vh do primeiro vídeo)
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: window.innerWidth <= 768 ? '+=1000vh' : '+=1300vh', // 1000vh para mobile, 1300vh para desktop
+          scrub: 1,
+          onUpdate: (self) => {
+            // Calcular o vh atual baseado no progresso total
+            const maxVh = window.innerWidth <= 768 ? 1000 : 1300
+            const currentVh = self.progress * maxVh
+            
+            // Primeiro vídeo inicia em 98% do progresso (294vh mobile, 686vh desktop)
+            const firstVideoStartVh = window.innerWidth <= 768 ? 300 * 0.98 : 700 * 0.98
+            
+            // Segundo vídeo deve iniciar 600vh depois do primeiro vídeo (aumentado de 400vh para 600vh)
+            const secondVideoStartVh = firstVideoStartVh + 600
+            
+            // Lógica simples: se estamos após o ponto de início do segundo vídeo, mostrar bolsa
+            if (currentVh >= secondVideoStartVh) {
+              setCurrentVideo('bolsa')
+              console.log('🎬 SEGUNDO VÍDEO ATIVO - VH atual:', Math.floor(currentVh), 'VH início segundo vídeo:', Math.floor(secondVideoStartVh))
+            } else if (currentVh >= firstVideoStartVh) {
+              setCurrentVideo('garrafa')
+              console.log('🎬 PRIMEIRO VÍDEO ATIVO - VH atual:', Math.floor(currentVh), 'VH início primeiro vídeo:', Math.floor(firstVideoStartVh))
+            }
+          },
+          onEnter: () => {
+            console.log('🎬 Iniciando controle de transição entre vídeos')
+          },
+          onLeave: () => {
+            console.log('✅ Transição entre vídeos finalizada')
+          }
+        })
+
+        // ScrollTrigger de FALLBACK para transição entre vídeos - PROTEÇÃO CONTRA SCROLL INVERSO
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: window.innerWidth <= 768 ? '+=1000vh' : '+=1300vh',
+          scrub: 0.5,
+          onUpdate: (self) => {
+            // Calcular o vh atual
+            const scrollY = window.scrollY
+            const viewportHeight = window.innerHeight
+            const scrollVh = scrollY / viewportHeight
+            
+            // Primeiro vídeo inicia em 98% do progresso
+            const firstVideoStartVh = window.innerWidth <= 768 ? 300 * 0.98 : 700 * 0.98
+            const secondVideoStartVh = firstVideoStartVh + 600
+            
+            // Se estamos em fallback (direction === -1) e na zona dos vídeos
+            if (self.direction === -1) {
+              if (scrollVh >= secondVideoStartVh) {
+                // Manter segundo vídeo ativo durante fallback
+                setCurrentVideo('bolsa')
+                console.log('🔄 FALLBACK - MANTENDO SEGUNDO VÍDEO em', scrollVh.toFixed(1) + 'vh')
+              } else if (scrollVh >= firstVideoStartVh) {
+                // Manter primeiro vídeo ativo durante fallback
+                setCurrentVideo('garrafa')
+                console.log('🔄 FALLBACK - MANTENDO PRIMEIRO VÍDEO em', scrollVh.toFixed(1) + 'vh')
+              }
+            }
+          },
+          onEnter: () => {
+            console.log('🔄 FALLBACK DE VÍDEOS ATIVADO')
+          },
+          onLeave: () => {
+            console.log('✅ FALLBACK DE VÍDEOS FINALIZADO')
+          }
+        })
+
+        // ScrollTrigger ADICIONAL para garantir estabilidade dos vídeos durante fallback
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: window.innerWidth <= 768 ? '+=1000vh' : '+=1300vh',
+          scrub: 0.1,
+          onUpdate: (self) => {
+            // Calcular o vh atual
+            const scrollY = window.scrollY
+            const viewportHeight = window.innerHeight
+            const scrollVh = scrollY / viewportHeight
+            
+            // Primeiro vídeo inicia em 98% do progresso
+            const firstVideoStartVh = window.innerWidth <= 768 ? 300 * 0.98 : 700 * 0.98
+            const secondVideoStartVh = firstVideoStartVh + 600
+            
+            // Proteção adicional para garantir que os vídeos permaneçam estáveis
+            if (scrollVh >= secondVideoStartVh) {
+              setCurrentVideo('bolsa')
+            } else if (scrollVh >= firstVideoStartVh) {
+              setCurrentVideo('garrafa')
+            }
+          }
+        })
+
+        // ScrollTrigger ESPECÍFICO para rolagem reversa - MELHORADO
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: window.innerWidth <= 768 ? '+=1000vh' : '+=1300vh',
+          scrub: 0.3,
+          onUpdate: (self) => {
+            // Calcular o vh atual
+            const scrollY = window.scrollY
+            const viewportHeight = window.innerHeight
+            const scrollVh = scrollY / viewportHeight
+            
+            // Primeiro vídeo inicia em 98% do progresso
+            const firstVideoStartVh = window.innerWidth <= 768 ? 300 * 0.98 : 700 * 0.98
+            const secondVideoStartVh = firstVideoStartVh + 600
+            
+            // Detectar rolagem reversa e aplicar proteção específica
+            if (self.direction === -1) {
+              // Durante rolagem reversa, usar margem de segurança
+              const safetyMargin = 50 // 50vh de margem de segurança
+              
+              if (scrollVh >= (secondVideoStartVh - safetyMargin)) {
+                setCurrentVideo('bolsa')
+                console.log('🔄 ROLAGEM REVERSA - MANTENDO BOLSA com margem de segurança em', scrollVh.toFixed(1) + 'vh')
+              } else if (scrollVh >= (firstVideoStartVh - safetyMargin)) {
+                setCurrentVideo('garrafa')
+                console.log('🔄 ROLAGEM REVERSA - MANTENDO GARRAFA com margem de segurança em', scrollVh.toFixed(1) + 'vh')
+              }
+            }
+          },
+          onEnter: () => {
+            console.log('🔄 SISTEMA DE ROLAGEM REVERSA ATIVADO')
+          },
+          onLeave: () => {
+            console.log('✅ SISTEMA DE ROLAGEM REVERSA FINALIZADO')
           }
         })
         
@@ -1329,28 +1470,54 @@ export default function HomePage() {
                   </div>
                 </div>
               ) : (
-                // Conteúdo final - Garrafa Reels
-                <video 
-                  src="/Garrafa_Reels.mp4" 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline
-                  preload="auto"
-                  className="w-full h-full object-cover z-10 relative rounded-[32px]"
-                  style={{ 
-                    objectPosition: 'center',
-                    opacity: videoOpacity,
-                    transform: `scale(${videoScale})`
-                  }}
-                  onLoadedData={(e) => {
-                    // Forçar play quando o vídeo estiver carregado
-                    const video = e.target as HTMLVideoElement;
-                    video.play().catch(err => {
-                      console.log('Erro ao reproduzir vídeo desktop:', err);
-                    });
-                  }}
-                />
+                // Conteúdo final - Vídeos com transição
+                <div className="w-full h-full relative">
+                  {/* Vídeo da Garrafa */}
+                  <video 
+                    src="/Garrafa_Reels.mp4" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    preload="auto"
+                    className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[32px] transition-opacity duration-500"
+                    style={{ 
+                      objectPosition: 'center',
+                      opacity: currentVideo === 'garrafa' ? videoOpacity : 0,
+                      transform: `scale(${videoScale})`
+                    }}
+                    onLoadedData={(e) => {
+                      // Forçar play quando o vídeo estiver carregado
+                      const video = e.target as HTMLVideoElement;
+                      video.play().catch(err => {
+                        console.log('Erro ao reproduzir vídeo garrafa desktop:', err);
+                      });
+                    }}
+                  />
+                  
+                  {/* Vídeo da Bolsa */}
+                  <video 
+                    src="/bolsa_reels_final.mp4" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    preload="auto"
+                    className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[32px] transition-opacity duration-500"
+                    style={{ 
+                      objectPosition: 'center',
+                      opacity: currentVideo === 'bolsa' ? videoOpacity : 0,
+                      transform: `scale(${videoScale})`
+                    }}
+                    onLoadedData={(e) => {
+                      // Forçar play quando o vídeo estiver carregado
+                      const video = e.target as HTMLVideoElement;
+                      video.play().catch(err => {
+                        console.log('Erro ao reproduzir vídeo bolsa desktop:', err);
+                      });
+                    }}
+                  />
+                </div>
               )}
             </div>
           </div>
@@ -1404,28 +1571,54 @@ export default function HomePage() {
                   </div>
                 </div>
               ) : (
-                // Conteúdo final - Garrafa Reels
-                <video 
-                  src="/Garrafa_Reels.mp4" 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline
-                  preload="auto"
-                  className="w-full h-full object-cover z-10 relative rounded-[24px]"
-                  style={{ 
-                    objectPosition: 'center',
-                    opacity: videoOpacity,
-                    transform: `scale(${videoScale})`
-                  }}
-                  onLoadedData={(e) => {
-                    // Forçar play quando o vídeo estiver carregado
-                    const video = e.target as HTMLVideoElement;
-                    video.play().catch(err => {
-                      console.log('Erro ao reproduzir vídeo mobile:', err);
-                    });
-                  }}
-                />
+                // Conteúdo final - Vídeos com transição
+                <div className="w-full h-full relative">
+                  {/* Vídeo da Garrafa */}
+                  <video 
+                    src="/Garrafa_Reels.mp4" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    preload="auto"
+                    className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[24px] transition-opacity duration-500"
+                    style={{ 
+                      objectPosition: 'center',
+                      opacity: currentVideo === 'garrafa' ? videoOpacity : 0,
+                      transform: `scale(${videoScale})`
+                    }}
+                    onLoadedData={(e) => {
+                      // Forçar play quando o vídeo estiver carregado
+                      const video = e.target as HTMLVideoElement;
+                      video.play().catch(err => {
+                        console.log('Erro ao reproduzir vídeo garrafa mobile:', err);
+                      });
+                    }}
+                  />
+                  
+                  {/* Vídeo da Bolsa */}
+                  <video 
+                    src="/bolsa_reels_final.mp4" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    preload="auto"
+                    className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[24px] transition-opacity duration-500"
+                    style={{ 
+                      objectPosition: 'center',
+                      opacity: currentVideo === 'bolsa' ? videoOpacity : 0,
+                      transform: `scale(${videoScale})`
+                    }}
+                    onLoadedData={(e) => {
+                      // Forçar play quando o vídeo estiver carregado
+                      const video = e.target as HTMLVideoElement;
+                      video.play().catch(err => {
+                        console.log('Erro ao reproduzir vídeo bolsa mobile:', err);
+                      });
+                    }}
+                  />
+                </div>
               )}
             </div>
           </div>
