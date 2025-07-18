@@ -348,571 +348,648 @@ export default function HomePage() {
 
   // Efeito dos cards entrando no retângulo - VERSÃO OTIMIZADA
   useEffect(() => {
-    // Não limpar todos os ScrollTriggers aqui para não interferir com outras animações
-    
-    const rectangle = rectangleRef.current
-    const garrafaCard = garrafaCardRef.current
-    const ursopeluciaCard = ursopeluciaCardRef.current
-    const blusaCard = blusaCardRef.current
-    const bolsaCard = bolsaCardRef.current
-    const oculosCard = oculosCardRef.current
-    const maquiagemCard = maquiagemCardRef.current
-    const tenisCard = tenisCardRef.current
-    const boneCard = boneCardRef.current
-    const cremeCard = cremeCardRef.current
-    const cameraCard = cameraCardRef.current
-
-    // Refs mobile
-    const mobileGarrafaCard = mobileGarrafaCardRef.current
-    const mobileUrsopeluciaCard = mobileUrsopeluciaCardRef.current
-    const mobileBlusaCard = mobileBlusaCardRef.current
-    const mobileBolsaCard = mobileBolsaCardRef.current
-    const mobileMaquiagemCard = mobileMaquiagemCardRef.current
-    const mobileTenisCard = mobileTenisCardRef.current
-    const mobileBoneCard = mobileBoneCardRef.current
-    const mobileRelogioCard = mobileRelogioCardRef.current
-    const mobileCameraCard = mobileCameraCardRef.current
-
-    // Listener para redimensionamento da janela (definido fora do if para ser acessível no cleanup)
-    const handleResize = () => {
-      const isMobileNow = window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches
-      console.log('🔄 Redimensionamento detectado - Mobile:', isMobileNow, 'Largura:', window.innerWidth)
-      
-      // Recarregar ScrollTrigger para ajustar aos novos tamanhos
-      ScrollTrigger.refresh()
+    // Verificar se estamos no browser e se GSAP está disponível
+    if (typeof window === 'undefined' || !gsap || !ScrollTrigger) {
+      console.warn('⚠️ GSAP ou ScrollTrigger não disponível')
+      return
     }
-    
-    window.addEventListener('resize', handleResize)
-    
-    if (rectangle && garrafaCard && ursopeluciaCard && blusaCard && bolsaCard && 
-        oculosCard && maquiagemCard && tenisCard && boneCard && cremeCard && cameraCard &&
-        mobileGarrafaCard && mobileUrsopeluciaCard && mobileBlusaCard && mobileBolsaCard &&
-        mobileMaquiagemCard && mobileTenisCard && mobileBoneCard &&
-        mobileRelogioCard && mobileCameraCard) {
-      
-      // Obter referência do retângulo mobile
-      const mobileRectangle = mobileRectangleRef.current
-      
-      console.log('=== CONFIGURAÇÃO DE ANIMAÇÃO ===')
-      console.log('Retângulo Desktop:', rectangle ? '✅ Encontrado' : '❌ Não encontrado')
-      console.log('Retângulo Mobile:', mobileRectangle ? '✅ Encontrado' : '❌ Não encontrado')
-      console.log('================================')
-      
-      // Array com todos os cards desktop
-      const cards = [
-        { ref: garrafaCard, scale: 1, zIndex: 1000, rotation: -25 }, // Garrafa sempre na frente (z-index máximo) - Rotação como cards da esquerda
-        { ref: ursopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
-        { ref: blusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
-        { ref: bolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
-        { ref: oculosCard, scale: 0.7, zIndex: 50, rotation: -30 }, // Esquerda
-        { ref: maquiagemCard, scale: 0.7, zIndex: 50, rotation: 35 }, // Direita
-        { ref: tenisCard, scale: 0.7, zIndex: 50, rotation: -20 }, // Esquerda
-        { ref: boneCard, scale: 0.7, zIndex: 50, rotation: 20 }, // Direita
-        { ref: cremeCard, scale: 0.7, zIndex: 50, rotation: -35 }, // Esquerda
-        { ref: cameraCard, scale: 0.7, zIndex: 50, rotation: 40 } // Direita
+
+    // Aguardar um frame para garantir que todos os elementos estejam renderizados
+    const initAnimation = () => {
+      // Verificar novamente se todos os elementos estão disponíveis
+      const allElements = [
+        rectangleRef.current,
+        garrafaCardRef.current,
+        ursopeluciaCardRef.current,
+        blusaCardRef.current,
+        bolsaCardRef.current,
+        oculosCardRef.current,
+        maquiagemCardRef.current,
+        tenisCardRef.current,
+        boneCardRef.current,
+        cremeCardRef.current,
+        cameraCardRef.current,
+        mobileGarrafaCardRef.current,
+        mobileUrsopeluciaCardRef.current,
+        mobileBlusaCardRef.current,
+        mobileBolsaCardRef.current,
+        mobileMaquiagemCardRef.current,
+        mobileTenisCardRef.current,
+        mobileBoneCardRef.current,
+        mobileRelogioCardRef.current,
+        mobileCameraCardRef.current
       ]
 
-      // Array com todos os cards mobile
-      const mobileCards = [
-        { ref: mobileGarrafaCard, scale: 1, zIndex: 1000, rotation: -25 }, // Garrafa sempre na frente (z-index máximo) - Rotação como cards da esquerda
-        { ref: mobileUrsopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
-        { ref: mobileBlusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
-        { ref: mobileBolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
-        { ref: mobileMaquiagemCard, scale: 0.7, zIndex: 50, rotation: 35 }, // Direita
-        { ref: mobileTenisCard, scale: 0.7, zIndex: 50, rotation: -20 }, // Esquerda
-        { ref: mobileBoneCard, scale: 0.7, zIndex: 50, rotation: 20 }, // Direita
-        { ref: mobileRelogioCard, scale: 0.7, zIndex: 50, rotation: -35 }, // Esquerda
-        { ref: mobileCameraCard, scale: 0.7, zIndex: 50, rotation: 40 } // Direita
-      ]
+      if (allElements.some(el => !el)) {
+        console.warn('⚠️ Alguns elementos ainda não estão disponíveis, tentando novamente...')
+        setTimeout(initAnimation, 100) // Usar setTimeout em vez de requestAnimationFrame para mais estabilidade
+        return
+      }
+
+      console.log('✅ Todos os elementos encontrados, iniciando animações...')
       
-      // Pin do retângulo desktop (independente da animação dos cards)
-      ScrollTrigger.create({
-        trigger: rectangle.parentElement?.parentElement,
-        start: 'top top', // Quando o topo da seção toca o topo da viewport
-        end: 'bottom center', // Quando a base da seção toca o centro da viewport
-        pin: rectangle.parentElement,
-        pinSpacing: true,
-        onRefresh: () => {
-          console.log('🔄 Pin do retângulo DESKTOP recarregado')
-        }
-      })
+      // Limpar ScrollTriggers existentes para evitar conflitos
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
       
-      // Pin do retângulo mobile (independente da animação dos cards)
-      if (mobileRectangle) {
-        ScrollTrigger.create({
-          trigger: mobileRectangle.parentElement?.parentElement,
-          start: 'top top', // Quando o topo da seção toca o topo da viewport
-          end: 'bottom center', // Quando a base da seção toca o centro da viewport
-          pin: mobileRectangle.parentElement,
-          pinSpacing: true,
-          onRefresh: () => {
-            console.log('🔄 Pin do retângulo MOBILE recarregado')
-          }
-        })
+      const rectangle = rectangleRef.current
+      const garrafaCard = garrafaCardRef.current
+      const ursopeluciaCard = ursopeluciaCardRef.current
+      const blusaCard = blusaCardRef.current
+      const bolsaCard = bolsaCardRef.current
+      const oculosCard = oculosCardRef.current
+      const maquiagemCard = maquiagemCardRef.current
+      const tenisCard = tenisCardRef.current
+      const boneCard = boneCardRef.current
+      const cremeCard = cremeCardRef.current
+      const cameraCard = cameraCardRef.current
+
+      // Refs mobile
+      const mobileGarrafaCard = mobileGarrafaCardRef.current
+      const mobileUrsopeluciaCard = mobileUrsopeluciaCardRef.current
+      const mobileBlusaCard = mobileBlusaCardRef.current
+      const mobileBolsaCard = mobileBolsaCardRef.current
+      const mobileMaquiagemCard = mobileMaquiagemCardRef.current
+      const mobileTenisCard = mobileTenisCardRef.current
+      const mobileBoneCard = mobileBoneCardRef.current
+      const mobileRelogioCard = mobileRelogioCardRef.current
+      const mobileCameraCard = mobileCameraCardRef.current
+
+      // Listener para redimensionamento da janela (definido fora do if para ser acessível no cleanup)
+      const handleResize = () => {
+        const isMobileNow = window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches
+        console.log('🔄 Redimensionamento detectado - Mobile:', isMobileNow, 'Largura:', window.innerWidth)
+        
+        // Recarregar ScrollTrigger para ajustar aos novos tamanhos
+        ScrollTrigger.refresh()
       }
       
-      // Timeline para animação dos cards - USANDO VIEWPORT UNITS
-      const tlCards = gsap.timeline({
-        scrollTrigger: {
-          trigger: 'body', // Trigger no body para começar desde o início
-          start: 'top top', // Começa desde o topo da página
-          end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
-          scrub: 3.5, // Sincroniza com o scroll com suavização de 3.5 segundos (mais lento)
-          onUpdate: (self) => {
-            // Calcular progresso em vh
+      window.addEventListener('resize', handleResize)
+      
+      if (rectangle && garrafaCard && ursopeluciaCard && blusaCard && bolsaCard && 
+          oculosCard && maquiagemCard && tenisCard && boneCard && cremeCard && cameraCard &&
+          mobileGarrafaCard && mobileUrsopeluciaCard && mobileBlusaCard && mobileBolsaCard &&
+          mobileMaquiagemCard && mobileTenisCard && mobileBoneCard &&
+          mobileRelogioCard && mobileCameraCard) {
+        
+        // Obter referência do retângulo mobile
+        const mobileRectangle = mobileRectangleRef.current
+        
+        console.log('=== CONFIGURAÇÃO DE ANIMAÇÃO ===')
+        console.log('Retângulo Desktop:', rectangle ? '✅ Encontrado' : '❌ Não encontrado')
+        console.log('Retângulo Mobile:', mobileRectangle ? '✅ Encontrado' : '❌ Não encontrado')
+        console.log('================================')
+        
+        // Array com todos os cards desktop
+        const cards = [
+          { ref: garrafaCard, scale: 1, zIndex: 1000, rotation: -25 }, // Garrafa sempre na frente (z-index máximo) - Rotação como cards da esquerda
+          { ref: ursopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
+          { ref: blusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
+          { ref: bolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
+          { ref: oculosCard, scale: 0.7, zIndex: 50, rotation: -30 }, // Esquerda
+          { ref: maquiagemCard, scale: 0.7, zIndex: 50, rotation: 35 }, // Direita
+          { ref: tenisCard, scale: 0.7, zIndex: 50, rotation: -20 }, // Esquerda
+          { ref: boneCard, scale: 0.7, zIndex: 50, rotation: 20 }, // Direita
+          { ref: cremeCard, scale: 0.7, zIndex: 50, rotation: -35 }, // Esquerda
+          { ref: cameraCard, scale: 0.7, zIndex: 50, rotation: 40 } // Direita
+        ]
+
+        // Array com todos os cards mobile
+        const mobileCards = [
+          { ref: mobileGarrafaCard, scale: 1, zIndex: 1000, rotation: -25 }, // Garrafa sempre na frente (z-index máximo) - Rotação como cards da esquerda
+          { ref: mobileUrsopeluciaCard, scale: 0.7, zIndex: 50, rotation: -25 }, // Esquerda
+          { ref: mobileBlusaCard, scale: 0.7, zIndex: 50, rotation: 25 }, // Direita
+          { ref: mobileBolsaCard, scale: 0.7, zIndex: 50, rotation: 30 }, // Direita
+          { ref: mobileMaquiagemCard, scale: 0.7, zIndex: 50, rotation: 35 }, // Direita
+          { ref: mobileTenisCard, scale: 0.7, zIndex: 50, rotation: -20 }, // Esquerda
+          { ref: mobileBoneCard, scale: 0.7, zIndex: 50, rotation: 20 }, // Direita
+          { ref: mobileRelogioCard, scale: 0.7, zIndex: 50, rotation: -35 }, // Esquerda
+          { ref: mobileCameraCard, scale: 0.7, zIndex: 50, rotation: 40 } // Direita
+        ]
+        
+        // Pin do retângulo desktop (independente da animação dos cards)
+        ScrollTrigger.create({
+          trigger: rectangle.parentElement?.parentElement,
+          start: 'top top', // Quando o topo da seção toca o topo da viewport
+          end: 'bottom center', // Quando a base da seção toca o centro da viewport
+          pin: rectangle.parentElement,
+          pinSpacing: true,
+          onRefresh: () => {
+            console.log('🔄 Pin do retângulo DESKTOP recarregado')
+          }
+        })
+        
+        // Pin do retângulo mobile (independente da animação dos cards)
+        if (mobileRectangle) {
+          ScrollTrigger.create({
+            trigger: mobileRectangle.parentElement?.parentElement,
+            start: 'top top', // Quando o topo da seção toca o topo da viewport
+            end: 'bottom center', // Quando a base da seção toca o centro da viewport
+            pin: mobileRectangle.parentElement,
+            pinSpacing: true,
+            onRefresh: () => {
+              console.log('🔄 Pin do retângulo MOBILE recarregado')
+            }
+          })
+        }
+        
+        // Timeline para animação dos cards - USANDO VIEWPORT UNITS
+        const tlCards = gsap.timeline({
+          scrollTrigger: {
+            trigger: 'body', // Trigger no body para começar desde o início
+            start: 'top top', // Começa desde o topo da página
+            end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
+            scrub: 3.5, // Sincroniza com o scroll com suavização de 3.5 segundos (mais lento)
+            onUpdate: (self) => {
+              // Calcular progresso em vh
+              const scrollY = window.scrollY
+              const viewportHeight = window.innerHeight
+              const scrollVh = scrollY / viewportHeight
+              
+              console.log('=== SCROLL STATUS ===')
+              console.log('Scroll VH:', scrollVh.toFixed(2) + 'vh')
+              console.log('Scroll Pixels:', Math.round(scrollY) + 'px')
+              console.log('Progress:', Math.round(self.progress * 100) + '%')
+              console.log('Direction:', self.direction)
+              console.log('=====================')
+            },
+            onEnter: () => {
+              console.log('🎬 ANIMAÇÃO INICIADA - Cards começando a se mover')
+            },
+            onLeave: () => {
+              console.log('🏁 ANIMAÇÃO FINALIZADA - Cards chegaram ao destino')
+            },
+            onEnterBack: () => {
+              console.log('🔄 ANIMAÇÃO REVERTENDO - Scroll para cima')
+            },
+            onLeaveBack: () => {
+              console.log('🔄 ANIMAÇÃO RESETANDO - Voltando ao início')
+              // Resetar todos os cards desktop
+              cards.forEach(card => {
+                gsap.set(card.ref, {
+                  x: 0,
+                  y: 0,
+                  scale: 1,
+                  rotation: 0,
+                  opacity: 1,
+                  pointerEvents: 'auto',
+                  zIndex: card.zIndex
+                })
+                // Resetar também o estilo inline para garantir
+                card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+                card.ref.style.opacity = '1'
+                card.ref.style.filter = 'none'
+              })
+              // Resetar todos os cards mobile
+              mobileCards.forEach(card => {
+                gsap.set(card.ref, {
+                  x: 0,
+                  y: 0,
+                  scale: 1,
+                  rotation: 0,
+                  opacity: 1,
+                  pointerEvents: 'auto',
+                  zIndex: card.zIndex
+                })
+                // Resetar também o estilo inline para garantir
+                card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+                card.ref.style.opacity = '1'
+                card.ref.style.filter = 'none'
+              })
+            },
+            onRefresh: () => {
+              console.log('🔄 Timeline dos cards recarregada')
+            }
+          }
+        })
+        
+        // Função para animar cards (desktop e mobile)
+        const animateCards = (cardsArray: Array<{ ref: HTMLElement, scale: number, zIndex: number, rotation: number }>, isMobile = false) => {
+          cardsArray.forEach(({ ref, scale, zIndex, rotation }, index: number) => {
+            // Função para calcular posição centralizada usando centro da página como referência
+            const calculateCenteredPosition = () => {
+              // Para a garrafa (index 0), usar centro da página como referência absoluta
+              if (index === 0) {
+                // Calcular posição atual do card (PONTO A)
+                const cardRect = ref.getBoundingClientRect()
+                const cardCenterX = cardRect.left + cardRect.width / 2
+                const cardCenterY = cardRect.top + cardRect.height / 2
+                
+                // Usar centro da viewport como ponto de destino horizontal (PONTO B)
+                const viewportCenterX = window.innerWidth / 2
+                
+                // Calcular distância horizontal do centro do card ao centro da viewport
+                let deltaX = viewportCenterX - cardCenterX
+                deltaX = Math.round(deltaX)
+                
+                // Para o eixo Y, usar o centro do retângulo como referência
+                const targetRectangle = isMobile ? mobileRectangle : rectangle
+                if (!targetRectangle) {
+                  console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
+                  return { deltaX: 0, deltaY: 0 }
+                }
+                const rectRect = targetRectangle.getBoundingClientRect()
+                const rectCenterY = rectRect.top + rectRect.height / 2
+                
+                // Calcular distância vertical do centro do card ao centro do retângulo
+                let deltaY = rectCenterY - cardCenterY
+                deltaY = Math.round(deltaY)
+                
+                return { deltaX, deltaY }
+              } else {
+                // Para outros cards, usar a lógica original do retângulo
+                const cardRect = ref.getBoundingClientRect()
+                const cardCenterX = cardRect.left + cardRect.width / 2
+                const cardCenterY = cardRect.top + cardRect.height / 2
+                
+                const targetRectangle = isMobile ? mobileRectangle : rectangle
+                if (!targetRectangle) {
+                  console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
+                  return { deltaX: 0, deltaY: 0 }
+                }
+                const rectRect = targetRectangle.getBoundingClientRect()
+                const rectCenterX = rectRect.left + rectRect.width / 2
+                const rectCenterY = rectRect.top + rectRect.height / 2
+                
+                let deltaX = rectCenterX - cardCenterX
+                let deltaY = rectCenterY - cardCenterY
+                
+                return { deltaX, deltaY }
+              }
+            }
+            
+            // Calcular posição inicial
+            let { deltaX, deltaY } = calculateCenteredPosition()
+            
+            // Para a garrafa, fazer retry se necessário
+            if (index === 0) {
+              // Aguardar um frame adicional para garantir renderização completa
+              requestAnimationFrame(() => {
+                const retryPosition = calculateCenteredPosition()
+                deltaX = retryPosition.deltaX
+                deltaY = retryPosition.deltaY
+              })
+            }
+            
+            // Removido log de posicionamento dos cards para manter console limpo
+            
+            // Animação: PONTO A → PONTO B (centro do retângulo)
+            tlCards.fromTo(ref, 
+              // PONTO A - Posição inicial
+              {
+                x: 0,
+                y: 0,
+                scale: 1,
+                rotation: 0,
+                zIndex: index === 0 ? 1000 : 10 + index // Garrafa sempre com z-index máximo
+              },
+              // PONTO B - Centro do retângulo
+              {
+                x: deltaX,
+                y: deltaY,
+                scale: scale,
+                rotation: rotation, // Usar a rotação calculada
+                zIndex: zIndex, // Usar o zIndex definido no array (1000 para garrafa)
+                ease: 'power3.out',
+                onUpdate: function() {
+                  // Removido logs detalhados dos cards para manter console limpo
+                }
+              },
+              0 // Sem delay - todos começam juntos
+            )
+          })
+        }
+
+        // Animar cards desktop
+        animateCards(cards, false)
+        
+        // Animar cards mobile
+        animateCards(mobileCards, true)
+        
+        // Recalibrar ScrollTrigger após setup completo
+        ScrollTrigger.refresh()
+        console.log('✅ ScrollTrigger recarregado e pronto')
+        
+        // Efeito para fazer todos os cards desaparecerem aos 400vh
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=400vh', // Começa aos 400vh
+          end: '+=410vh', // Dura 10vh para o fade out
+          scrub: 0.5, // Sincronização rápida
+          onEnter: () => {
+            console.log('👻 INICIANDO FADE OUT DE TODOS OS CARDS - 400vh')
+            // Fazer todos os cards desaparecerem juntos
+            cards.forEach((card) => {
+              gsap.to(card.ref, {
+                opacity: 0,
+                scale: 0.8,
+                duration: 0.5,
+                ease: 'power2.out'
+              })
+            })
+            
+            // Alterar conteúdo do retângulo para mostrar garrafa sobreposta ao splash
+            setRectangleContent('garrafa-overlay')
+            
+            // Animar entrada da garrafa com delay - ANIMAÇÃO IMPACTANTE
+            setTimeout(() => {
+              gsap.to({}, {
+                duration: 0.4, // Mais rápida
+                onUpdate: function() {
+                  const progress = this.progress()
+                  setGarrafaOpacity(progress)
+                  setGarrafaScale(progress) // Escala de 0 a 1
+                  setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
+                },
+                ease: 'back.out(1.7)' // Easing mais dramático
+              })
+            }, 100) // Delay reduzido para 100ms
+          },
+          onLeave: () => {
+            console.log('✅ TODOS OS CARDS DESAPARECERAM - 410vh')
+          },
+          onEnterBack: () => {
+            console.log('🔄 RETORNANDO TODOS OS CARDS - 410vh')
+            // Verificar se estamos na posição correta para retornar os cards
             const scrollY = window.scrollY
             const viewportHeight = window.innerHeight
             const scrollVh = scrollY / viewportHeight
             
-            console.log('=== SCROLL STATUS ===')
-            console.log('Scroll VH:', scrollVh.toFixed(2) + 'vh')
-            console.log('Scroll Pixels:', Math.round(scrollY) + 'px')
-            console.log('Progress:', Math.round(self.progress * 100) + '%')
-            console.log('Direction:', self.direction)
-            console.log('=====================')
-          },
-          onEnter: () => {
-            console.log('🎬 ANIMAÇÃO INICIADA - Cards começando a se mover')
-          },
-          onLeave: () => {
-            console.log('🏁 ANIMAÇÃO FINALIZADA - Cards chegaram ao destino')
-          },
-          onEnterBack: () => {
-            console.log('🔄 ANIMAÇÃO REVERTENDO - Scroll para cima')
+            // Só retornar os cards se estivermos abaixo de 300vh (onde eles devem permanecer ocultos)
+            if (scrollVh < 300) {
+              console.log('✅ RETORNANDO CARDS DESKTOP - Scroll abaixo de 300vh (', scrollVh.toFixed(1) + 'vh)')
+              // Fazer todos os cards aparecerem juntos
+              cards.forEach((card) => {
+                gsap.to(card.ref, {
+                  opacity: 1,
+                  scale: 1, // Retornar à escala original (1)
+                  duration: 0.5,
+                  ease: 'power2.out',
+                  onComplete: () => {
+                    // Garantir que o estilo inline esteja correto após a animação
+                    card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+                    card.ref.style.opacity = '1'
+                    card.ref.style.filter = 'none'
+                    card.ref.style.pointerEvents = 'auto'
+                  }
+                })
+              })
+              
+              // Voltar para o conteúdo splash original e ocultar garrafa
+              setRectangleContent('splash')
+              setGarrafaOpacity(0)
+              setGarrafaScale(0)
+              setGarrafaRotation(180)
+            } else {
+              console.log('🚫 CARDS DESKTOP PERMANECEM OCULTOS - Ainda em zona de vídeo (', scrollVh.toFixed(1) + 'vh)')
+              // Forçar cards ocultos mesmo no retorno se ainda estiver acima de 300vh
+              cards.forEach(card => {
+                gsap.set(card.ref, {
+                  opacity: 0,
+                  scale: 0.8
+                })
+                card.ref.style.opacity = '0'
+                card.ref.style.pointerEvents = 'none'
+              })
+            }
           },
           onLeaveBack: () => {
-            console.log('🔄 ANIMAÇÃO RESETANDO - Voltando ao início')
-            // Resetar todos os cards desktop
-            cards.forEach(card => {
-              gsap.set(card.ref, {
-                x: 0,
-                y: 0,
-                scale: 1,
-                rotation: 0,
-                opacity: 1,
-                pointerEvents: 'auto',
-                zIndex: card.zIndex
-              })
-              // Resetar também o estilo inline para garantir
-              card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
-              card.ref.style.opacity = '1'
-              card.ref.style.filter = 'none'
-            })
-            // Resetar todos os cards mobile
-            mobileCards.forEach(card => {
-              gsap.set(card.ref, {
-                x: 0,
-                y: 0,
-                scale: 1,
-                rotation: 0,
-                opacity: 1,
-                pointerEvents: 'auto',
-                zIndex: card.zIndex
-              })
-              // Resetar também o estilo inline para garantir
-              card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
-              card.ref.style.opacity = '1'
-              card.ref.style.filter = 'none'
-            })
-          },
-          onRefresh: () => {
-            console.log('🔄 Timeline dos cards recarregada')
+            console.log('✅ TODOS OS CARDS RETORNARAM - 400vh')
           }
-        }
-      })
-      
-      // Função para animar cards (desktop e mobile)
-      const animateCards = (cardsArray: Array<{ ref: HTMLElement, scale: number, zIndex: number, rotation: number }>, isMobile = false) => {
-        cardsArray.forEach(({ ref, scale, zIndex, rotation }, index: number) => {
-          // Função para calcular posição centralizada usando centro da página como referência
-          const calculateCenteredPosition = () => {
-            // Para a garrafa (index 0), usar centro da página como referência absoluta
-            if (index === 0) {
-              // Calcular posição atual do card (PONTO A)
-              const cardRect = ref.getBoundingClientRect()
-              const cardCenterX = cardRect.left + cardRect.width / 2
-              const cardCenterY = cardRect.top + cardRect.height / 2
-              
-              // Usar centro da viewport como ponto de destino horizontal (PONTO B)
-              const viewportCenterX = window.innerWidth / 2
-              
-              // Calcular distância horizontal do centro do card ao centro da viewport
-              let deltaX = viewportCenterX - cardCenterX
-              deltaX = Math.round(deltaX)
-              
-              // Para o eixo Y, usar o centro do retângulo como referência
-              const targetRectangle = isMobile ? mobileRectangle : rectangle
-              if (!targetRectangle) {
-                console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
-                return { deltaX: 0, deltaY: 0 }
-              }
-              const rectRect = targetRectangle.getBoundingClientRect()
-              const rectCenterY = rectRect.top + rectRect.height / 2
-              
-              // Calcular distância vertical do centro do card ao centro do retângulo
-              let deltaY = rectCenterY - cardCenterY
-              deltaY = Math.round(deltaY)
-              
-              return { deltaX, deltaY }
-            } else {
-              // Para outros cards, usar a lógica original do retângulo
-              const cardRect = ref.getBoundingClientRect()
-              const cardCenterX = cardRect.left + cardRect.width / 2
-              const cardCenterY = cardRect.top + cardRect.height / 2
-              
-              const targetRectangle = isMobile ? mobileRectangle : rectangle
-              if (!targetRectangle) {
-                console.error(`❌ Referência do retângulo ${isMobile ? 'MOBILE' : 'DESKTOP'} não encontrada`)
-                return { deltaX: 0, deltaY: 0 }
-              }
-              const rectRect = targetRectangle.getBoundingClientRect()
-              const rectCenterX = rectRect.left + rectRect.width / 2
-              const rectCenterY = rectRect.top + rectRect.height / 2
-              
-              let deltaX = rectCenterX - cardCenterX
-              let deltaY = rectCenterY - cardCenterY
-              
-              return { deltaX, deltaY }
-            }
-          }
-          
-          // Calcular posição inicial
-          let { deltaX, deltaY } = calculateCenteredPosition()
-          
-          // Para a garrafa, fazer retry se necessário
-          if (index === 0) {
-            // Aguardar um frame adicional para garantir renderização completa
-            requestAnimationFrame(() => {
-              const retryPosition = calculateCenteredPosition()
-              deltaX = retryPosition.deltaX
-              deltaY = retryPosition.deltaY
-            })
-          }
-          
-          // Removido log de posicionamento dos cards para manter console limpo
-          
-          // Animação: PONTO A → PONTO B (centro do retângulo)
-          tlCards.fromTo(ref, 
-            // PONTO A - Posição inicial
-            {
-              x: 0,
-              y: 0,
-              scale: 1,
-              rotation: 0,
-              zIndex: index === 0 ? 1000 : 10 + index // Garrafa sempre com z-index máximo
-            },
-            // PONTO B - Centro do retângulo
-            {
-              x: deltaX,
-              y: deltaY,
-              scale: scale,
-              rotation: rotation, // Usar a rotação calculada
-              zIndex: zIndex, // Usar o zIndex definido no array (1000 para garrafa)
-              ease: 'power3.out',
-              onUpdate: function() {
-                // Removido logs detalhados dos cards para manter console limpo
-              }
-            },
-            0 // Sem delay - todos começam juntos
-          )
         })
-      }
 
-      // Animar cards desktop
-      animateCards(cards, false)
-      
-      // Animar cards mobile
-      animateCards(mobileCards, true)
-      
-      // Recalibrar ScrollTrigger após setup completo
-      ScrollTrigger.refresh()
-      console.log('✅ ScrollTrigger recarregado e pronto')
-      
-
-
-      // Efeito para fazer todos os cards desaparecerem aos 400vh
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: '+=400vh', // Começa aos 400vh
-        end: '+=410vh', // Dura 10vh para o fade out
-        scrub: 0.5, // Sincronização rápida
-        onEnter: () => {
-          console.log('👻 INICIANDO FADE OUT DE TODOS OS CARDS - 400vh')
-          // Fazer todos os cards desaparecerem juntos
-          cards.forEach((card) => {
-            gsap.to(card.ref, {
-              opacity: 0,
-              scale: 0.8,
-              duration: 0.5,
-              ease: 'power2.out'
-            })
-          })
-          
-          // Alterar conteúdo do retângulo para mostrar garrafa sobreposta ao splash
-          setRectangleContent('garrafa-overlay')
-          
-          // Animar entrada da garrafa com delay - ANIMAÇÃO IMPACTANTE
-          setTimeout(() => {
-            gsap.to({}, {
-              duration: 0.4, // Mais rápida
-              onUpdate: function() {
-                const progress = this.progress()
-                setGarrafaOpacity(progress)
-                setGarrafaScale(progress) // Escala de 0 a 1
-                setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
-              },
-              ease: 'back.out(1.7)' // Easing mais dramático
-            })
-          }, 100) // Delay reduzido para 100ms
-        },
-        onLeave: () => {
-          console.log('✅ TODOS OS CARDS DESAPARECERAM - 410vh')
-        },
-        onEnterBack: () => {
-          console.log('🔄 RETORNANDO TODOS OS CARDS - 410vh')
-          // Fazer todos os cards aparecerem juntos
-          cards.forEach((card) => {
-            gsap.to(card.ref, {
-              opacity: 1,
-              scale: 1, // Retornar à escala original (1)
-              duration: 0.5,
-              ease: 'power2.out',
-              onComplete: () => {
-                // Garantir que o estilo inline esteja correto após a animação
-                card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
-                card.ref.style.opacity = '1'
-                card.ref.style.filter = 'none'
-              }
-            })
-          })
-          
-          // Voltar para o conteúdo splash original e ocultar garrafa
-          setRectangleContent('splash')
-          setGarrafaOpacity(0)
-          setGarrafaScale(0)
-          setGarrafaRotation(180)
-        },
-        onLeaveBack: () => {
-          console.log('✅ TODOS OS CARDS RETORNARAM - 400vh')
-        }
-      })
-
-      // ScrollTrigger para controlar o reaparecimento dos cards no fallback - REGRA GLOBAL
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: 'top top', // Monitora desde o início
-        end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
-        scrub: 0.5,
-        onUpdate: (self) => {
-          // Calcular o vh atual
-          const scrollY = window.scrollY
-          const viewportHeight = window.innerHeight
-          const scrollVh = scrollY / viewportHeight
-          
-          // Se estamos em fallback (direction === -1) e ainda na zona de vídeo ou além
-          if (self.direction === -1 && scrollVh >= 400) {
-            console.log('🚫 FALLBACK DETECTADO - MANTENDO CARDS OCULTOS em', scrollVh.toFixed(1) + 'vh')
-            cards.forEach(card => {
-              gsap.set(card.ref, {
-                opacity: 0,
-                scale: 0.8
-              })
-            })
-          }
-        },
-        onEnter: () => {
-          console.log('👀 MONITORAMENTO GLOBAL DE FALLBACK ATIVADO')
-        },
-        onLeave: () => {
-          console.log('✅ MONITORAMENTO GLOBAL DE FALLBACK FINALIZADO')
-        }
-      })
-
-      // Efeito para fazer todos os cards mobile desaparecerem aos 250vh
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: '+=250vh', // Começa aos 250vh (antes da mudança do vídeo)
-        end: '+=260vh', // Dura 10vh para o fade out
-        scrub: 0.5, // Sincronização rápida
-        onEnter: () => {
-          console.log('👻 INICIANDO FADE OUT DE TODOS OS CARDS MOBILE - 250vh')
-          // Fazer todos os cards mobile desaparecerem juntos
-          mobileCards.forEach((card) => {
-            gsap.to(card.ref, {
-              opacity: 0,
-              scale: 0.8,
-              duration: 0.5,
-              ease: 'power2.out'
-            })
-          })
-          
-          // Alterar conteúdo do retângulo para mostrar garrafa sobreposta ao splash
-          setRectangleContent('garrafa-overlay')
-          
-          // Animar entrada da garrafa mobile com delay - ANIMAÇÃO IMPACTANTE
-          setTimeout(() => {
-            gsap.to({}, {
-              duration: 0.4, // Mais rápida
-              onUpdate: function() {
-                const progress = this.progress()
-                setGarrafaOpacity(progress)
-                setGarrafaScale(progress) // Escala de 0 a 1
-                setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
-              },
-              ease: 'back.out(1.7)' // Easing mais dramático
-            })
-          }, 100) // Delay reduzido para 100ms
-        },
-        onLeave: () => {
-          console.log('✅ TODOS OS CARDS MOBILE DESAPARECERAM - 260vh')
-        },
-        onEnterBack: () => {
-          console.log('🔄 RETORNANDO TODOS OS CARDS MOBILE - 260vh')
-          // Verificar se estamos na posição correta para retornar os cards
-          const scrollY = window.scrollY
-          const viewportHeight = window.innerHeight
-          const scrollVh = scrollY / viewportHeight
-          
-          // Só retornar os cards se estivermos abaixo de 260vh (onde eles desapareceram)
-          if (scrollVh < 260) {
-            // Fazer todos os cards mobile aparecerem juntos
+        // Efeito para fazer todos os cards mobile desaparecerem aos 250vh
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=250vh', // Começa aos 250vh (antes da mudança do vídeo)
+          end: '+=260vh', // Dura 10vh para o fade out
+          scrub: 0.5, // Sincronização rápida
+          onEnter: () => {
+            console.log('👻 INICIANDO FADE OUT DE TODOS OS CARDS MOBILE - 250vh')
+            // Fazer todos os cards mobile desaparecerem juntos
             mobileCards.forEach((card) => {
               gsap.to(card.ref, {
-                opacity: 1,
-                scale: 1, // Retornar à escala original (1)
-                duration: 0.5,
-                ease: 'power2.out',
-                onComplete: () => {
-                  // Garantir que o estilo inline esteja correto após a animação
-                  card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
-                  card.ref.style.opacity = '1'
-                  card.ref.style.filter = 'none'
-                }
-              })
-            })
-            
-            // Voltar para o conteúdo splash original e ocultar garrafa
-            setRectangleContent('splash')
-            setGarrafaOpacity(0)
-            setGarrafaScale(0)
-            setGarrafaRotation(180)
-          } else {
-            console.log('🚫 CARDS MOBILE PERMANECEM OCULTOS - Ainda em zona de vídeo (', scrollVh.toFixed(1) + 'vh)')
-          }
-        },
-        onLeaveBack: () => {
-          console.log('✅ TODOS OS CARDS MOBILE RETORNARAM - 250vh')
-        }
-      })
-
-      // ScrollTrigger para controlar o reaparecimento dos cards mobile no fallback - REGRA GLOBAL
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: 'top top', // Monitora desde o início
-        end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
-        scrub: 0.5,
-        onUpdate: (self) => {
-          // Calcular o vh atual
-          const scrollY = window.scrollY
-          const viewportHeight = window.innerHeight
-          const scrollVh = scrollY / viewportHeight
-          
-          // Se estamos em fallback (direction === -1) e ainda na zona onde os cards devem estar ocultos
-          if (self.direction === -1 && scrollVh >= 260) {
-            console.log('🚫 FALLBACK MOBILE DETECTADO - MANTENDO CARDS OCULTOS em', scrollVh.toFixed(1) + 'vh')
-            mobileCards.forEach(card => {
-              gsap.set(card.ref, {
                 opacity: 0,
-                scale: 0.8
-              })
-            })
-          }
-        },
-        onEnter: () => {
-          console.log('👀 MONITORAMENTO GLOBAL DE FALLBACK MOBILE ATIVADO')
-        },
-        onLeave: () => {
-          console.log('✅ MONITORAMENTO GLOBAL DE FALLBACK MOBILE FINALIZADO')
-        }
-      })
-
-
-      
-      // ScrollTrigger para trocar o conteúdo do retângulo quando a animação terminar
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: 'top top',
-        end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
-        scrub: 2,
-        onUpdate: (self) => {
-          // Calcular o vh atual baseado no progresso (responsivo)
-          const maxVh = window.innerWidth <= 768 ? 300 : 700
-          const currentVh = self.progress * maxVh
-          
-          // Log detalhado a cada 50vh para não sobrecarregar o console
-          if (Math.floor(currentVh) % 50 === 0 && currentVh > 0) {
-            console.log(`📏 VH ATUAL: ${Math.floor(currentVh)}vh (${Math.round(self.progress * 100)}% do progresso)`)
-          }
-          
-          // Log mais frequente quando estiver próximo do momento de mudança
-          const thresholdVh = window.innerWidth <= 768 ? 300 : 700
-          if (currentVh > thresholdVh && Math.floor(currentVh) % 10 === 0) {
-            console.log(`🎯 VH PRÓXIMO: ${Math.floor(currentVh)}vh - MOMENTO DE MUDANÇA APROXIMANDO!`)
-          }
-          
-          // Quando chegar a 98% do progresso, trocar o conteúdo
-          if (self.progress >= 0.98) {
-            setRectangleContent('final')
-            setGarrafaOpacity(0)
-            
-            // Animar entrada do vídeo em desktop e mobile
-            setTimeout(() => {
-              gsap.to({}, {
-                duration: 0.6,
-                onUpdate: function() {
-                  const progress = this.progress()
-                  setVideoOpacity(progress)
-                  setVideoScale(0.8 + (progress * 0.2)) // Escala de 0.8 a 1
-                },
+                scale: 0.8,
+                duration: 0.5,
                 ease: 'power2.out'
               })
-            }, 100)
+            })
             
-            console.log('🎯 Conteúdo do retângulo alterado para FINAL')
-          } else if (self.progress >= 0.6) {
-            // Manter garrafa-overlay entre 60% e 98% do progresso
+            // Alterar conteúdo do retângulo para mostrar garrafa sobreposta ao splash
             setRectangleContent('garrafa-overlay')
-            // Não alterar a opacidade aqui - ela é controlada pela animação de entrada
-          } else {
-            setRectangleContent('splash')
-            setGarrafaOpacity(0)
-            setGarrafaScale(0)
-            setGarrafaRotation(180)
-            setVideoOpacity(0)
-            setVideoScale(0.8)
+            
+            // Animar entrada da garrafa mobile com delay - ANIMAÇÃO IMPACTANTE
+            setTimeout(() => {
+              gsap.to({}, {
+                duration: 0.4, // Mais rápida
+                onUpdate: function() {
+                  const progress = this.progress()
+                  setGarrafaOpacity(progress)
+                  setGarrafaScale(progress) // Escala de 0 a 1
+                  setGarrafaRotation(180 - (progress * 180)) // Rotação de 180° a 0°
+                },
+                ease: 'back.out(1.7)' // Easing mais dramático
+              })
+            }, 100) // Delay reduzido para 100ms
+          },
+          onLeave: () => {
+            console.log('✅ TODOS OS CARDS MOBILE DESAPARECERAM - 260vh')
+          },
+          onEnterBack: () => {
+            console.log('🔄 RETORNANDO TODOS OS CARDS MOBILE - 260vh')
+            // Verificar se estamos na posição correta para retornar os cards
+            const scrollY = window.scrollY
+            const viewportHeight = window.innerHeight
+            const scrollVh = scrollY / viewportHeight
+            
+            // Só retornar os cards se estivermos abaixo de 300vh (onde eles devem permanecer ocultos)
+            if (scrollVh < 300) {
+              console.log('✅ RETORNANDO CARDS MOBILE - Scroll abaixo de 300vh (', scrollVh.toFixed(1) + 'vh)')
+              // Fazer todos os cards mobile aparecerem juntos
+              mobileCards.forEach((card) => {
+                gsap.to(card.ref, {
+                  opacity: 1,
+                  scale: 1, // Retornar à escala original (1)
+                  duration: 0.5,
+                  ease: 'power2.out',
+                  onComplete: () => {
+                    // Garantir que o estilo inline esteja correto após a animação
+                    card.ref.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)'
+                    card.ref.style.opacity = '1'
+                    card.ref.style.filter = 'none'
+                    card.ref.style.pointerEvents = 'auto'
+                  }
+                })
+              })
+              
+              // Voltar para o conteúdo splash original e ocultar garrafa
+              setRectangleContent('splash')
+              setGarrafaOpacity(0)
+              setGarrafaScale(0)
+              setGarrafaRotation(180)
+            } else {
+              console.log('🚫 CARDS MOBILE PERMANECEM OCULTOS - Ainda em zona de vídeo (', scrollVh.toFixed(1) + 'vh)')
+              // Forçar cards ocultos mesmo no retorno se ainda estiver acima de 300vh
+              mobileCards.forEach(card => {
+                gsap.set(card.ref, {
+                  opacity: 0,
+                  scale: 0.8
+                })
+                card.ref.style.opacity = '0'
+                card.ref.style.pointerEvents = 'none'
+              })
+            }
+          },
+          onLeaveBack: () => {
+            console.log('✅ TODOS OS CARDS MOBILE RETORNARAM - 250vh')
           }
-        },
-        onEnter: () => {
-          console.log('🔄 Iniciando detecção de troca de conteúdo')
-        },
-        onLeave: () => {
-          console.log('✅ Animação completa - conteúdo final ativo')
-        },
-        onEnterBack: () => {
-          console.log('↩️ Voltando para conteúdo splash')
-        },
-        onLeaveBack: () => {
-          console.log('🔄 Resetando para conteúdo splash')
-          // Não restaurar a garrafa - ela deve permanecer oculta conforme a lógica dos cards
+        })
+
+        // ScrollTrigger para controlar o reaparecimento dos cards mobile no fallback - REGRA GLOBAL
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top', // Monitora desde o início
+          end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
+          scrub: 0.5,
+          onUpdate: (self) => {
+            // Calcular o vh atual
+            const scrollY = window.scrollY
+            const viewportHeight = window.innerHeight
+            const scrollVh = scrollY / viewportHeight
+            
+            // Se estamos em fallback (direction === -1) e ainda na zona onde os cards devem estar ocultos
+            if (self.direction === -1 && scrollVh >= 300) {
+              console.log('🚫 FALLBACK MOBILE DETECTADO - MANTENDO CARDS OCULTOS em', scrollVh.toFixed(1) + 'vh')
+              mobileCards.forEach(card => {
+                gsap.set(card.ref, {
+                  opacity: 0,
+                  scale: 0.8
+                })
+                // Forçar também o estilo inline para garantir
+                card.ref.style.opacity = '0'
+                card.ref.style.transform = card.ref.style.transform.replace(/scale\([^)]*\)/, 'scale(0.8)')
+              })
+            }
+          },
+          onEnter: () => {
+            console.log('👀 MONITORAMENTO GLOBAL DE FALLBACK MOBILE ATIVADO')
+          },
+          onLeave: () => {
+            console.log('✅ MONITORAMENTO GLOBAL DE FALLBACK MOBILE FINALIZADO')
+          }
+        })
+
+        // ScrollTrigger ADICIONAL para garantir que os cards mobile permaneçam ocultos durante fallback
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: '+=400vh',
+          scrub: 0.1,
+          onUpdate: (self) => {
+            // Calcular o vh atual
+            const scrollY = window.scrollY
+            const viewportHeight = window.innerHeight
+            const scrollVh = scrollY / viewportHeight
+            
+            // Se estamos em fallback (direction === -1) e acima de 300vh, FORÇAR cards ocultos
+            if (self.direction === -1 && scrollVh >= 300) {
+              mobileCards.forEach(card => {
+                // Forçar opacidade 0 e escala 0.8
+                gsap.set(card.ref, {
+                  opacity: 0,
+                  scale: 0.8,
+                  immediateRender: true
+                })
+                // Forçar também o estilo inline
+                card.ref.style.opacity = '0'
+                card.ref.style.pointerEvents = 'none'
+              })
+            }
+          }
+        })
+
+        // ScrollTrigger para trocar o conteúdo do retângulo quando a animação terminar
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh', // 400vh para mobile, 800vh para desktop
+          scrub: 2,
+          onUpdate: (self) => {
+            // Calcular o vh atual baseado no progresso (responsivo)
+            const maxVh = window.innerWidth <= 768 ? 300 : 700
+            const currentVh = self.progress * maxVh
+            
+            // Log detalhado a cada 50vh para não sobrecarregar o console
+            if (Math.floor(currentVh) % 50 === 0 && currentVh > 0) {
+              console.log(`📏 VH ATUAL: ${Math.floor(currentVh)}vh (${Math.round(self.progress * 100)}% do progresso)`)
+            }
+            
+            // Log mais frequente quando estiver próximo do momento de mudança
+            const thresholdVh = window.innerWidth <= 768 ? 300 : 700
+            if (currentVh > thresholdVh && Math.floor(currentVh) % 10 === 0) {
+              console.log(`🎯 VH PRÓXIMO: ${Math.floor(currentVh)}vh - MOMENTO DE MUDANÇA APROXIMANDO!`)
+            }
+            
+            // Quando chegar a 98% do progresso, trocar o conteúdo
+            if (self.progress >= 0.98) {
+              setRectangleContent('final')
+              setGarrafaOpacity(0)
+              
+              // Animar entrada do vídeo em desktop e mobile
+              setTimeout(() => {
+                gsap.to({}, {
+                  duration: 0.6,
+                  onUpdate: function() {
+                    const progress = this.progress()
+                    setVideoOpacity(progress)
+                    setVideoScale(0.8 + (progress * 0.2)) // Escala de 0.8 a 1
+                  },
+                  ease: 'power2.out'
+                })
+              }, 100)
+              
+              console.log('🎯 Conteúdo do retângulo alterado para FINAL')
+            } else if (self.progress >= 0.6) {
+              // Manter garrafa-overlay entre 60% e 98% do progresso
+              setRectangleContent('garrafa-overlay')
+              // Não alterar a opacidade aqui - ela é controlada pela animação de entrada
+            } else {
+              setRectangleContent('splash')
+              setGarrafaOpacity(0)
+              setGarrafaScale(0)
+              setGarrafaRotation(180)
+              setVideoOpacity(0)
+              setVideoScale(0.8)
+            }
+          },
+          onEnter: () => {
+            console.log('🔄 Iniciando detecção de troca de conteúdo')
+          },
+          onLeave: () => {
+            console.log('✅ Animação completa - conteúdo final ativo')
+          },
+          onEnterBack: () => {
+            console.log('↩️ Voltando para conteúdo splash')
+          },
+          onLeaveBack: () => {
+            console.log('🔄 Resetando para conteúdo splash')
+            // Não restaurar a garrafa - ela deve permanecer oculta conforme a lógica dos cards
+          }
+        })
+        
+        // Cleanup function
+        return () => {
+          window.removeEventListener('resize', handleResize)
+          ScrollTrigger.getAll().forEach(trigger => trigger.kill())
         }
-      })
-
-
+      }
     }
+    
+    // Aguardar um frame para garantir que todos os elementos estejam renderizados
+    setTimeout(initAnimation, 200) // Aumentar o delay para garantir renderização completa
     
     // Cleanup function
     return () => {
-      window.removeEventListener('resize', handleResize)
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
     }
   }, []) // Dependências vazias - executa apenas uma vez após DOM estar pronto
