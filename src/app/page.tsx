@@ -119,6 +119,8 @@ export default function HomePage() {
   const [videoTransform, setVideoTransform] = useState('translateY(0vh)')
   const [videoTransitionProgress, setVideoTransitionProgress] = useState(0)
   
+
+  
   // Refs para os cards desktop
   const garrafaCardRef = useRef<HTMLDivElement>(null)
   const ursopeluciaCardRef = useRef<HTMLDivElement>(null)
@@ -142,10 +144,37 @@ export default function HomePage() {
   const mobileRelogioCardRef = useRef<HTMLDivElement>(null)
   const mobileCameraCardRef = useRef<HTMLDivElement>(null)
 
+
+
   // Registrar o plugin ScrollTrigger
   useEffect(() => {
     if (typeof window !== 'undefined') {
       gsap.registerPlugin(ScrollTrigger)
+    }
+  }, [])
+
+  // Forçar autoplay em dispositivos móveis com interação do usuário
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const forcePlayVideos = async () => {
+        const videos = document.querySelectorAll('video')
+        videos.forEach(async (video) => {
+          try {
+            await (video as HTMLVideoElement).play()
+          } catch (err) {
+            console.log('Tentativa de autoplay falhou:', err)
+          }
+        })
+      }
+
+      // Tentar reproduzir vídeos em diferentes eventos de interação
+      const events = ['touchstart', 'touchend', 'click', 'scroll']
+      events.forEach(event => {
+        document.addEventListener(event, forcePlayVideos, { once: true })
+      })
+
+      // Tentar reproduzir após um delay
+      setTimeout(forcePlayVideos, 1000)
     }
   }, [])
 
@@ -1288,6 +1317,8 @@ export default function HomePage() {
     }
   }, []) // Dependências vazias - executa apenas uma vez após DOM estar pronto
 
+
+
   return (
     <main className="min-h-screen" style={{ border: 'none', outline: 'none' }}>
       {/* Partículas flutuantes de fundo */}
@@ -1633,6 +1664,10 @@ export default function HomePage() {
                     muted 
                     playsInline
                     preload="auto"
+                    webkit-playsinline="true"
+                    x5-playsinline="true"
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="false"
                     className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[32px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
@@ -1643,9 +1678,31 @@ export default function HomePage() {
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
                       const video = e.target as HTMLVideoElement;
-                      video.play().catch(err => {
-                        console.log('Erro ao reproduzir vídeo garrafa desktop:', err);
-                      });
+                      // Múltiplas tentativas de play para dispositivos móveis
+                      const playVideo = async () => {
+                        try {
+                          await video.play()
+                        } catch (err) {
+                          console.log('Primeira tentativa falhou, tentando novamente...')
+                          // Segunda tentativa após um delay
+                          setTimeout(async () => {
+                            try {
+                              await video.play()
+                            } catch (err2) {
+                              console.log('Segunda tentativa falhou, tentando com user interaction...')
+                              // Terceira tentativa com user interaction
+                              document.addEventListener('touchstart', async () => {
+                                try {
+                                  await video.play()
+                                } catch (err3) {
+                                  console.log('Erro ao reproduzir vídeo garrafa desktop:', err3)
+                                }
+                              }, { once: true })
+                            }
+                          }, 100)
+                        }
+                      }
+                      playVideo()
                     }}
                   />
                   
@@ -1657,6 +1714,10 @@ export default function HomePage() {
                     muted 
                     playsInline
                     preload="auto"
+                    webkit-playsinline="true"
+                    x5-playsinline="true"
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="false"
                     className="w-full h-full object-cover z-20 absolute top-0 left-0 rounded-[32px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
@@ -1667,9 +1728,31 @@ export default function HomePage() {
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
                       const video = e.target as HTMLVideoElement;
-                      video.play().catch(err => {
-                        console.log('Erro ao reproduzir vídeo bolsa desktop:', err);
-                      });
+                      // Múltiplas tentativas de play para dispositivos móveis
+                      const playVideo = async () => {
+                        try {
+                          await video.play()
+                        } catch (err) {
+                          console.log('Primeira tentativa falhou, tentando novamente...')
+                          // Segunda tentativa após um delay
+                          setTimeout(async () => {
+                            try {
+                              await video.play()
+                            } catch (err2) {
+                              console.log('Segunda tentativa falhou, tentando com user interaction...')
+                              // Terceira tentativa com user interaction
+                              document.addEventListener('touchstart', async () => {
+                                try {
+                                  await video.play()
+                                } catch (err3) {
+                                  console.log('Erro ao reproduzir vídeo bolsa desktop:', err3)
+                                }
+                              }, { once: true })
+                            }
+                          }, 100)
+                        }
+                      }
+                      playVideo()
                     }}
                   />
                   
@@ -1681,6 +1764,10 @@ export default function HomePage() {
                     muted 
                     playsInline
                     preload="auto"
+                    webkit-playsinline="true"
+                    x5-playsinline="true"
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="false"
                     className="w-full h-full object-cover z-30 absolute top-0 left-0 rounded-[32px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
@@ -1691,9 +1778,31 @@ export default function HomePage() {
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
                       const video = e.target as HTMLVideoElement;
-                      video.play().catch(err => {
-                        console.log('Erro ao reproduzir vídeo parafusadeira desktop:', err);
-                      });
+                      // Múltiplas tentativas de play para dispositivos móveis
+                      const playVideo = async () => {
+                        try {
+                          await video.play()
+                        } catch (err) {
+                          console.log('Primeira tentativa falhou, tentando novamente...')
+                          // Segunda tentativa após um delay
+                          setTimeout(async () => {
+                            try {
+                              await video.play()
+                            } catch (err2) {
+                              console.log('Segunda tentativa falhou, tentando com user interaction...')
+                              // Terceira tentativa com user interaction
+                              document.addEventListener('touchstart', async () => {
+                                try {
+                                  await video.play()
+                                } catch (err3) {
+                                  console.log('Erro ao reproduzir vídeo parafusadeira desktop:', err3)
+                                }
+                              }, { once: true })
+                            }
+                          }, 100)
+                        }
+                      }
+                      playVideo()
                     }}
                   />
                 </div>
@@ -1760,6 +1869,10 @@ export default function HomePage() {
                     muted 
                     playsInline
                     preload="auto"
+                    webkit-playsinline="true"
+                    x5-playsinline="true"
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="false"
                     className="w-full h-full object-cover z-10 absolute top-0 left-0 rounded-[24px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
@@ -1770,9 +1883,31 @@ export default function HomePage() {
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
                       const video = e.target as HTMLVideoElement;
-                      video.play().catch(err => {
-                        console.log('Erro ao reproduzir vídeo garrafa mobile:', err);
-                      });
+                      // Múltiplas tentativas de play para dispositivos móveis
+                      const playVideo = async () => {
+                        try {
+                          await video.play()
+                        } catch (err) {
+                          console.log('Primeira tentativa falhou, tentando novamente...')
+                          // Segunda tentativa após um delay
+                          setTimeout(async () => {
+                            try {
+                              await video.play()
+                            } catch (err2) {
+                              console.log('Segunda tentativa falhou, tentando com user interaction...')
+                              // Terceira tentativa com user interaction
+                              document.addEventListener('touchstart', async () => {
+                                try {
+                                  await video.play()
+                                } catch (err3) {
+                                  console.log('Erro ao reproduzir vídeo garrafa mobile:', err3)
+                                }
+                              }, { once: true })
+                            }
+                          }, 100)
+                        }
+                      }
+                      playVideo()
                     }}
                   />
                   
@@ -1784,6 +1919,10 @@ export default function HomePage() {
                     muted 
                     playsInline
                     preload="auto"
+                    webkit-playsinline="true"
+                    x5-playsinline="true"
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="false"
                     className="w-full h-full object-cover z-20 absolute top-0 left-0 rounded-[24px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
@@ -1794,9 +1933,31 @@ export default function HomePage() {
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
                       const video = e.target as HTMLVideoElement;
-                      video.play().catch(err => {
-                        console.log('Erro ao reproduzir vídeo bolsa mobile:', err);
-                      });
+                      // Múltiplas tentativas de play para dispositivos móveis
+                      const playVideo = async () => {
+                        try {
+                          await video.play()
+                        } catch (err) {
+                          console.log('Primeira tentativa falhou, tentando novamente...')
+                          // Segunda tentativa após um delay
+                          setTimeout(async () => {
+                            try {
+                              await video.play()
+                            } catch (err2) {
+                              console.log('Segunda tentativa falhou, tentando com user interaction...')
+                              // Terceira tentativa com user interaction
+                              document.addEventListener('touchstart', async () => {
+                                try {
+                                  await video.play()
+                                } catch (err3) {
+                                  console.log('Erro ao reproduzir vídeo bolsa mobile:', err3)
+                                }
+                              }, { once: true })
+                            }
+                          }, 100)
+                        }
+                      }
+                      playVideo()
                     }}
                   />
                   
@@ -1808,6 +1969,10 @@ export default function HomePage() {
                     muted 
                     playsInline
                     preload="auto"
+                    webkit-playsinline="true"
+                    x5-playsinline="true"
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="false"
                     className="w-full h-full object-cover z-30 absolute top-0 left-0 rounded-[24px] transition-opacity duration-500"
                     style={{ 
                       objectPosition: 'center',
@@ -1818,9 +1983,31 @@ export default function HomePage() {
                     onLoadedData={(e) => {
                       // Forçar play quando o vídeo estiver carregado
                       const video = e.target as HTMLVideoElement;
-                      video.play().catch(err => {
-                        console.log('Erro ao reproduzir vídeo parafusadeira mobile:', err);
-                      });
+                      // Múltiplas tentativas de play para dispositivos móveis
+                      const playVideo = async () => {
+                        try {
+                          await video.play()
+                        } catch (err) {
+                          console.log('Primeira tentativa falhou, tentando novamente...')
+                          // Segunda tentativa após um delay
+                          setTimeout(async () => {
+                            try {
+                              await video.play()
+                            } catch (err2) {
+                              console.log('Segunda tentativa falhou, tentando com user interaction...')
+                              // Terceira tentativa com user interaction
+                              document.addEventListener('touchstart', async () => {
+                                try {
+                                  await video.play()
+                                } catch (err3) {
+                                  console.log('Erro ao reproduzir vídeo parafusadeira mobile:', err3)
+                                }
+                              }, { once: true })
+                            }
+                          }, 100)
+                        }
+                      }
+                      playVideo()
                     }}
                   />
                 </div>
