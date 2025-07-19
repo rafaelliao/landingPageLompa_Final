@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useResponsive } from '../hooks/useResponsive'
 
 interface Product {
@@ -139,22 +138,9 @@ const ProductsSection = () => {
         {/* Grid de produtos posicionados em meias-luas */}
         <div className="products-grid">
           {products.map((product, index) => (
-            <motion.div
+            <div
               key={product.id}
               className={`product-item ${getPositionClasses(product.position)}`}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ 
-                duration: 0.6, 
-                delay: index * 0.1,
-                type: 'spring',
-                stiffness: 100
-              }}
-              whileHover={{ 
-                scale: 1.1,
-                rotate: 5,
-                transition: { duration: 0.2 }
-              }}
             >
               <div className="product-card">
                 <img 
@@ -166,35 +152,29 @@ const ProductsSection = () => {
               
               {/* Ícones especiais para alguns produtos */}
               {product.name === 'Blusa Creme' && (
-                <motion.div 
+                <div 
                   className="product-icon star-icon"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 }}
                 >
                   <img 
                     src="/star_icon.svg" 
                     alt="Star" 
                     className="icon-image"
                   />
-                </motion.div>
+                </div>
               )}
               
               {product.name === 'Óculos' && (
-                <motion.div 
+                <div 
                   className="product-icon like-icon"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 }}
                 >
                   <img 
                     src="/icon_like.svg" 
                     alt="Like" 
                     className="icon-image"
                   />
-                </motion.div>
+                </div>
               )}
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

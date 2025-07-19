@@ -8,7 +8,7 @@ import MainLayout from '@/components/MainLayout'
 import HeroSection from '@/components/HeroSection'
 import FeaturesSection from '@/components/FeaturesSection'
 import { MobileProvider } from '@/contexts/MobileContext'
-import CursorGlow from '@/components/CursorGlow'
+
 import type { NavItem, Feature, FooterSection } from '@/types'
 
 // Dados de exemplo para a landing page
@@ -96,22 +96,17 @@ export default function HomePage() {
   return (
     <MobileProvider>
       <main className="min-h-screen" style={{ border: 'none', outline: 'none' }}>
-        {/* Círculos de fundo sutis */}
+        {/* Círculos de fundo fixos */}
         <BackgroundCircles />
         
-        {/* Brilho do cursor */}
-        <CursorGlow />
-        
-          {/* Navigation */}
+        {/* Navigation */}
             <Navigation items={navigationItems} />
         
-        {/* Layout Principal Centralizado */}
-        <MainLayout>
-          {/* Hero Section */}
-          <HeroSection />
-          
-          {/* Features Section */}
-          <FeaturesSection features={featuresData} />
+        {/* Hero Section */}
+        <HeroSection />
+        
+        {/* Features Section */}
+        <FeaturesSection features={featuresData} />
           
           {/* Pricing Section - Placeholder */}
           <section id="pricing" className="py-20">
@@ -211,7 +206,6 @@ export default function HomePage() {
               </motion.div>
             </div>
           </section>
-        </MainLayout>
           
           {/* Footer */}
           <Footer sections={footerSections} />
