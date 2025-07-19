@@ -44,7 +44,7 @@ export default function CursorGlow() {
   return (
     <div
       ref={cursorRef}
-      className="hidden lg:block fixed pointer-events-none z-20 w-[300px] h-[300px] rounded-full opacity-40 blur-2xl"
+              className="fixed pointer-events-none z-20 w-[300px] h-[300px] rounded-full opacity-40 blur-2xl"
       style={{
         background: 'radial-gradient(circle, rgba(227, 27, 255, 0.6) 0%, rgba(130, 23, 231, 0.4) 30%, rgba(72, 7, 173, 0.2) 60%, transparent 100%)',
         transform: 'translate(-50%, -50%)',
