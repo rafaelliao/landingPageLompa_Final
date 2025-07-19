@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { ScrollMonitor } from '../components/ScrollMonitor'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,6 +25,7 @@ export default function RootLayout({
         <div id="root">
           {children}
         </div>
+        <ScrollMonitor enabled={true} />
       </body>
     </html>
   )
