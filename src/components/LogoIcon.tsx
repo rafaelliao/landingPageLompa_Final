@@ -7,7 +7,7 @@ export default function LogoIcon({ size = 'md', className = '' }: LogoIconProps)
   const sizeClasses = {
     sm: 'w-12 h-12',
     md: 'w-16 h-16',
-    lg: 'w-24 h-24',
+    lg: 'w-16 h-16',
     xl: 'w-24 h-24'
   }
 

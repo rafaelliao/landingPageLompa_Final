@@ -42,7 +42,7 @@ export function useResponsive(): ResponsiveConfig {
       else if (width >= BREAKPOINTS.sm) breakpoint = 'sm'
 
       setResponsiveConfig({
-        isMobile: width < BREAKPOINTS.lg,
+        isMobile: width < BREAKPOINTS.md,
         isTablet: width >= BREAKPOINTS.md && width < BREAKPOINTS.lg,
         isDesktop: width >= BREAKPOINTS.lg,
         screenWidth: width,

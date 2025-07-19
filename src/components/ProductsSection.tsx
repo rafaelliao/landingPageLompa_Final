@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useResponsive } from '../hooks/useResponsive'
 
 interface Product {
   id: string
@@ -10,7 +11,7 @@ interface Product {
   position: 'left-top' | 'left-center' | 'left-bottom' | 'left-bottom-inner' | 'left-center-inner' | 'left-extra' | 'right-top' | 'right-center' | 'right-bottom' | 'right-bottom-inner' | 'right-extra'
 }
 
-const products: Product[] = [
+const allProducts: Product[] = [
   {
     id: '1',
     name: 'Garrafa Stanley',
@@ -83,7 +84,26 @@ const products: Product[] = [
   }
 ]
 
+// Cards visíveis apenas na versão mobile
+const mobileVisibleCards = [
+  'Garrafa Stanley',
+  'Bolsa',
+  'Blusa Creme',
+  'Câmera Card',
+  'Boné',
+  'Relógio'
+]
+
 const ProductsSection = () => {
+  const { isMobile } = useResponsive()
+
+  // Filtrar produtos baseado no dispositivo
+  const products = isMobile 
+    ? allProducts.filter(product => mobileVisibleCards.includes(product.name))
+    : allProducts
+
+
+
   const getPositionClasses = (position: string) => {
     switch (position) {
       case 'left-top':
