@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronDown, HeadphonesIcon, Phone, Mail, MapPin } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Logo from './Logo'
+import { useNavbarScroll } from '@/hooks/useNavbarScroll'
 import type { NavItem } from '@/types'
 
 interface NavigationProps {
@@ -14,16 +15,7 @@ interface NavigationProps {
 
 export default function Navigation({ items, className }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const { isVisible, isScrolling } = useNavbarScroll()
 
   // Fechar menu ao clicar fora
   useEffect(() => {
@@ -94,6 +86,7 @@ export default function Navigation({ items, className }: NavigationProps) {
       <motion.nav
         className={cn(
           'fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 px-4',
+          isVisible ? 'navbar-visible' : 'navbar-hidden',
           className
         )}
         initial="hidden"
@@ -103,7 +96,7 @@ export default function Navigation({ items, className }: NavigationProps) {
         <motion.div
           className={cn(
             'flex items-center justify-between px-4 py-3 transition-all duration-300 max-w-7xl mx-auto navbar-custom-rounded mt-4',
-            isScrolled 
+            isScrolling 
               ? 'bg-white/20 backdrop-blur-md shadow-lg border border-white/20' 
               : 'bg-white/10 backdrop-blur-sm border border-white/10'
           )}

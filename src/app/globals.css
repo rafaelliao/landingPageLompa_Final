@@ -790,10 +790,22 @@
       padding-top: clamp(9rem, 13vh, 11rem) !important;
     }
     
+    /* Esconder ícone vermelho da blusa no mobile pequeno */
+    .product-item .star-icon {
+      display: none !important;
+    }
+    
+
+    
     /* Mobile extra pequeno - mais espaçamento */
     @media (max-width: 360px) {
       .hero-section {
         padding-top: clamp(8rem, 12vh, 10rem) !important;
+      }
+      
+      /* Esconder ícone vermelho da blusa no mobile extra pequeno */
+      .product-item .star-icon {
+        display: none !important;
       }
     }
     
@@ -1067,6 +1079,17 @@
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
+    transition: transform 0.3s ease-in-out !important;
+  }
+  
+  /* Classe para esconder a navbar */
+  .navbar-hidden {
+    transform: translateY(-100%) !important;
+  }
+  
+  /* Classe para mostrar a navbar */
+  .navbar-visible {
+    transform: translateY(0) !important;
   }
   
   /* Prevenir sobreposições desnecessárias */
@@ -1118,6 +1141,11 @@
     /* Padding responsivo para diferentes tamanhos */
     .hero-section {
       padding-top: clamp(10rem, 15vh, 12rem) !important;
+    }
+    
+    /* Esconder ícone vermelho da blusa nas versões móveis */
+    .product-item .star-icon {
+      display: none !important;
     }
   }
   
