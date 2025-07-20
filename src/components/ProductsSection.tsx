@@ -2,7 +2,7 @@
 
 import { useResponsive } from '../hooks/useResponsive'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useMemo, useState } from 'react'
 
 interface Product {
   id: string
@@ -130,44 +130,73 @@ const allProducts: Product[] = [
   }
 ]
 
-// Cards visíveis apenas na versão mobile
+// Cards visíveis apenas na versão mobile (4 de cada lado)
 const mobileVisibleCards = [
-  'Garrafa Stanley',
-  'Bolsa',
-  'Blusa Creme',
-  'Câmera Card',
-  'Boné',
-  'Relógio',
-  'Fone',
-  'Ventilador'
+  // GRUPO ESQUERDA - 4 cards
+  'Garrafa Stanley',    // ✅ Garantido - Card principal
+  'Bolsa',              // ✅ Card importante
+  'Blusa Creme',        // ✅ Card com estrela
+  'Urso Pelúcia',       // ✅ Novo card inserido no grupo da esquerda
+  'Câmera Card',        // ✅ Card visual
+  // 'Fone',            // ❌ Removido do mobile
+  
+  // GRUPO DIREITA - 4 cards
+  'Boné',               // ✅ Card importante
+  'Óculos',             // ✅ Novo card inserido no grupo da direita
+  'Relógio',            // ✅ Card visual
+  // 'Ventilador'       // ❌ Removido do mobile
 ]
 
 const ProductsSection = () => {
   const { isMobile: isMobileResponsive } = useResponsive()
-  const { scrollProgress, createAnimation, isMobile: isMobileScroll } = useScrollAnimation()
+  const { scrollProgress, createAnimation } = useScrollAnimation()
   const productRefs = useRef<(HTMLDivElement | null)[]>([])
-  
-  // Usar a detecção de mobile do hook de scroll para animação
-  const isMobile = isMobileScroll || isMobileResponsive
+
+  // Garantir renderização só no client para evitar mismatch
+  const [isClient, setIsClient] = useState(false)
+  useEffect(() => { setIsClient(true) }, [])
+
+  const isMobile = isMobileResponsive
 
   // Filtrar produtos baseado no dispositivo
-  const products = isMobile 
-    ? allProducts.filter(product => mobileVisibleCards.includes(product.name))
-    : allProducts
+  const products = useMemo(() => {
+    if (isMobile) {
+      return allProducts.filter(product => mobileVisibleCards.includes(product.name))
+    } else {
+      return allProducts.filter(product => product.name !== 'Creme Icon')
+    }
+  }, [isMobile, allProducts])
 
   // Inicializar animação GSAP com ScrollTrigger
   useEffect(() => {
-    const timer = setTimeout(() => {
-      console.log('Inicializando ScrollTriggers para', products.length, 'cards')
-      createAnimation()
-    }, 300)
-    
-    return () => clearTimeout(timer)
-  }, [createAnimation, products])
+    if (isClient) {
+      const timer = setTimeout(() => {
+        createAnimation()
+      }, 300)
+      return () => clearTimeout(timer)
+    }
+  }, [createAnimation, products, isClient])
 
-
+  if (!isClient) return null
 
   const getPositionClasses = (position: string) => {
+    // Posições específicas para mobile
+    if (isMobile) {
+      switch (position) {
+        case 'left-extra':
+          return 'top-25 left-10'      // Câmera Card - mobile: ajustado para ficar visível no grupo esquerda
+        case 'left-top-inner':
+          return 'top-50 -left-60'     // Fone - mobile: movido 40px para esquerda (era top-50 left-20)
+        case 'right-top':
+          return 'top-30 right-12'     // Óculos - mobile: movido mais para a esquerda
+        case 'right-extra':
+          return 'top-40 right-6'      // Relógio - mobile: movido um pouco para a direita
+        default:
+          break // Usar posições padrão para outros cards
+      }
+    }
+    
+    // Posições padrão para desktop e outros cards mobile
     switch (position) {
       case 'left-top':
         return '-top-68 left-5'
@@ -180,9 +209,9 @@ const ProductsSection = () => {
       case 'left-center-inner':
         return '-top-1 left-22'
       case 'left-extra':
-        return 'top-15 left-5'
+        return 'top-15 left-5'        // Câmera Card - desktop: posição original
       case 'left-top-inner':
-        return '-top-40 left-15'
+        return '-top-40 left-15'      // Fone - desktop: posição original
       case 'left-bottom-extra':
         return 'top-35 -left-5'
       case 'right-top':
@@ -196,9 +225,9 @@ const ProductsSection = () => {
       case 'right-extra':
         return 'top-15 right-5'
       case 'right-center-inner':
-        return '-top-20 right-15'
+        return '-top-20 right-15'     // Creme Icon - desktop: posição original
       case 'right-top-inner':
-        return '-top-45 right-20'
+        return '-top-45 right-20'     // Ventilador - desktop: posição original
       case 'right-bottom-extra':
         return 'top-30 -right-5'
       default:
@@ -209,24 +238,6 @@ const ProductsSection = () => {
   return (
     <section className="products-section">
       <div className="products-container">
-        {/* Indicador do elemento de referência dinâmico */}
-        <div 
-          id="reference-indicator"
-          style={{
-            position: 'fixed',
-            width: '15px',
-            height: '15px',
-            background: 'lime',
-            borderRadius: '50%',
-            border: '3px solid white',
-            zIndex: 9998,
-            pointerEvents: 'none',
-            opacity: 1,
-            boxShadow: '0 0 15px rgba(0,255,0,1)',
-            transition: 'all 0.1s ease'
-          }}
-        />
-        
         {/* Indicador de progresso da animação */}
         <div style={{
           position: 'fixed',
@@ -244,88 +255,26 @@ const ProductsSection = () => {
           {scrollProgress.toFixed(1)}vh | {scrollProgress <= 74.1 ? ((scrollProgress / 74.1) * 100).toFixed(1) : '100'}%
         </div>
         
-        {/* Indicador de fase da animação */}
-        <div style={{
-          position: 'fixed',
-          top: '50px',
-          right: '10px',
-          background: 'rgba(0,0,255,0.9)',
-          color: 'white',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          zIndex: 9999,
-          fontFamily: 'monospace',
-          fontWeight: 'bold'
-        }}>
-          BLUEPRINT ATIVO
-        </div>
-        
-        {/* Indicador de ScrollTrigger */}
-        <div style={{
-          position: 'fixed',
-          top: '90px',
-          right: '10px',
-          background: 'rgba(255,0,255,0.9)',
-          color: 'white',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          zIndex: 9999,
-          fontFamily: 'monospace',
-          fontWeight: 'bold'
-        }}>
-          SCRUB 3.5
-        </div>
-        
-        {/* Indicador de Performance */}
-        <div style={{
-          position: 'fixed',
-          top: '130px',
-          right: '10px',
-          background: 'rgba(0,255,0,0.9)',
-          color: 'white',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          zIndex: 9999,
-          fontFamily: 'monospace',
-          fontWeight: 'bold'
-        }}>
-          800VH TIMELINE
-        </div>
-        
-        {/* Indicador de Cache */}
-        <div style={{
-          position: 'fixed',
-          top: '170px',
-          right: '10px',
-          background: 'rgba(255,165,0,0.9)',
-          color: 'white',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          zIndex: 9999,
-          fontFamily: 'monospace',
-          fontWeight: 'bold'
-        }}>
-          FASE SEPARADA
-        </div>
-        
         {/* Grid de produtos posicionados em meias-luas */}
         <div className="products-grid">
-          {products.map((product, index) => {
-                          return (
+          {products.map((product: Product, index: number) => (
                 <div
                   key={product.id}
                   ref={(el) => { productRefs.current[index] = el; }}
                   className={`product-item ${getPositionClasses(product.position)}`}
+                  style={product.name === 'Fone' && isMobile ? { border: '2px solid red', backgroundColor: 'rgba(255,0,0,0.1)' } : {}} // Debug visual para o Fone apenas no mobile
                 >
-              <div className="product-card">
+              <div className="product-card" style={product.name === 'Fone' && isMobile ? { width: '60px', height: '60px' } : {}}>
                 <img 
                   src={product.image} 
                   alt={product.alt} 
                   className="product-image"
+                  style={product.name === 'Fone' && isMobile ? { 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover',
+                    borderRadius: '8px'
+                  } : {}}
                 />
               </div>
               
@@ -342,7 +291,7 @@ const ProductsSection = () => {
                 </div>
               )}
               
-              {product.name === 'Óculos' && (
+              {product.name === 'Óculos' && !isMobile && (
                 <div 
                   className="product-icon like-icon"
                 >
@@ -354,8 +303,7 @@ const ProductsSection = () => {
                 </div>
               )}
             </div>
-          );
-        })}
+          ))}
         </div>
       </div>
     </section>

@@ -2,17 +2,54 @@ import { useEffect, useState, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Registrar o plugin ScrollTrigger
-gsap.registerPlugin(ScrollTrigger);
+  // Registrar o plugin ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger);
 
 export const useScrollAnimation = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [debugMode, setDebugMode] = useState(false); // Controle de debug
   const scrollTriggersRef = useRef<ScrollTrigger[]>([]);
+
+  // Função helper para logs condicionais
+  const debugLog = (message: string, ...args: any[]) => {
+    if (debugMode) {
+      console.log(message, ...args);
+    }
+  };
+  
+  // Configurações das timelines
+  const TIMELINE_CONFIG = {
+    TIMELINE_1: {
+      name: 'Cards to Mockup',
+      end: {
+        desktop: '+=800vh',
+        mobile: '+=400vh'  // Aumentado de 60vh para 400vh para dar mais espaço
+      },
+      scrub: {
+        desktop: 3.5,
+        mobile: 2.5
+      },
+      description: 'Movimentação dos cards para o centro do mockup'
+    }
+    // FUTURAS TIMELINES - EXEMPLO DE COMO ADICIONAR:
+    // TIMELINE_2: {
+    //   name: 'Mockup to Features',
+    //   end: '+=600vh',
+    //   scrub: 2.5,
+    //   description: 'Movimentação do mockup para a seção de features'
+    // },
+    // TIMELINE_3: {
+    //   name: 'Features Animation',
+    //   end: '+=400vh',
+    //   scrub: 1.5,
+    //   description: 'Animação dos cards de features'
+    // }
+  };
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
+      setIsMobile(window.innerWidth < 768); // Usar o mesmo breakpoint do useResponsive
     };
 
     checkMobile();
@@ -34,8 +71,8 @@ export const useScrollAnimation = () => {
 
     const handleResize = () => {
       checkMobile();
-      // Recriar ScrollTriggers no resize
-      createScrollTriggers();
+      // Recriar todas as timelines no resize
+      createAllTimelines();
     };
 
     window.addEventListener('resize', handleResize);
@@ -51,40 +88,85 @@ export const useScrollAnimation = () => {
 
   // Cache otimizado - removido getMockupPosition para evitar reflows
 
-  const createScrollTriggers = () => {
+  // Função principal para criar todas as timelines
+  const createAllTimelines = () => {
     // Limpar ScrollTriggers anteriores
     scrollTriggersRef.current.forEach(trigger => trigger.kill());
     scrollTriggersRef.current = [];
 
+    debugLog('🎬 Iniciando criação de todas as timelines...');
+    
+    // Criar Timeline 1
+    createTimeline1();
+    
+    // Futuras timelines serão adicionadas aqui
+    // createTimeline2();
+    // createTimeline3();
+    
+    // EXEMPLO DE COMO ADICIONAR NOVA TIMELINE:
+    // 1. Adicionar configuração em TIMELINE_CONFIG
+    // 2. Criar função createTimeline2() seguindo o padrão da Timeline 1
+    // 3. Chamar createTimeline2() aqui
+    // 4. Atualizar indicadores visuais se necessário
+    
+    debugLog('✅ Todas as timelines criadas com sucesso!');
+  };
+
+  const createTimeline1 = () => {
+    const isMobileDevice = window.innerWidth < 768;
+    const endValue = isMobileDevice ? TIMELINE_CONFIG.TIMELINE_1.end.mobile : TIMELINE_CONFIG.TIMELINE_1.end.desktop;
+    const scrubValue = isMobileDevice ? TIMELINE_CONFIG.TIMELINE_1.scrub.mobile : TIMELINE_CONFIG.TIMELINE_1.scrub.desktop;
+    
+    debugLog('🎬 Criando TIMELINE 1:', TIMELINE_CONFIG.TIMELINE_1.name);
+    debugLog(`📱 Configuração: ${isMobileDevice ? 'MOBILE' : 'DESKTOP'} - End: ${endValue}, Scrub: ${scrubValue}`);
+    
     // Obter todos os cards
     const elements = Array.from(document.querySelectorAll('.product-item')) as HTMLElement[];
     if (elements.length === 0) {
-      console.warn('Nenhum card encontrado');
+      debugLog('❌ Nenhum card encontrado para Timeline 1');
       return;
     }
+
+    // Verificar se os elementos de referência existem
+    // isMobileDevice já declarado acima
+    const mockupId = isMobileDevice ? 'smartphone-mockup-mobile' : 'smartphone-mockup-desktop';
+    const centerRefId = isMobileDevice ? 'mockup-center-reference-mobile' : 'mockup-center-reference-desktop';
+    
+    debugLog(`🔍 Verificando elementos de referência:`);
+    debugLog(`🔍 Mockup ID: ${mockupId}`);
+    debugLog(`🔍 Centro ID: ${centerRefId}`);
+    debugLog(`🔍 Mockup existe: ${!!document.getElementById(mockupId)}`);
+    debugLog(`🔍 Centro existe: ${!!document.getElementById(centerRefId)}`);
+    
+    // Listar todos os elementos com IDs que contêm "mockup" para debug
+    const allMockupElements = document.querySelectorAll('[id*="mockup"]');
+    debugLog(`🔍 Todos os elementos mockup encontrados:`, Array.from(allMockupElements).map(el => el.id));
 
     // VARIÁVEIS CACHEADAS (serão preenchidas no onRefresh)
     let cardsData: Array<{ el: HTMLElement; centerX: number; centerY: number }> = [];
     let mockupCenter: { x: number; y: number } = { x: 0, y: 0 };
     let setters: Array<{ setX: Function; setY: Function; setScaleX: Function; setScaleY: Function; setOpacity: Function; setRotation: Function; setFilter: Function; setZIndex: Function }> = [];
 
-    console.log('ScrollTriggers criados para', elements.length, 'cards com blueprint otimizado');
+    debugLog(`✅ Timeline 1 configurada para ${elements.length} cards`);
 
-    // CRIAR UM ÚNICO SCROLLTRIGGER PARA TODOS OS CARDS (BLUEPRINT OTIMIZADO)
-    const isMobileDevice = window.innerWidth < 1024;
+    // CRIAR TIMELINE 1: SCROLLTRIGGER PARA TODOS OS CARDS (BLUEPRINT OTIMIZADO)
     const finalScale = isMobileDevice ? 0.6 : 0.8;
     const finalOpacity = isMobileDevice ? 0.5 : 0.7;
 
     const trigger = ScrollTrigger.create({
       trigger: "body",
       start: "top top",
-      end: "+=800vh", // VALOR DO PROJETO ANTERIOR QUE FUNCIONAVA
-      scrub: 3.5, // SCRUB MAIS SUAVE COMO NO PROJETO ANTERIOR
+      end: isMobileDevice ? TIMELINE_CONFIG.TIMELINE_1.end.mobile : TIMELINE_CONFIG.TIMELINE_1.end.desktop,
+      scrub: isMobileDevice ? TIMELINE_CONFIG.TIMELINE_1.scrub.mobile : TIMELINE_CONFIG.TIMELINE_1.scrub.desktop,
       invalidateOnRefresh: true,
-      markers: true,
+      markers: false, // Removido marcadores visuais
       onRefresh: (self) => {
         // FASE 1: MEDIÇÃO - RECALCULAR AQUI E ARMAZENAR
-        console.log('🔄 onRefresh: Recalculando posições...');
+        debugLog('🔄 Timeline 1 - onRefresh: Recalculando posições...');
+        
+        // Detectar dispositivo
+        const isMobileDevice = window.innerWidth < 768;
+        debugLog('📱 Dispositivo detectado:', isMobileDevice ? 'MOBILE' : 'DESKTOP');
         
         // Medir posições dos cards
         cardsData = elements.map(card => {
@@ -96,14 +178,38 @@ export const useScrollAnimation = () => {
           };
         });
         
+        debugLog(`📊 Cards encontrados: ${cardsData.length}`);
+        
         // Medir posição do mockup
-        const mockupElement = document.getElementById('smartphone-mockup-target') as HTMLElement;
-        if (mockupElement) {
-          const rect = mockupElement.getBoundingClientRect();
+        debugLog(`🎯 Procurando mockup: ${mockupId}`);
+        debugLog(`🎯 Procurando centro: ${centerRefId}`);
+        
+        // Primeiro tentar usar o ponto de referência dinâmico no centro
+        const centerRefElement = document.getElementById(centerRefId) as HTMLElement;
+        if (centerRefElement) {
+          const rect = centerRefElement.getBoundingClientRect();
           mockupCenter = { 
             x: rect.left + rect.width / 2, 
             y: rect.top + rect.height / 2 
           };
+          debugLog(`✅ Timeline 1 - Usando ponto de referência dinâmico: ${centerRefId}`);
+          debugLog(`📍 Centro calculado: x=${mockupCenter.x}, y=${mockupCenter.y}`);
+        } else {
+          debugLog(`❌ Ponto de referência não encontrado: ${centerRefId}`);
+          // Fallback para o mockup principal
+          const mockupElement = document.getElementById(mockupId) as HTMLElement;
+          if (mockupElement) {
+            const rect = mockupElement.getBoundingClientRect();
+            mockupCenter = { 
+              x: rect.left + rect.width / 2, 
+              y: rect.top + rect.height / 2 
+            };
+            debugLog(`✅ Timeline 1 - Usando centro do mockup principal: ${mockupId}`);
+            debugLog(`📍 Centro calculado: x=${mockupCenter.x}, y=${mockupCenter.y}`);
+          } else {
+            debugLog(`❌ Mockup principal não encontrado: ${mockupId}`);
+            debugLog(`❌ Nenhum elemento de referência encontrado!`);
+          }
         }
         
         // Configurar quickSetters
@@ -118,7 +224,7 @@ export const useScrollAnimation = () => {
           setZIndex: gsap.quickSetter(card, 'zIndex')
         }));
         
-        console.log('✅ onRefresh: Cache atualizado para', cardsData.length, 'cards');
+        debugLog('✅ Timeline 1 - onRefresh: Cache atualizado para', cardsData.length, 'cards');
       },
       onUpdate: (self) => {
         // FASE 2: ATUALIZAÇÃO - AQUI SÓ CHAME SETTERS ULTRA-LEVES
@@ -126,7 +232,8 @@ export const useScrollAnimation = () => {
         
         // Log reduzido para performance
         if (Math.floor(self.progress * 100) % 10 === 0) {
-          console.log(`📊 Progress: ${(self.progress * 100).toFixed(1)}%`);
+          debugLog(`📊 Timeline 1 - Progress: ${(self.progress * 100).toFixed(1)}%`);
+          debugLog(`🎯 Mockup Center: x=${mockupCenter.x}, y=${mockupCenter.y}`);
         }
         
         // ANIMAÇÃO OTIMIZADA: APENAS SETTERS SEM MEDIÇÕES
@@ -136,6 +243,13 @@ export const useScrollAnimation = () => {
           // Calcular delta usando dados cacheados
           const deltaX = mockupCenter.x - data.centerX;
           const deltaY = mockupCenter.y - data.centerY;
+          
+          // Log do primeiro card para debug
+          if (i === 0 && Math.floor(self.progress * 100) % 10 === 0) {
+            debugLog(`🎯 Card 0 - Original: x=${data.centerX}, y=${data.centerY}`);
+            debugLog(`🎯 Card 0 - Delta: x=${deltaX}, y=${deltaY}`);
+            debugLog(`🎯 Card 0 - Aplicado: x=${deltaX * self.progress}, y=${deltaY * self.progress}`);
+          }
           
           // Aplicar movimento direto (máxima performance)
           setter.setX(deltaX * self.progress);
@@ -187,14 +301,27 @@ export const useScrollAnimation = () => {
     ScrollTrigger.refresh();
   };
 
-  // Inicializar ScrollTriggers quando o componente montar
+  // Inicializar todas as timelines quando o componente montar
   useEffect(() => {
     const timer = setTimeout(() => {
-      createScrollTriggers();
-    }, 200);
+      debugLog('🚀 Iniciando criação de timelines após delay...');
+      createAllTimelines();
+    }, 500); // Aumentado de 200ms para 500ms para garantir renderização
 
     return () => clearTimeout(timer);
   }, []);
 
-  return { scrollProgress, createAnimation: createScrollTriggers, isMobile };
+  // Função para ativar/desativar debug mode
+  const toggleDebugMode = () => {
+    setDebugMode(!debugMode);
+    console.log(`🔧 Debug mode ${!debugMode ? 'ATIVADO' : 'DESATIVADO'}`);
+  };
+
+  return { 
+    scrollProgress, 
+    createAnimation: createAllTimelines, 
+    isMobile, 
+    debugMode, 
+    toggleDebugMode 
+  };
 }; 

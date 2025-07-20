@@ -99,7 +99,7 @@ export default function HomePage() {
         {/* Círculos de fundo fixos - DESABILITADO PARA TESTE DE PERFORMANCE */}
         {/* <BackgroundCircles /> */}
         
-        {/* Navigation */}
+          {/* Navigation */}
             <Navigation items={navigationItems} />
         
         {/* Hero Section */}

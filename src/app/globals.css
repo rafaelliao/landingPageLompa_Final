@@ -209,6 +209,49 @@
     /* Filtros removidos para otimização de performance */
   }
 
+  /* Mockup Desktop - referência específica */
+  #smartphone-mockup-desktop {
+    width: 336px;
+    height: 672px;
+    display: block; /* Desktop visível por padrão */
+  }
+
+  /* Mockup Mobile - referência específica */
+  #smartphone-mockup-mobile {
+    width: 240px;
+    height: 480px;
+    z-index: 5; /* Mobile: fica atrás dos cards de produtos (z-index: 50-1002) */
+    display: none; /* Mobile oculto por padrão */
+  }
+
+  /* Ponto de referência dinâmico no centro - Mobile */
+  #mockup-center-reference-mobile {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 1px !important;
+    height: 1px !important;
+    background-color: transparent !important;
+    z-index: 1000 !important;
+    pointer-events: none !important;
+    display: none; /* Oculto por padrão */
+  }
+
+  /* Ponto de referência dinâmico no centro - Desktop */
+  #mockup-center-reference-desktop {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 1px !important;
+    height: 1px !important;
+    background-color: transparent !important;
+    z-index: 1000 !important;
+    pointer-events: none !important;
+    display: block; /* Visível por padrão */
+  }
+
     .mockup-screen {
     width: 100%;
     height: 100%;
@@ -218,8 +261,7 @@
     padding: 0;
     position: relative;
     overflow: hidden;
-    /* Sombras simplificadas para otimização */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    /* Sombras removidas para eliminar contorno indesejado */
   }
 
   .mockup-screen::before {
@@ -736,16 +778,51 @@
       margin: 2rem auto 0;
     }
     
+    /* Mockup Mobile específico */
+    #smartphone-mockup-mobile {
+      width: 240px;
+      height: 480px;
+      margin: 2rem auto 0;
+      z-index: 5; /* Mobile: fica atrás dos cards de produtos (z-index: 50-1002) */
+      display: block !important; /* Garantir que está visível no mobile */
+    }
+    
+    /* Mockup Desktop específico */
+    #smartphone-mockup-desktop {
+      width: 336px;
+      height: 672px;
+      margin: 2rem auto 0;
+      display: none !important; /* Garantir que está oculto no mobile */
+    }
+    
+    /* Ponto de referência dinâmico - Mobile responsivo */
+    #mockup-center-reference-mobile {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: 1px !important;
+      height: 1px !important;
+      background-color: transparent !important;
+      z-index: 1000 !important;
+      pointer-events: none !important;
+      display: block !important; /* Garantir que está visível no mobile */
+    }
+    
+    #mockup-center-reference-desktop {
+      display: none !important; /* Garantir que está oculto no mobile */
+    }
+    
     .products-section {
       min-height: auto;
-      transform: translateY(-40px);
+      /* transform: translateY(-40px); */
       position: relative;
-      z-index: 20;
+      z-index: 50; /* Aumentar para ficar acima do mockup mobile (z-index: 5) */
     }
     
     .product-item {
       transform: scale(0.84);
-      z-index: 999 !important;
+      z-index: 100 !important; /* Garantir que fique acima do mockup mobile (z-index: 5) */
     }
     
     .product-card {
@@ -754,8 +831,8 @@
     }
     
     .icon-image {
-      width: 49px;
-      height: 49px;
+      width: 63px !important;
+      height: 63px !important;
     }
     
     /* Posições dos produtos para nova estrutura */
@@ -822,6 +899,13 @@
     .product-item.top-15.right-5 {
       right: 15px;
       top: 12rem !important;
+      z-index: 1000 !important;
+    }
+    
+    /* Regra específica para o card Relógio (right-extra) no mobile */
+    .product-item.top-40.right-6 {
+      right: 24px !important;
+      top: 10rem !important;
       z-index: 1000 !important;
     }
   }
@@ -972,9 +1056,35 @@
       margin: 1.5rem auto 0;
     }
     
+    /* Mockup Mobile específico - mobile pequeno */
+    #smartphone-mockup-mobile {
+      width: 200px;
+      height: 400px;
+      margin: 1.5rem auto 0;
+      z-index: 5; /* Mobile: fica atrás dos cards de produtos (z-index: 50-1002) */
+      display: block !important; /* Garantir que está visível no mobile pequeno */
+    }
+    
+    /* Mockup Desktop específico - mobile pequeno */
+    #smartphone-mockup-desktop {
+      width: 200px;
+      height: 400px;
+      margin: 1.5rem auto 0;
+      display: none !important; /* Garantir que está oculto no mobile pequeno */
+    }
+    
+    /* Ponto de referência dinâmico - Mobile pequeno */
+    #mockup-center-reference-mobile {
+      display: block !important; /* Garantir que está visível no mobile pequeno */
+    }
+    
+    #mockup-center-reference-desktop {
+      display: none !important; /* Garantir que está oculto no mobile pequeno */
+    }
+    
     .product-item {
-      transform: scale(0.7);
-      z-index: 999 !important;
+      /* transform: scale(0.7); */
+      z-index: 100 !important; /* Garantir que fique acima do mockup mobile (z-index: 5) */
     }
     
     .product-card {
@@ -1219,7 +1329,7 @@
     
     /* Hero section simplificado */
     .hero-section {
-      position: relative !important;
+    position: relative !important;
       margin: 0 !important;
       min-height: auto !important;
       height: auto !important;
@@ -1269,11 +1379,30 @@
       right: 0 !important;
       height: 100% !important;
       pointer-events: none !important;
-      z-index: 10 !important;
+      z-index: 50 !important; /* Aumentar para ficar acima do mockup mobile (z-index: 5) */
     }
     
     .product-item {
       pointer-events: auto !important;
+    }
+  }
+
+  /* Media query para mobile - mostrar mockup mobile e ocultar desktop */
+  @media (max-width: 767px) {
+    #smartphone-mockup-desktop {
+      display: none !important; /* Ocultar desktop no mobile */
+    }
+    
+    #smartphone-mockup-mobile {
+      display: block !important; /* Mostrar mobile */
+    }
+    
+    #mockup-center-reference-desktop {
+      display: none !important; /* Ocultar referência desktop */
+    }
+    
+    #mockup-center-reference-mobile {
+      display: block !important; /* Mostrar referência mobile */
     }
   }
 } 

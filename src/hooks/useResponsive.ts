@@ -19,13 +19,37 @@ export const BREAKPOINTS = {
 } as const
 
 export function useResponsive(): ResponsiveConfig {
-  const [responsiveConfig, setResponsiveConfig] = useState<ResponsiveConfig>({
-    isMobile: false,
-    isTablet: false,
-    isDesktop: false,
-    screenWidth: 0,
-    screenHeight: 0,
-    breakpoint: 'xs'
+  const [responsiveConfig, setResponsiveConfig] = useState<ResponsiveConfig>(() => {
+    // Inicialização com valores corretos baseados no tamanho atual da janela
+    if (typeof window !== 'undefined') {
+      const width = window.innerWidth
+      const height = window.innerHeight
+      
+      let breakpoint: ResponsiveConfig['breakpoint'] = 'xs'
+      if (width >= BREAKPOINTS['2xl']) breakpoint = '2xl'
+      else if (width >= BREAKPOINTS.xl) breakpoint = 'xl'
+      else if (width >= BREAKPOINTS.lg) breakpoint = 'lg'
+      else if (width >= BREAKPOINTS.md) breakpoint = 'md'
+      else if (width >= BREAKPOINTS.sm) breakpoint = 'sm'
+      
+      return {
+        isMobile: width < BREAKPOINTS.md,
+        isTablet: width >= BREAKPOINTS.md && width < BREAKPOINTS.lg,
+        isDesktop: width >= BREAKPOINTS.lg,
+        screenWidth: width,
+        screenHeight: height,
+        breakpoint
+      }
+    }
+    
+    return {
+      isMobile: false,
+      isTablet: false,
+      isDesktop: false,
+      screenWidth: 0,
+      screenHeight: 0,
+      breakpoint: 'xs'
+    }
   })
 
   useEffect(() => {
