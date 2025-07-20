@@ -17,6 +17,49 @@ export const useScrollAnimation = () => {
       console.log(message, ...args);
     }
   };
+
+  // Função para criar partículas
+  const createParticles = (element: HTMLElement, count: number = 20) => {
+    const rect = element.getBoundingClientRect();
+    const particles: HTMLElement[] = [];
+    
+    for (let i = 0; i < count; i++) {
+      const particle = document.createElement('div');
+      particle.style.cssText = `
+        position: fixed;
+        width: 4px;
+        height: 4px;
+        background: radial-gradient(circle, #E11BFF 0%, #8217E7 50%, transparent 100%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        left: ${rect.left + rect.width / 2}px;
+        top: ${rect.top + rect.height / 2}px;
+        opacity: 1;
+        transform: scale(1);
+      `;
+      
+      document.body.appendChild(particle);
+      particles.push(particle);
+      
+      // Animar partícula
+      gsap.to(particle, {
+        x: (Math.random() - 0.5) * 200,
+        y: (Math.random() - 0.5) * 200,
+        opacity: 0,
+        scale: 0,
+        duration: 1 + Math.random() * 0.5,
+        ease: "power2.out",
+        onComplete: () => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }
+      });
+    }
+    
+    return particles;
+  };
   
   // Configurações das timelines
   const TIMELINE_CONFIG = {
@@ -126,6 +169,15 @@ export const useScrollAnimation = () => {
       debugLog('❌ Nenhum card encontrado para Timeline 1');
       return;
     }
+
+    // Obter elementos do título e ícone para efeito de partículas
+    const titleEl = document.querySelector('.hero-title') as HTMLElement;
+    const iconEl = document.querySelector('.hero-icon') as HTMLElement;
+    
+    debugLog(`🔍 Elementos de saída encontrados:`, {
+      title: !!titleEl,
+      icon: !!iconEl
+    });
 
     // Verificar se os elementos de referência existem
     // isMobileDevice já declarado acima
@@ -292,6 +344,51 @@ export const useScrollAnimation = () => {
             setter.setFilter(`brightness(${1 + 0.2 - fadeProgress * 0.2}) blur(${fadeProgress * 1.5}px)`);
           }
         });
+
+        // EFEITO DE SAÍDA COM PARTÍCULAS PARA TÍTULO E ÍCONE (SUPER RÁPIDO)
+        if (titleEl && iconEl) {
+          // Efeito de saída começa muito mais cedo (20-45%)
+          if (self.progress >= 0.2 && self.progress <= 0.45) {
+            const exitProgress = (self.progress - 0.2) / 0.25; // 0 a 1
+            
+            // Título: Fade out com partículas
+            titleEl.style.opacity = (1 - exitProgress * 0.8).toString();
+            titleEl.style.transform = `translateY(${-exitProgress * 20}px) scale(${1 - exitProgress * 0.1})`;
+            titleEl.style.filter = `blur(${exitProgress * 0.5}px) brightness(${1 + exitProgress * 0.3})`;
+            
+            // Ícone: Fade out com partículas
+            iconEl.style.opacity = (1 - exitProgress * 0.9).toString();
+            iconEl.style.transform = `translateY(${-exitProgress * 15}px) scale(${1 - exitProgress * 0.15}) rotate(${exitProgress * 15}deg)`;
+            iconEl.style.filter = `blur(${exitProgress * 0.3}px) brightness(${1 + exitProgress * 0.4}) drop-shadow(0 0 ${exitProgress * 10}px rgba(225, 27, 255, ${exitProgress * 0.8}))`;
+            
+            // Criar partículas no meio da animação (30-40%)
+            if (self.progress >= 0.3 && self.progress <= 0.4 && Math.floor(self.progress * 100) % 2 === 0) {
+              createParticles(titleEl, 5);
+              createParticles(iconEl, 3);
+            }
+          }
+          
+          // Efeito final de desaparecimento com explosão de partículas (45-65%)
+          if (self.progress > 0.45) {
+            const finalExitProgress = (self.progress - 0.45) / 0.2; // 0 a 1
+            
+            // Título: Desaparecimento final com partículas
+            titleEl.style.opacity = ((1 - 0.8) * (1 - finalExitProgress)).toString();
+            titleEl.style.transform = `translateY(${-20 - finalExitProgress * 30}px) scale(${(1 - 0.1) * (1 - finalExitProgress * 0.5)})`;
+            titleEl.style.filter = `blur(${0.5 + finalExitProgress * 1.5}px) brightness(${1.3 - finalExitProgress * 0.3}) drop-shadow(0 0 ${15 + finalExitProgress * 20}px rgba(225, 27, 255, ${0.8 - finalExitProgress * 0.8}))`;
+            
+            // Ícone: Desaparecimento final com partículas
+            iconEl.style.opacity = ((1 - 0.9) * (1 - finalExitProgress)).toString();
+            iconEl.style.transform = `translateY(${-15 - finalExitProgress * 25}px) scale(${(1 - 0.15) * (1 - finalExitProgress * 0.3)}) rotate(${15 + finalExitProgress * 25}deg)`;
+            iconEl.style.filter = `blur(${0.3 + finalExitProgress * 1.2}px) brightness(${1.4 - finalExitProgress * 0.4}) drop-shadow(0 0 ${10 + finalExitProgress * 25}px rgba(130, 23, 231, ${0.9 - finalExitProgress * 0.9}))`;
+            
+            // Explosão final de partículas (50-60%)
+            if (self.progress >= 0.5 && self.progress <= 0.6 && Math.floor(self.progress * 100) % 3 === 0) {
+              createParticles(titleEl, 15);
+              createParticles(iconEl, 10);
+            }
+          }
+        }
       }
     });
 
