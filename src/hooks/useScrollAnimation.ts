@@ -23,8 +23,8 @@ export const useScrollAnimation = () => {
     TIMELINE_1: {
       name: 'Cards to Mockup',
       end: {
-        desktop: '+=800vh',
-        mobile: '+=400vh'  // Aumentado de 60vh para 400vh para dar mais espaço
+        desktop: '+=1000vh',
+        mobile: '+=500vh'  // Aumentado para dar mais espaço à animação
       },
       scrub: {
         desktop: 3.5,
@@ -151,7 +151,7 @@ export const useScrollAnimation = () => {
 
     // CRIAR TIMELINE 1: SCROLLTRIGGER PARA TODOS OS CARDS (BLUEPRINT OTIMIZADO)
     const finalScale = isMobileDevice ? 0.6 : 0.8;
-    const finalOpacity = isMobileDevice ? 0.5 : 0.7;
+    const finalOpacity = isMobileDevice ? 0.7 : 0.85; // Aumentado para diminuir transparência
 
     const trigger = ScrollTrigger.create({
       trigger: "body",
@@ -270,8 +270,11 @@ export const useScrollAnimation = () => {
           // Filter otimizado
           setter.setFilter(self.progress > 0.2 ? `brightness(${1 + self.progress * 0.15})` : 'none');
           
-          // ZIndex otimizado
-          setter.setZIndex(self.progress > 0.5 ? 1000 : 1);
+          // ZIndex otimizado - Garrafa Stanley sempre na frente
+          const isGarrafa = data.el.querySelector('img[alt="Garrafa Stanley"]') !== null;
+          const baseZIndex = self.progress > 0.5 ? 1000 : 1;
+          const garrafaZIndex = isGarrafa ? baseZIndex + 500 : baseZIndex;
+          setter.setZIndex(garrafaZIndex);
 
           // Efeito de entrada na tela (80-95% da timeline)
           if (self.progress > 0.8) {

@@ -430,7 +430,7 @@
   .product-item.-top-68.left-5 {
     top: -70px;
     left: 20px;
-    z-index: 1002;
+    z-index: 1500; /* Garrafa Stanley - sempre na frente */
   }
 
   .product-item.-top-50.-left-8 {
@@ -839,7 +839,7 @@
     .product-item.-top-68.left-5 {
       left: 10px;
       top: 6rem !important;
-      z-index: 1003 !important;
+      z-index: 1500 !important; /* Garrafa Stanley - sempre na frente (mobile) */
     }
     
     .product-item.top-24.-left-12 {
