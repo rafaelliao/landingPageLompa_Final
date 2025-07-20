@@ -264,6 +264,9 @@ export const useScrollAnimation = () => {
         cardsData.forEach((data, i) => {
           const setter = setters[i];
           
+          // Verificar se é a garrafa Stanley
+          const isGarrafa = data.el.querySelector('img[alt="Garrafa Stanley"]') !== null;
+          
           // Calcular delta usando dados cacheados
           const deltaX = mockupCenter.x - data.centerX;
           const deltaY = mockupCenter.y - data.centerY;
@@ -275,48 +278,96 @@ export const useScrollAnimation = () => {
             debugLog(`🎯 Card 0 - Aplicado: x=${deltaX * self.progress}, y=${deltaY * self.progress}`);
           }
           
-          // Aplicar movimento direto (máxima performance)
-          setter.setX(deltaX * self.progress);
-          setter.setY(deltaY * self.progress);
-          
-          // Scale otimizado
-          const scaleValue = 1 + (finalScale - 1) * self.progress;
-          setter.setScaleX(scaleValue);
-          setter.setScaleY(scaleValue);
-          
-          // Opacity otimizado
-          setter.setOpacity(1 + (finalOpacity - 1) * self.progress);
-          
-          // Rotation otimizado (fixo para evitar recálculos)
-          const rotationValue = (Math.random() * 10 - 5) * self.progress;
-          setter.setRotation(rotationValue);
-          
-          // Filter otimizado
-          setter.setFilter(self.progress > 0.2 ? `brightness(${1 + self.progress * 0.15})` : 'none');
-          
-          // ZIndex otimizado - Garrafa Stanley sempre na frente
-          const isGarrafa = data.el.querySelector('img[alt="Garrafa Stanley"]') !== null;
-          const baseZIndex = self.progress > 0.5 ? 1000 : 1;
-          const garrafaZIndex = isGarrafa ? baseZIndex + 500 : baseZIndex;
-          setter.setZIndex(garrafaZIndex);
+          if (isGarrafa) {
+            // ANIMAÇÃO INDEPENDENTE PARA A GARRAFA STANLEY
+            // TODO: Aqui você pode modificar o comportamento específico da garrafa
+            
+            // Aplicar movimento direto (máxima performance) - MESMO COMPORTAMENTO ATUAL
+            setter.setX(deltaX * self.progress);
+            setter.setY(deltaY * self.progress);
+            
+            // Scale otimizado - GARRAFA 80% MAIOR NO DESTINO
+            const garrafaFinalScale = finalScale * 1.8; // 80% maior que o scale final normal
+            const scaleValue = 1 + (garrafaFinalScale - 1) * self.progress;
+            setter.setScaleX(scaleValue);
+            setter.setScaleY(scaleValue);
+            
+            // Opacity otimizado - GARRAFA SEM TRANSPARÊNCIA
+            setter.setOpacity(1); // Sempre opaca (sem transparência)
+            
+            // Rotation otimizado (fixo para evitar recálculos) - MESMO COMPORTAMENTO ATUAL
+            const rotationValue = (Math.random() * 10 - 5) * self.progress;
+            setter.setRotation(rotationValue);
+            
+            // Filter otimizado - MESMO COMPORTAMENTO ATUAL
+            setter.setFilter(self.progress > 0.2 ? `brightness(${1 + self.progress * 0.15})` : 'none');
+            
+            // ZIndex otimizado - Garrafa Stanley sempre na frente
+            const baseZIndex = self.progress > 0.5 ? 1000 : 1;
+            const garrafaZIndex = baseZIndex + 500;
+            setter.setZIndex(garrafaZIndex);
 
-          // Efeito de entrada na tela (80-95% da timeline)
-          if (self.progress > 0.8) {
-            const entryProgress = (self.progress - 0.8) / 0.15;
-            const entryScale = finalScale * (1 + entryProgress * 0.2);
-            setter.setScaleX(entryScale);
-            setter.setScaleY(entryScale);
-            setter.setFilter(`brightness(${1 + 0.2}) drop-shadow(0 0 15px rgba(255,255,255,${entryProgress * 0.5}))`);
-          }
+            // Efeito de entrada na tela (80-95% da timeline) - GARRAFA 40% MAIOR
+            if (self.progress > 0.8) {
+              const entryProgress = (self.progress - 0.8) / 0.15;
+              const entryScale = garrafaFinalScale * (1 + entryProgress * 0.2);
+              setter.setScaleX(entryScale);
+              setter.setScaleY(entryScale);
+              setter.setFilter(`brightness(${1 + 0.2}) drop-shadow(0 0 15px rgba(255,255,255,${entryProgress * 0.5}))`);
+            }
 
-          // Fade out final (95-100% da timeline)
-          if (self.progress > 0.95) {
-            const fadeProgress = (self.progress - 0.95) / 0.05;
-            setter.setOpacity(finalOpacity * (1 - fadeProgress));
-            const fadeScale = finalScale * (1 - fadeProgress * 0.3);
-            setter.setScaleX(fadeScale);
-            setter.setScaleY(fadeScale);
-            setter.setFilter(`brightness(${1 + 0.2 - fadeProgress * 0.2}) blur(${fadeProgress * 1.5}px)`);
+            // Fade out final (95-100% da timeline) - GARRAFA 80% MAIOR SEM TRANSPARÊNCIA
+            if (self.progress > 0.95) {
+              const fadeProgress = (self.progress - 0.95) / 0.05;
+              setter.setOpacity(1); // Mantém sempre opaca
+              const fadeScale = garrafaFinalScale * (1 - fadeProgress * 0.3);
+              setter.setScaleX(fadeScale);
+              setter.setScaleY(fadeScale);
+              setter.setFilter(`brightness(${1 + 0.2 - fadeProgress * 0.2}) blur(${fadeProgress * 1.5}px)`);
+            }
+          } else {
+            // ANIMAÇÃO PARA OS DEMAIS CARDS (NÃO GARRAFA)
+            // Aplicar movimento direto (máxima performance)
+            setter.setX(deltaX * self.progress);
+            setter.setY(deltaY * self.progress);
+            
+            // Scale otimizado
+            const scaleValue = 1 + (finalScale - 1) * self.progress;
+            setter.setScaleX(scaleValue);
+            setter.setScaleY(scaleValue);
+            
+            // Opacity otimizado
+            setter.setOpacity(1 + (finalOpacity - 1) * self.progress);
+            
+            // Rotation otimizado (fixo para evitar recálculos)
+            const rotationValue = (Math.random() * 10 - 5) * self.progress;
+            setter.setRotation(rotationValue);
+            
+            // Filter otimizado
+            setter.setFilter(self.progress > 0.2 ? `brightness(${1 + self.progress * 0.15})` : 'none');
+            
+            // ZIndex otimizado - Cards normais
+            const baseZIndex = self.progress > 0.5 ? 1000 : 1;
+            setter.setZIndex(baseZIndex);
+
+            // Efeito de entrada na tela (80-95% da timeline)
+            if (self.progress > 0.8) {
+              const entryProgress = (self.progress - 0.8) / 0.15;
+              const entryScale = finalScale * (1 + entryProgress * 0.2);
+              setter.setScaleX(entryScale);
+              setter.setScaleY(entryScale);
+              setter.setFilter(`brightness(${1 + 0.2}) drop-shadow(0 0 15px rgba(255,255,255,${entryProgress * 0.5}))`);
+            }
+
+            // Fade out final (95-100% da timeline)
+            if (self.progress > 0.95) {
+              const fadeProgress = (self.progress - 0.95) / 0.05;
+              setter.setOpacity(finalOpacity * (1 - fadeProgress));
+              const fadeScale = finalScale * (1 - fadeProgress * 0.3);
+              setter.setScaleX(fadeScale);
+              setter.setScaleY(fadeScale);
+              setter.setFilter(`brightness(${1 + 0.2 - fadeProgress * 0.2}) blur(${fadeProgress * 1.5}px)`);
+            }
           }
         });
       }
