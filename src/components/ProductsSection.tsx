@@ -175,6 +175,7 @@ const ProductsSection = () => {
       }, 300)
       return () => clearTimeout(timer)
     }
+    return undefined // Retorno explícito para quando isClient é false
   }, [createAnimation, products, isClient])
 
   if (!isClient) return null
