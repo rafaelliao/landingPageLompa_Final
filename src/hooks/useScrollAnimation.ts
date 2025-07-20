@@ -43,6 +43,18 @@ export const useScrollAnimation = () => {
         mobile: 1.5
       },
       description: 'Efeito de saída Fade Out + Slide Up para o título e ícone central'
+    },
+    GARRAFA_TIMELINE: {
+      name: 'Garrafa Stanley Extended',
+      end: {
+        desktop: '+=1400vh', // 400vh a mais que timeline1
+        mobile: '+=700vh'    // 200vh a mais que timeline1
+      },
+      scrub: {
+        desktop: 4.0,        // Mais suave que timeline1
+        mobile: 3.0
+      },
+      description: 'Timeline estendida para a garrafa Stanley com duração maior'
     }
     // FUTURAS TIMELINES - EXEMPLO DE COMO ADICIONAR:
     // TIMELINE_2: {
@@ -119,6 +131,9 @@ export const useScrollAnimation = () => {
     
     // Criar Timeline do Título
     createTitleExitTimeline();
+    
+    // Criar Timeline da Garrafa Stanley
+    createGarrafaTimeline();
     
     // Futuras timelines serão adicionadas aqui
     // createTimeline2();
@@ -264,9 +279,6 @@ export const useScrollAnimation = () => {
         cardsData.forEach((data, i) => {
           const setter = setters[i];
           
-          // Verificar se é a garrafa Stanley
-          const isGarrafa = data.el.querySelector('img[alt="Garrafa Stanley"]') !== null;
-          
           // Calcular delta usando dados cacheados
           const deltaX = mockupCenter.x - data.centerX;
           const deltaY = mockupCenter.y - data.centerY;
@@ -278,55 +290,7 @@ export const useScrollAnimation = () => {
             debugLog(`🎯 Card 0 - Aplicado: x=${deltaX * self.progress}, y=${deltaY * self.progress}`);
           }
           
-          if (isGarrafa) {
-            // ANIMAÇÃO INDEPENDENTE PARA A GARRAFA STANLEY
-            // TODO: Aqui você pode modificar o comportamento específico da garrafa
-            
-            // Aplicar movimento direto (máxima performance) - MESMO COMPORTAMENTO ATUAL
-            setter.setX(deltaX * self.progress);
-            setter.setY(deltaY * self.progress);
-            
-            // Scale otimizado - GARRAFA 80% MAIOR NO DESTINO
-            const garrafaFinalScale = finalScale * 1.8; // 80% maior que o scale final normal
-            const scaleValue = 1 + (garrafaFinalScale - 1) * self.progress;
-            setter.setScaleX(scaleValue);
-            setter.setScaleY(scaleValue);
-            
-            // Opacity otimizado - GARRAFA SEM TRANSPARÊNCIA
-            setter.setOpacity(1); // Sempre opaca (sem transparência)
-            
-            // Rotation otimizado (fixo para evitar recálculos) - MESMO COMPORTAMENTO ATUAL
-            const rotationValue = (Math.random() * 10 - 5) * self.progress;
-            setter.setRotation(rotationValue);
-            
-            // Filter otimizado - MESMO COMPORTAMENTO ATUAL
-            setter.setFilter(self.progress > 0.2 ? `brightness(${1 + self.progress * 0.15})` : 'none');
-            
-            // ZIndex otimizado - Garrafa Stanley sempre na frente
-            const baseZIndex = self.progress > 0.5 ? 1000 : 1;
-            const garrafaZIndex = baseZIndex + 500;
-            setter.setZIndex(garrafaZIndex);
-
-            // Efeito de entrada na tela (80-95% da timeline) - GARRAFA 40% MAIOR
-            if (self.progress > 0.8) {
-              const entryProgress = (self.progress - 0.8) / 0.15;
-              const entryScale = garrafaFinalScale * (1 + entryProgress * 0.2);
-              setter.setScaleX(entryScale);
-              setter.setScaleY(entryScale);
-              setter.setFilter(`brightness(${1 + 0.2}) drop-shadow(0 0 15px rgba(255,255,255,${entryProgress * 0.5}))`);
-            }
-
-            // Fade out final (95-100% da timeline) - GARRAFA 80% MAIOR SEM TRANSPARÊNCIA
-            if (self.progress > 0.95) {
-              const fadeProgress = (self.progress - 0.95) / 0.05;
-              setter.setOpacity(1); // Mantém sempre opaca
-              const fadeScale = garrafaFinalScale * (1 - fadeProgress * 0.3);
-              setter.setScaleX(fadeScale);
-              setter.setScaleY(fadeScale);
-              setter.setFilter(`brightness(${1 + 0.2 - fadeProgress * 0.2}) blur(${fadeProgress * 1.5}px)`);
-            }
-          } else {
-            // ANIMAÇÃO PARA OS DEMAIS CARDS (NÃO GARRAFA)
+          // ANIMAÇÃO PARA OS CARDS NORMAIS (NÃO GARRAFA)
             // Aplicar movimento direto (máxima performance)
             setter.setX(deltaX * self.progress);
             setter.setY(deltaY * self.progress);
@@ -368,7 +332,6 @@ export const useScrollAnimation = () => {
               setter.setScaleY(fadeScale);
               setter.setFilter(`brightness(${1 + 0.2 - fadeProgress * 0.2}) blur(${fadeProgress * 1.5}px)`);
             }
-          }
         });
       }
     });
@@ -474,6 +437,173 @@ export const useScrollAnimation = () => {
     scrollTriggersRef.current.push(titleTrigger);
     
     debugLog('✅ Title Exit Timeline criada com sucesso');
+  };
+
+  // CRIAR TIMELINE INDEPENDENTE PARA A GARRAFA STANLEY
+  const createGarrafaTimeline = () => {
+    const isMobileDevice = window.innerWidth < 768;
+    const endValue = isMobileDevice ? TIMELINE_CONFIG.GARRAFA_TIMELINE.end.mobile : TIMELINE_CONFIG.GARRAFA_TIMELINE.end.desktop;
+    const scrubValue = isMobileDevice ? TIMELINE_CONFIG.GARRAFA_TIMELINE.scrub.mobile : TIMELINE_CONFIG.GARRAFA_TIMELINE.scrub.desktop;
+    
+    debugLog('🎬 Criando GARRAFA TIMELINE:', TIMELINE_CONFIG.GARRAFA_TIMELINE.name);
+    debugLog(`📱 Configuração: ${isMobileDevice ? 'MOBILE' : 'DESKTOP'} - End: ${endValue}, Scrub: ${scrubValue}`);
+    
+    // Obter apenas a garrafa Stanley
+    const garrafaElement = document.querySelector('.product-item img[alt="Garrafa Stanley"]')?.closest('.product-item') as HTMLElement;
+    if (!garrafaElement) {
+      debugLog('❌ Garrafa Stanley não encontrada para Garrafa Timeline');
+      return;
+    }
+
+    // Verificar se os elementos de referência existem
+    const mockupId = isMobileDevice ? 'smartphone-mockup-mobile' : 'smartphone-mockup-desktop';
+    const centerRefId = isMobileDevice ? 'mockup-center-reference-mobile' : 'mockup-center-reference-desktop';
+    
+    debugLog(`🔍 Verificando elementos de referência para Garrafa:`);
+    debugLog(`🔍 Mockup ID: ${mockupId}`);
+    debugLog(`🔍 Centro ID: ${centerRefId}`);
+
+    // VARIÁVEIS CACHEADAS
+    let garrafaData: { el: HTMLElement; centerX: number; centerY: number } | null = null;
+    let mockupCenter: { x: number; y: number } = { x: 0, y: 0 };
+    let garrafaSetter: { setX: Function; setY: Function; setScaleX: Function; setScaleY: Function; setOpacity: Function; setRotation: Function; setFilter: Function; setZIndex: Function } | null = null;
+
+    debugLog(`✅ Garrafa Timeline configurada`);
+
+    // CONFIGURAÇÕES ESPECÍFICAS DA GARRAFA
+    const garrafaFinalScale = isMobileDevice ? 0.6 * 1.8 : 0.8 * 1.8; // 80% maior que timeline1
+
+    const garrafaTrigger = ScrollTrigger.create({
+      trigger: "body",
+      start: "top top",
+      end: endValue,
+      scrub: scrubValue,
+      invalidateOnRefresh: true,
+      markers: false,
+      onRefresh: (self) => {
+        debugLog('🔄 Garrafa Timeline - onRefresh: Recalculando posições...');
+        
+        // Medir posição da garrafa
+        const r = garrafaElement.getBoundingClientRect();
+        garrafaData = {
+          el: garrafaElement,
+          centerX: r.left + r.width / 2,
+          centerY: r.top + r.height / 2
+        };
+        
+        debugLog(`📊 Garrafa encontrada: x=${garrafaData.centerX}, y=${garrafaData.centerY}`);
+        
+        // Medir posição do mockup
+        const centerRefElement = document.getElementById(centerRefId) as HTMLElement;
+        if (centerRefElement) {
+          const rect = centerRefElement.getBoundingClientRect();
+          mockupCenter = { 
+            x: rect.left + rect.width / 2, 
+            y: rect.top + rect.height / 2 
+          };
+          debugLog(`✅ Garrafa Timeline - Usando ponto de referência: ${centerRefId}`);
+          debugLog(`📍 Centro calculado: x=${mockupCenter.x}, y=${mockupCenter.y}`);
+        } else {
+          const mockupElement = document.getElementById(mockupId) as HTMLElement;
+          if (mockupElement) {
+            const rect = mockupElement.getBoundingClientRect();
+            mockupCenter = { 
+              x: rect.left + rect.width / 2, 
+              y: rect.top + rect.height / 2 
+            };
+            debugLog(`✅ Garrafa Timeline - Usando centro do mockup: ${mockupId}`);
+            debugLog(`📍 Centro calculado: x=${mockupCenter.x}, y=${mockupCenter.y}`);
+          } else {
+            debugLog(`❌ Nenhum elemento de referência encontrado para Garrafa Timeline`);
+          }
+        }
+        
+        // Configurar quickSetter para a garrafa
+        garrafaSetter = {
+          setX: gsap.quickSetter(garrafaElement, 'x', 'px'),
+          setY: gsap.quickSetter(garrafaElement, 'y', 'px'),
+          setScaleX: gsap.quickSetter(garrafaElement, 'scaleX'),
+          setScaleY: gsap.quickSetter(garrafaElement, 'scaleY'),
+          setOpacity: gsap.quickSetter(garrafaElement, 'opacity'),
+          setRotation: gsap.quickSetter(garrafaElement, 'rotation', 'deg'),
+          setFilter: gsap.quickSetter(garrafaElement, 'filter'),
+          setZIndex: gsap.quickSetter(garrafaElement, 'zIndex')
+        };
+        
+        debugLog('✅ Garrafa Timeline - onRefresh: Cache atualizado');
+      },
+      onUpdate: (self) => {
+        if (!garrafaData || !garrafaSetter) return;
+        
+        // Log reduzido para performance
+        if (Math.floor(self.progress * 100) % 10 === 0) {
+          debugLog(`📊 Garrafa Timeline - Progress: ${(self.progress * 100).toFixed(1)}%`);
+        }
+        
+        // ANIMAÇÃO ESPECÍFICA DA GARRAFA STANLEY
+        const deltaX = mockupCenter.x - garrafaData.centerX;
+        const deltaY = mockupCenter.y - garrafaData.centerY;
+        
+        // CURVA DE PROGRESSO BASEADA NA TIMELINE1: Move igual aos outros cards até timeline1
+        const timeline1End = isMobileDevice ? 500 : 1000; // timeline1 end em vh
+        const garrafaEnd = isMobileDevice ? 700 : 1400; // garrafa timeline end em vh
+        const timeline1Progress = Math.min(self.progress / (timeline1End / garrafaEnd), 1); // Progresso equivalente à timeline1
+        const finalPositionProgress = self.progress > (timeline1End / garrafaEnd) ? 1 : timeline1Progress; // Fica parada após timeline1
+        
+        // Movimento direto (máxima performance) - Mesma velocidade dos outros cards
+        garrafaSetter.setX(deltaX * finalPositionProgress);
+        garrafaSetter.setY(deltaY * finalPositionProgress);
+        
+        // Scale otimizado - GARRAFA 80% MAIOR NO DESTINO (mesma velocidade dos outros cards)
+        const scaleProgress = Math.min(self.progress / (timeline1End / garrafaEnd), 1); // Progresso equivalente à timeline1
+        const finalScaleProgress = self.progress > (timeline1End / garrafaEnd) ? 1 : scaleProgress; // Fica no tamanho final após timeline1
+        const scaleValue = 1 + (garrafaFinalScale - 1) * finalScaleProgress;
+        garrafaSetter.setScaleX(scaleValue);
+        garrafaSetter.setScaleY(scaleValue);
+        
+        // Opacity otimizado - GARRAFA SEM TRANSPARÊNCIA
+        garrafaSetter.setOpacity(1); // Sempre opaca
+        
+        // Rotation otimizado (mesma velocidade dos outros cards)
+        const rotationProgress = Math.min(self.progress / (timeline1End / garrafaEnd), 1); // Progresso equivalente à timeline1
+        const finalRotationProgress = self.progress > (timeline1End / garrafaEnd) ? 1 : rotationProgress; // Fica na rotação final após timeline1
+        const rotationValue = (Math.random() * 10 - 5) * finalRotationProgress;
+        garrafaSetter.setRotation(rotationValue);
+        
+        // Filter otimizado
+        garrafaSetter.setFilter(self.progress > 0.2 ? `brightness(${1 + self.progress * 0.15})` : 'none');
+        
+        // ZIndex otimizado - Garrafa Stanley sempre na frente (mesma velocidade dos outros cards)
+        const zIndexProgress = Math.min(self.progress / (timeline1End / garrafaEnd), 1); // Progresso equivalente à timeline1
+        const finalZIndexProgress = self.progress > (timeline1End / garrafaEnd) ? 1 : zIndexProgress; // Fica no z-index final após timeline1
+        const baseZIndex = finalZIndexProgress > 0.5 ? 1000 : 1;
+        const garrafaZIndex = baseZIndex + 500;
+        garrafaSetter.setZIndex(garrafaZIndex);
+
+        // Efeito de entrada na tela (80-95% da timeline)
+        if (self.progress > 0.8) {
+          const entryProgress = (self.progress - 0.8) / 0.15;
+          const entryScale = garrafaFinalScale * (1 + entryProgress * 0.2);
+          garrafaSetter.setScaleX(entryScale);
+          garrafaSetter.setScaleY(entryScale);
+          garrafaSetter.setFilter(`brightness(${1 + 0.2}) drop-shadow(0 0 15px rgba(255,255,255,${entryProgress * 0.5}))`);
+        }
+
+        // Fade out final (95-100% da timeline) - SEM TRANSPARÊNCIA
+        if (self.progress > 0.95) {
+          const fadeProgress = (self.progress - 0.95) / 0.05;
+          garrafaSetter.setOpacity(1); // Mantém sempre opaca
+          const fadeScale = garrafaFinalScale * (1 - fadeProgress * 0.3);
+          garrafaSetter.setScaleX(fadeScale);
+          garrafaSetter.setScaleY(fadeScale);
+          garrafaSetter.setFilter(`brightness(${1 + 0.2 - fadeProgress * 0.2}) blur(${fadeProgress * 1.5}px)`);
+        }
+      }
+    });
+
+    scrollTriggersRef.current.push(garrafaTrigger);
+    
+    debugLog('✅ Garrafa Timeline criada com sucesso');
   };
 
   // Inicializar todas as timelines quando o componente montar
