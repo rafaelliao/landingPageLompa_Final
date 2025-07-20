@@ -5,7 +5,7 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto; /* Removido smooth para evitar conflito com GSAP */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -35,7 +35,7 @@
   /* Prevenir problemas de renderização durante scroll */
   body {
     overflow-x: hidden;
-    overflow-y: visible;
+    overflow-y: auto; /* Corrigido para auto em vez de visible */
   }
   
 
@@ -82,7 +82,7 @@
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
-    overflow-y: visible;
+    /* overflow-y: visible; Removido para otimização */
     margin: 0;
     padding: 0;
   }
@@ -200,34 +200,26 @@
 
   /* Smartphone Mockup */
   .smartphone-mockup {
-    width: 280px;
-    height: 560px;
+    width: 336px;
+    height: 672px;
     margin: 0;
     position: relative;
     z-index: 20;
     order: 3;
-    filter: 
-      drop-shadow(0 0 15px rgba(72, 7, 173, 0.6))
-      drop-shadow(0 0 30px rgba(227, 33, 255, 0.4))
-      drop-shadow(0 0 50px rgba(72, 7, 173, 0.3))
-      drop-shadow(0 0 80px rgba(227, 33, 255, 0.2));
+    /* Filtros removidos para otimização de performance */
   }
 
     .mockup-screen {
     width: 100%;
     height: 100%;
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
+    /* backdrop-filter: blur(20px); Removido para otimização */
     border-radius: 3rem;
     padding: 0;
     position: relative;
     overflow: hidden;
-    box-shadow:
-      0 0 20px rgba(72, 7, 173, 0.6),
-      0 0 40px rgba(227, 33, 255, 0.4),
-      0 0 60px rgba(72, 7, 173, 0.3),
-      0 0 80px rgba(227, 33, 255, 0.2),
-      0 8px 32px rgba(0, 0, 0, 0.3);
+    /* Sombras simplificadas para otimização */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
 
   .mockup-screen::before {
@@ -253,7 +245,7 @@
   .features-section {
     padding: 5rem 0;
     background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); Removido para otimização */
     grid-area: features;
   }
 
@@ -298,7 +290,7 @@
 
   .feature-card {
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); Removido para otimização */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
     padding: 2rem;
@@ -389,65 +381,92 @@
     position: absolute;
     z-index: 50;
     pointer-events: auto;
+    will-change: transform; /* Otimização GPU para animações */
   }
 
-  /* Posicionamento específico dos produtos em meias-luas */
+  /* GRUPO ESQUERDA - Cards espalhados à esquerda do título */
   .product-item.-top-68.left-5 {
-    top: -90px;
-    left: 40px;
+    top: -70px;
+    left: 20px;
     z-index: 1002;
   }
 
   .product-item.-top-50.-left-8 {
-    top: -140px;
-    left: -12px;
+    top: -220px;
+    left: -40px;
   }
 
   .product-item.-top-13.-left-10 {
-    top: 8px;
-    left: -50px;
+    top: -50px;
+    left: -80px;
   }
 
   .product-item.top-24.-left-12 {
-    top: 156px;
+    top: 150px;
     left: -60px;
   }
 
   .product-item.-top-1.left-22 {
-    top: 90px;
-    left: 88px;
+    top: 80px;
+    left: 40px;
   }
 
   .product-item.top-15.left-5 {
-    top: 130px;
-    left: 10px;
+    top: 220px;
+    left: 0px;
   }
 
-  .product-item.-top-68.right-5 {
+  .product-item.-top-40.left-15 {
     top: -120px;
+    left: -20px;
+  }
+
+  .product-item.top-35.-left-5 {
+    top: 280px;
+    left: 80px;
+  }
+
+  /* GRUPO DIREITA - Cards espalhados à direita do título */
+  .product-item.-top-68.right-5 {
+    top: -180px;
     right: 20px;
   }
 
   .product-item.-top-30.right-28 {
-    top: -60px;
-    right: 112px;
+    top: -100px;
+    right: 40px;
     z-index: 1001;
   }
 
   .product-item.-top-33.-right-10 {
-    top: -100px;
-    right: -40px;
+    top: 0px;
+    right: 90px;
     z-index: 998;
   }
 
   .product-item.-top-1.right-22 {
-    top: 90px;
-    right: 88px;
+    top: 80px;
+    right: 40px;
   }
 
   .product-item.top-15.right-5 {
-    top: 130px;
-    right: 20px;
+    top: 220px;
+    right: 0px;
+  }
+
+  .product-item.-top-20.right-15 {
+    top: -80px;
+    right: -20px;
+  }
+
+  .product-item.-top-45.right-20 {
+    top: -140px;
+    right: -60px;
+  }
+
+  .product-item.top-30.-right-5 {
+    top: 260px;
+    right: 80px;
   }
 
   .product-card {
@@ -460,9 +479,14 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); Removido para otimização */
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
+    will-change: transform; /* Otimização GPU */
+  }
+
+  .product-card-transparent {
+    will-change: transform; /* Otimização GPU */
   }
 
   .product-card:hover {
@@ -475,6 +499,18 @@
     height: 100%;
     object-fit: contain;
     border-radius: 0.5rem;
+  }
+
+  /* Fone - imagem cobrindo todo o card */
+  .product-item.-top-40.left-15 .product-image {
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  /* Ventilador - imagem cobrindo todo o card */
+  .product-item.-top-45.right-20 .product-image {
+    object-fit: cover;
+    border-radius: 1rem;
   }
 
   .product-icon {
@@ -495,7 +531,7 @@
   .icon-image {
     width: 40px;
     height: 40px;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    /* filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); Removido para otimização */
   }
 
   /* Posicionamento responsivo dos produtos */
@@ -514,49 +550,70 @@
       height: 63px;
     }
     
-    /* Ajustar posições para telas menores */
+    /* GRUPO ESQUERDA - Responsivo espalhado */
     .product-item.-top-68.left-5 {
-      left: 15px;
+      left: -10px;
     }
     
     .product-item.-top-50.-left-8 {
-      left: -24px;
+      left: -40px;
     }
     
     .product-item.-top-13.-left-10 {
-      left: -30px;
+      left: -60px;
     }
     
     .product-item.top-24.-left-12 {
-      left: -36px;
+      left: -50px;
     }
     
     .product-item.-top-1.left-22 {
-      left: 66px;
+      left: -10px;
     }
     
     .product-item.top-15.left-5 {
-      left: 15px;
+      left: -30px;
     }
     
+    .product-item.-top-40.left-15 {
+      left: -45px;
+    }
+    
+    .product-item.top-35.-left-5 {
+      left: -55px;
+    }
+    
+    /* GRUPO DIREITA - Responsivo espalhado */
     .product-item.-top-68.right-5 {
-      right: 15px;
+      right: -10px;
     }
     
     .product-item.-top-30.-right-2 {
-      right: -6px;
+      right: -10px;
     }
     
     .product-item.-top-33.-right-10 {
-      right: -30px;
+      right: -40px;
     }
     
     .product-item.-top-1.right-22 {
-      right: 66px;
+      right: -10px;
     }
     
     .product-item.top-15.right-5 {
-      right: 15px;
+      right: -30px;
+    }
+    
+    .product-item.-top-20.right-15 {
+      right: -45px;
+    }
+    
+    .product-item.-top-45.right-20 {
+      right: -60px;
+    }
+    
+    .product-item.top-30.-right-5 {
+      right: -50px;
     }
   }
 

@@ -13,18 +13,10 @@ export const useScrollMonitor = () => {
       // Calcular porcentagem total da página
       const totalScrollPercentage = (scrollY / (documentHeight - windowHeight)) * 100;
       
-      // Log detalhado no console
-      console.log('📊 SCROLL MONITOR:', {
-        'Scroll Y (px)': Math.round(scrollY),
-        'Scroll (vh)': scrollVH.toFixed(2) + 'vh',
-        'Progresso (%)': totalScrollPercentage.toFixed(2) + '%',
-        'Window Height': windowHeight + 'px',
-        'Document Height': documentHeight + 'px',
-        'Timestamp': new Date().toLocaleTimeString()
-      });
-      
-      // Log simples para debug rápido
-      console.log(`🔄 Scroll: ${scrollVH.toFixed(1)}vh (${totalScrollPercentage.toFixed(1)}%)`);
+      // Log otimizado - apenas a cada 5% do progresso para reduzir overhead
+      if (Math.floor(totalScrollPercentage) % 5 === 0 && totalScrollPercentage > 0) {
+        console.log(`🔄 Scroll: ${scrollVH.toFixed(1)}vh (${totalScrollPercentage.toFixed(1)}%)`);
+      }
     };
 
     // Adicionar listener

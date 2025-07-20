@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import BackgroundCircles from '@/components/BackgroundCircles'
@@ -96,8 +96,8 @@ export default function HomePage() {
   return (
     <MobileProvider>
       <main className="min-h-screen" style={{ border: 'none', outline: 'none' }}>
-        {/* Círculos de fundo fixos */}
-        <BackgroundCircles />
+        {/* Círculos de fundo fixos - DESABILITADO PARA TESTE DE PERFORMANCE */}
+        {/* <BackgroundCircles /> */}
         
         {/* Navigation */}
             <Navigation items={navigationItems} />
@@ -111,99 +111,45 @@ export default function HomePage() {
           {/* Pricing Section - Placeholder */}
           <section id="pricing" className="py-20">
             <div className="main-container text-center">
-              <motion.h2 
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-              >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
                 Planos Flexíveis
-              </motion.h2>
-              <motion.p 
-                className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
+              </h2>
+              <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
                 Escolha o plano ideal para suas necessidades e comece a crescer hoje mesmo.
-              </motion.p>
-              <motion.div 
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg max-w-md mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
+              </p>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg max-w-md mx-auto">
                 <p className="text-white/80 text-base">Componente de Preços em desenvolvimento...</p>
-              </motion.div>
+              </div>
             </div>
           </section>
           
           {/* About Section - Placeholder */}
           <section id="about" className="py-20 bg-white/5">
             <div className="main-container text-center">
-              <motion.h2 
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-              >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
                 Sobre a Lompa
-              </motion.h2>
-              <motion.p 
-                className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
+              </h2>
+              <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
                 Somos uma empresa inovadora focada em criar soluções digitais que transformam negócios.
-              </motion.p>
-              <motion.div 
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 max-w-md mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
+              </p>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 max-w-md mx-auto">
                 <p className="text-white/80 text-base">Componente Sobre em desenvolvimento...</p>
-              </motion.div>
+              </div>
             </div>
           </section>
           
           {/* Contact Section - Placeholder */}
           <section id="contact" className="py-20">
             <div className="main-container text-center">
-              <motion.h2 
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-              >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
                 Entre em Contato
-              </motion.h2>
-              <motion.p 
-                className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
+              </h2>
+              <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
                 Estamos aqui para ajudar você a alcançar seus objetivos digitais.
-              </motion.p>
-              <motion.div 
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg max-w-md mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
+              </p>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg max-w-md mx-auto">
                 <p className="text-white/80 text-base">Componente de Contato em desenvolvimento...</p>
-              </motion.div>
+              </div>
             </div>
           </section>
           

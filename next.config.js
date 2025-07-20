@@ -17,7 +17,7 @@ const nextConfig = {
   // Configurações de desenvolvimento
   experimental: {
     // Melhorar estabilidade do hot reload
-    optimizePackageImports: ['framer-motion'],
+    optimizePackageImports: ['gsap'],
   },
   
   // Configurações de webpack para estabilidade

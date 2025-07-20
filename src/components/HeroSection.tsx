@@ -40,6 +40,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         {/* Splash Screen */}
         <div
           className="smartphone-mockup"
+          id="smartphone-mockup-target"
+          data-testid="mockup-element"
         >
           <div className="mockup-screen">
             <img 
@@ -48,6 +50,23 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               className="w-full h-full object-cover"
             />
           </div>
+          
+          {/* Elemento invisível fixo no centro do mockup */}
+          <div 
+            id="mockup-center-reference"
+            className="mockup-center-reference"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '1px',
+              height: '1px',
+              backgroundColor: 'transparent',
+              zIndex: 1000,
+              pointerEvents: 'none'
+            }}
+          />
         </div>
       </div>
 
