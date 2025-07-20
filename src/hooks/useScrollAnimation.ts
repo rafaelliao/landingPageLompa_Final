@@ -31,6 +31,18 @@ export const useScrollAnimation = () => {
         mobile: 2.5
       },
       description: 'Movimentação dos cards para o centro do mockup'
+    },
+    TITLE_EXIT: {
+      name: 'Title & Icon Fade Out + Slide Up Exit',
+      end: {
+        desktop: '+=500vh', // 50% da timeline1 desktop
+        mobile: '+=250vh'   // 50% da timeline1 mobile
+      },
+      scrub: {
+        desktop: 2.0,
+        mobile: 1.5
+      },
+      description: 'Efeito de saída Fade Out + Slide Up para o título e ícone central'
     }
     // FUTURAS TIMELINES - EXEMPLO DE COMO ADICIONAR:
     // TIMELINE_2: {
@@ -98,6 +110,9 @@ export const useScrollAnimation = () => {
     
     // Criar Timeline 1
     createTimeline1();
+    
+    // Criar Timeline do Título
+    createTitleExitTimeline();
     
     // Futuras timelines serão adicionadas aqui
     // createTimeline2();
@@ -302,6 +317,106 @@ export const useScrollAnimation = () => {
     
     // Refresh do ScrollTrigger após criar todos os triggers
     ScrollTrigger.refresh();
+  };
+
+  // CRIAR TIMELINE DO TÍTULO E ÍCONE: FADE OUT + SLIDE UP
+  const createTitleExitTimeline = () => {
+    const isMobileDevice = window.innerWidth < 768;
+    const endValue = isMobileDevice ? TIMELINE_CONFIG.TITLE_EXIT.end.mobile : TIMELINE_CONFIG.TITLE_EXIT.end.desktop;
+    const scrubValue = isMobileDevice ? TIMELINE_CONFIG.TITLE_EXIT.scrub.mobile : TIMELINE_CONFIG.TITLE_EXIT.scrub.desktop;
+    
+    debugLog('🎬 Criando TITLE EXIT TIMELINE:', TIMELINE_CONFIG.TITLE_EXIT.name);
+    debugLog(`📱 Configuração: ${isMobileDevice ? 'MOBILE' : 'DESKTOP'} - End: ${endValue}, Scrub: ${scrubValue}`);
+    
+    // Obter o título e o ícone
+    const titleElement = document.querySelector('.hero-title') as HTMLElement;
+    const iconElement = document.querySelector('.hero-icon') as HTMLElement;
+    
+    if (!titleElement) {
+      debugLog('❌ Título não encontrado para Title Exit Timeline');
+      return;
+    }
+    
+    if (!iconElement) {
+      debugLog('⚠️ Ícone não encontrado, animando apenas o título');
+    }
+
+    debugLog('✅ Title Exit Timeline configurada');
+
+    // Criar setters para o título
+    const titleSetter = {
+      setX: gsap.quickSetter(titleElement, 'x', 'px'),
+      setY: gsap.quickSetter(titleElement, 'y', 'px'),
+      setOpacity: gsap.quickSetter(titleElement, 'opacity'),
+      setRotation: gsap.quickSetter(titleElement, 'rotation', 'deg'),
+      setScaleX: gsap.quickSetter(titleElement, 'scaleX'),
+      setScaleY: gsap.quickSetter(titleElement, 'scaleY')
+    };
+
+    // Criar setters para o ícone (se existir)
+    const iconSetter = iconElement ? {
+      setX: gsap.quickSetter(iconElement, 'x', 'px'),
+      setY: gsap.quickSetter(iconElement, 'y', 'px'),
+      setOpacity: gsap.quickSetter(iconElement, 'opacity'),
+      setRotation: gsap.quickSetter(iconElement, 'rotation', 'deg'),
+      setScaleX: gsap.quickSetter(iconElement, 'scaleX'),
+      setScaleY: gsap.quickSetter(iconElement, 'scaleY')
+    } : null;
+
+    const titleTrigger = ScrollTrigger.create({
+      trigger: "body",
+      start: "top top",
+      end: endValue,
+      scrub: scrubValue,
+      invalidateOnRefresh: true,
+      markers: false,
+      onUpdate: (self) => {
+        // Log reduzido para performance
+        if (Math.floor(self.progress * 100) % 20 === 0) {
+          debugLog(`📊 Title Exit - Progress: ${(self.progress * 100).toFixed(1)}%`);
+        }
+        
+        // Efeito Fade Out + Slide Up
+        const slideDistance = isMobileDevice ? -80 : -120; // Distância do slide (mobile menor)
+        const easeCurve = 0.8; // Curva de easing para movimento mais natural
+        
+        // Slide Up progressivo
+        const slideY = slideDistance * Math.pow(self.progress, easeCurve);
+        
+        // Fade Out progressivo
+        const opacity = 1 - Math.pow(self.progress, 1.2); // Curva de fade mais suave
+        
+        // Scale sutil para dar profundidade
+        const scale = 1 - (self.progress * 0.05); // Redução sutil de 5%
+        
+        // Aplicar animações no título
+        titleSetter.setX(0); // Sem movimento horizontal
+        titleSetter.setY(slideY);
+        titleSetter.setRotation(0); // Sem rotação
+        titleSetter.setScaleX(scale);
+        titleSetter.setScaleY(scale);
+        titleSetter.setOpacity(opacity);
+        
+        // Aplicar animações no ícone (se existir)
+        if (iconSetter) {
+          // Ícone com movimento ligeiramente diferente para criar profundidade
+          const iconSlideY = slideY * 0.8; // Movimento 20% menor que o título
+          const iconScale = 1 - (self.progress * 0.08); // Scale um pouco mais pronunciado
+          const iconOpacity = 1 - Math.pow(self.progress, 1.1); // Fade um pouco mais rápido
+          
+          iconSetter.setX(0);
+          iconSetter.setY(iconSlideY);
+          iconSetter.setRotation(0);
+          iconSetter.setScaleX(iconScale);
+          iconSetter.setScaleY(iconScale);
+          iconSetter.setOpacity(iconOpacity);
+        }
+      }
+    });
+
+    scrollTriggersRef.current.push(titleTrigger);
+    
+    debugLog('✅ Title Exit Timeline criada com sucesso');
   };
 
   // Inicializar todas as timelines quando o componente montar
