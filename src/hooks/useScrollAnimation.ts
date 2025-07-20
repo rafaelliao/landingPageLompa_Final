@@ -81,10 +81,15 @@ export const useScrollAnimation = () => {
     // Listener para atualizar progresso
     window.addEventListener('scroll', updateScrollProgress, { passive: true });
 
+    // Debounce para evitar múltiplas chamadas de resize
+    let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
-      checkMobile();
-      // Recriar todas as timelines no resize
-      createAllTimelines();
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        checkMobile();
+        // Recriar todas as timelines no resize (apenas uma vez)
+        createAllTimelines();
+      }, 150); // Delay de 150ms para agrupar múltiplos eventos de resize
     };
 
     window.addEventListener('resize', handleResize);
@@ -92,6 +97,7 @@ export const useScrollAnimation = () => {
     return () => {
       window.removeEventListener('scroll', updateScrollProgress);
       window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout); // Limpar timeout de resize
       // Limpar ScrollTriggers
       scrollTriggersRef.current.forEach(trigger => trigger.kill());
       scrollTriggersRef.current = [];
@@ -123,6 +129,9 @@ export const useScrollAnimation = () => {
     // 2. Criar função createTimeline2() seguindo o padrão da Timeline 1
     // 3. Chamar createTimeline2() aqui
     // 4. Atualizar indicadores visuais se necessário
+    
+    // Refresh do ScrollTrigger apenas uma vez após criar todas as timelines
+    ScrollTrigger.refresh();
     
     debugLog('✅ Todas as timelines criadas com sucesso!');
   };
@@ -314,9 +323,6 @@ export const useScrollAnimation = () => {
     });
 
     scrollTriggersRef.current.push(trigger);
-    
-    // Refresh do ScrollTrigger após criar todos os triggers
-    ScrollTrigger.refresh();
   };
 
   // CRIAR TIMELINE DO TÍTULO E ÍCONE: FADE OUT + SLIDE UP

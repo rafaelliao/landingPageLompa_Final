@@ -239,23 +239,6 @@ const ProductsSection = () => {
   return (
     <section className="products-section">
       <div className="products-container">
-        {/* Indicador de progresso da animação */}
-        <div style={{
-          position: 'fixed',
-          top: '10px',
-          right: '10px',
-          background: 'rgba(0,255,0,0.9)',
-          color: 'white',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          zIndex: 9999,
-          fontFamily: 'monospace',
-          fontWeight: 'bold'
-        }}>
-          {scrollProgress.toFixed(1)}vh | {scrollProgress <= 74.1 ? ((scrollProgress / 74.1) * 100).toFixed(1) : '100'}%
-        </div>
-        
         {/* Grid de produtos posicionados em meias-luas */}
         <div className="products-grid">
           {products.map((product: Product, index: number) => (
