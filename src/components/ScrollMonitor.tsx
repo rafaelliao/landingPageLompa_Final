@@ -7,8 +7,11 @@ interface ScrollMonitorProps {
 }
 
 export const ScrollMonitor: React.FC<ScrollMonitorProps> = ({ enabled = true }) => {
-  if (enabled) {
-    useScrollMonitor();
+  const scrollMonitor = useScrollMonitor();
+  
+  // Se não estiver habilitado, não faz nada
+  if (!enabled) {
+    return null;
   }
   
   return null; // Componente não renderiza nada visualmente
