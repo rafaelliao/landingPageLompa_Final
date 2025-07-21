@@ -158,6 +158,9 @@
     align-items: center;
     margin: 0;
     order: 1;
+    transform: translateY(0) !important; /* Forçar que a animação funcione */
+    will-change: transform !important; /* Otimização para animações */
+    transition: none !important; /* Remover transições CSS que possam interferir */
   }
   
   .hero-icon svg {
@@ -173,6 +176,29 @@
     color: white;
     font-family: 'Outfit', sans-serif;
     order: 2;
+    transform: translateY(0) !important; /* Forçar que a animação funcione */
+    will-change: transform !important; /* Otimização para animações */
+    transition: none !important; /* Remover transições CSS que possam interferir */
+    z-index: 200; /* Título na frente dos cards */
+    position: relative; /* Necessário para z-index funcionar */
+  }
+
+  /* Container para cards no mobile - mesma altura do título */
+  .mobile-cards-container {
+    display: none; /* Escondido por padrão (desktop) */
+  }
+
+  /* Container para cards no desktop - mesma altura do título */
+  .desktop-cards-container {
+    display: block; /* Voltar para block para manter posicionamento absoluto dos cards */
+    position: absolute;
+    top: 0;
+    left: -15%; /* Estende mais para a esquerda */
+    right: -15%; /* Estende mais para a direita */
+    bottom: 0;
+    z-index: 100;
+    pointer-events: none;
+    width: 130%; /* Aumenta mais a largura total */
   }
 
   .text-accent {
@@ -398,7 +424,7 @@
   .products-container {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 100vh; /* Aumentado para 100vh para evitar corte */
     max-width: 1200px;
     margin: 0 auto;
     overflow: visible;
@@ -411,7 +437,7 @@
   .products-grid {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 100vh; /* Garantir altura total */
     display: grid;
     grid-template-areas: "items";
     align-items: center;
@@ -431,6 +457,7 @@
     top: -70px;
     left: 20px;
     z-index: 1500; /* Garrafa Stanley - sempre na frente */
+    transform-origin: center center; /* Garantir que escala a partir do centro */
   }
 
   .product-item.-top-50.-left-8 {
@@ -706,6 +733,44 @@
       padding-top: 0 !important;
     }
     
+    /* Garantir que produtos não sejam cortados no mobile */
+    .products-section {
+      height: 100vh !important;
+      overflow: visible !important;
+    }
+    
+    .products-container {
+      height: 100vh !important;
+      overflow: visible !important;
+    }
+    
+    .products-grid {
+      height: 100vh !important;
+      overflow: visible !important;
+    }
+    
+    /* Container para cards no mobile - mesma altura do título */
+    .mobile-cards-container {
+      display: flex !important;
+      align-items: center !important; /* Centralizar verticalmente */
+      justify-content: center !important; /* Centralizar horizontalmente */
+      position: absolute !important;
+      top: -4rem !important; /* Mover mais para cima */
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important; /* Ocupar toda a altura */
+      z-index: 300 !important; /* Z-index maior que o título (200) */
+      pointer-events: none !important;
+      /* Debug temporário */
+      border: 2px solid red !important;
+      background-color: rgba(255, 0, 0, 0.1) !important;
+    }
+    
+    /* Esconder container desktop no mobile */
+    .desktop-cards-container {
+      display: none !important;
+    }
+    
     .main-layout {
       padding: 0;
       margin: 0;
@@ -762,6 +827,16 @@
       text-align: center;
       line-height: 1.1;
       max-width: 90vw;
+      z-index: 200; /* Título na frente dos cards */
+      position: relative; /* Necessário para z-index funcionar */
+    }
+
+    /* Título específico para mobile */
+    .hero-title-mobile {
+      order: 2; /* Garantir ordem no flexbox */
+      margin-bottom: 1rem; /* Espaçamento para o container de cards */
+      z-index: 400 !important; /* Z-index maior que o container de cards (300) */
+      position: relative !important; /* Necessário para z-index funcionar */
     }
     
     .hero-title br {
@@ -814,14 +889,16 @@
     }
     
     .products-section {
-      min-height: auto;
+      min-height: 120vh; /* Aumentar altura do container */
       /* transform: translateY(-40px); */
       position: relative;
+      top: -4rem; /* Mover mais para cima para centralizar com o título */
       z-index: 50; /* Aumentar para ficar acima do mockup mobile (z-index: 5) */
     }
     
     .product-item {
       transform: scale(0.84);
+      position: absolute !important; /* Position absolute restaurado para posicionamento dentro do container */
       z-index: 100 !important; /* Garantir que fique acima do mockup mobile (z-index: 5) */
     }
     
@@ -835,78 +912,104 @@
       height: 63px !important;
     }
     
-    /* Posições dos produtos para nova estrutura */
-    .product-item.-top-68.left-5 {
-      left: 10px;
+    /* Coordenadas aplicadas para mobile dentro do container */
+    
+    /* Garrafa Stanley */
+    .product-item.top-24.left-2 {
+      left: 10px !important;
       top: 6rem !important;
-      z-index: 1500 !important; /* Garrafa Stanley - sempre na frente (mobile) */
+      z-index: 1500 !important;
     }
     
-    .product-item.top-24.-left-12 {
+    /* Urso Pelúcia */
+    .product-item.top-40.left-1 {
+      left: 5px !important;
+      top: 12rem !important; /* Movido para baixo (era 8rem) */
+    }
+    
+    /* Blusa Creme */
+    .product-item.top-24.left-85 {
+      left: 85% !important;
+      top: 6rem !important;
+      z-index: 1000 !important;
+    }
+    
+    /* Câmera Icon */
+    .product-item.top-16.left-4 {
       left: 15px !important;
       top: 4rem !important;
       z-index: 1002 !important;
     }
     
-    .product-item.-top-50.-left-8 {
-      left: 5px;
-      top: 10rem !important;
+    /* Fone */
+    .product-item.top-12.left-10 {
+      left: 40px !important;
+      top: 3rem !important;
     }
     
-    .product-item.-top-13.-left-10 {
-      left: 85%;
+    /* Câmera Card */
+    .product-item.top-24.left-4 {
+      left: 15px !important;
       top: 6rem !important;
       z-index: 1000 !important;
     }
     
-    .product-item.-top-1.left-22 {
-      left: 40px;
-      top: 3rem !important;
-    }
-    
-    .product-item.top-15.left-5 {
-      left: 15px;
-      top: 12rem !important;
+    /* Ring Light */
+    .product-item.top-8.left-5 {
+      left: 20px !important;
+      top: 2rem !important;
       z-index: 1000 !important;
     }
     
-    .product-item.-top-68.right-5 {
-      right: 15px;
+    /* Óculos */
+    .product-item.top-24.right-0 {
+      right: 0px !important;
       top: 6rem !important;
     }
     
-    .product-item.-top-30.-right-2 {
-      right: 5px;
+    /* Maquiagem */
+    .product-item.top-40.right-1 {
+      right: 5px !important;
       top: 10rem !important;
     }
     
-    .product-item.-top-33.-right-10 {
-      right: 10px;
+    /* Ventilador */
+    .product-item.top-48.right-2 {
+      right: 10px !important;
       top: 12rem !important;
     }
     
-    .product-item.-top-1.right-22 {
-      right: 40px;
-      top: 3rem !important;
+    /* Boné */
+    .product-item.top-4.right-10 {
+      right: 40px !important;
+      top: 1rem !important;
     }
     
-    /* Posicionamento específico para o Boné na versão mobile */
-    .product-item.-top-1.right-22:has(img[alt*="Boné"]) {
-      right: 40px;
-      top: 3rem !important;
-    }
-    
-    .product-item.top-15.right-5 {
-      right: 15px;
+    /* Tenis */
+    .product-item.top-48.right-6 {
+      right: 15px !important;
       top: 12rem !important;
       z-index: 1000 !important;
     }
     
-    /* Regra específica para o card Relógio (right-extra) no mobile */
+    /* Ursinho */
     .product-item.top-40.right-6 {
       right: 24px !important;
       top: 10rem !important;
       z-index: 1000 !important;
+    }
+    
+    /* Relógio */
+    .product-item.top-40.right-5 {
+      right: 5px !important;
+      top: 10rem !important;
+      z-index: 1000 !important;
+    }
+    
+    /* Urso Pelúcia - imagem aumentada */
+    .product-item.top-40.left-1 .product-image {
+      transform: scale(1.3) !important;
+      object-fit: contain !important;
     }
   }
 
@@ -1040,6 +1143,8 @@
       align-items: center;
       text-align: center;
       max-width: 85vw;
+      z-index: 200; /* Título na frente dos cards */
+      position: relative; /* Necessário para z-index funcionar */
     }
     
     .hero-title br {
@@ -1364,6 +1469,8 @@
       padding: 0 !important;
       order: 2 !important;
       text-align: center !important;
+      z-index: 200 !important;
+      position: relative !important;
     }
     
     .smartphone-mockup {

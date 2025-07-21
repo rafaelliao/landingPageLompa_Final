@@ -1,7 +1,7 @@
 'use client'
 
 import { useResponsive } from '../hooks/useResponsive'
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
+
 import { useEffect, useRef, useMemo, useState } from 'react'
 
 interface Product {
@@ -149,8 +149,9 @@ const mobileVisibleCards = [
 
 const ProductsSection = () => {
   const { isMobile: isMobileResponsive } = useResponsive()
-  const { scrollProgress, createAnimation } = useScrollAnimation()
+
   const productRefs = useRef<(HTMLDivElement | null)[]>([])
+  const garrafaCardRef = useRef<HTMLDivElement>(null)
 
   // Garantir renderização só no client para evitar mismatch
   const [isClient, setIsClient] = useState(false)
@@ -167,33 +168,48 @@ const ProductsSection = () => {
     }
   }, [isMobile, allProducts])
 
-  // Inicializar animação GSAP com ScrollTrigger
-  useEffect(() => {
-    if (isClient) {
-      const timer = setTimeout(() => {
-        createAnimation()
-      }, 300)
-      return () => clearTimeout(timer)
-    }
-    return undefined // Retorno explícito para quando isClient é false
-  }, [createAnimation, products, isClient])
+
 
   if (!isClient) return null
 
   const getPositionClasses = (position: string) => {
-    // Posições específicas para mobile
+    // Posições específicas para mobile com coordenadas salvas
     if (isMobile) {
       switch (position) {
+        case 'left-top':
+          return 'top-24 left-2'       // Garrafa Stanley: left: 10px, top: 6rem
+        case 'left-center':
+          return 'top-40 left-1'       // Urso Pelúcia: left: 5px, top: 8rem (movido para cima)
+        case 'left-bottom':
+          return 'top-24 left-85'      // Blusa Creme: left: 85%, top: 6rem
+        case 'left-bottom-inner':
+          return 'top-16 left-4'       // Câmera Icon: left: 15px, top: 4rem
+        case 'left-center-inner':
+          return 'top-12 left-10'      // Bolsa: left: 40px, top: 3rem
         case 'left-extra':
-          return 'top-25 left-10'      // Câmera Card - mobile: ajustado para ficar visível no grupo esquerda
+          return 'top-24 left-4'       // Câmera Card: left: 15px, top: 6rem
         case 'left-top-inner':
-          return 'top-50 -left-60'     // Fone - mobile: movido 40px para esquerda (era top-50 left-20)
+          return 'top-8 left-5'        // Fone: left: 20px, top: 2rem
+        case 'left-bottom-extra':
+          return 'top-35 left-1'       // Ring Light: left: 5px, top: 10rem
         case 'right-top':
-          return 'top-30 right-12'     // Óculos - mobile: movido mais para a esquerda
+          return 'top-24 right-0'      // Óculos: right: 0px, top: 6rem
+        case 'right-center':
+          return 'top-40 right-1'      // Maquiagem: right: 5px, top: 10rem
+        case 'right-bottom':
+          return 'top-48 right-2'      // Ventilador: right: 10px, top: 12rem
+        case 'right-bottom-inner':
+          return 'top-4 right-10'      // Boné: right: 40px, top: 1rem
         case 'right-extra':
-          return 'top-40 right-6'      // Relógio - mobile: movido um pouco para a direita
+          return 'top-48 right-6'      // Tenis: right: 15px, top: 12rem
+        case 'right-center-inner':
+          return 'top-40 right-6'      // Ursinho: right: 24px, top: 10rem
+        case 'right-top-inner':
+          return 'top-40 right-5'      // Relógio: right: 5px, top: 10rem
+        case 'right-bottom-extra':
+          return 'top-30 right-1'      // Posição padrão
         default:
-          break // Usar posições padrão para outros cards
+          return 'top-0 left-0'
       }
     }
     
@@ -244,26 +260,19 @@ const ProductsSection = () => {
           {products.map((product: Product, index: number) => (
                 <div
                   key={product.id}
-                  ref={(el) => { productRefs.current[index] = el; }}
+                  ref={product.name === 'Garrafa Stanley' ? garrafaCardRef : (el) => { productRefs.current[index] = el; }}
                   className={`product-item ${getPositionClasses(product.position)}`}
-                  style={product.name === 'Fone' && isMobile ? { border: '2px solid red', backgroundColor: 'rgba(255,0,0,0.1)' } : {}} // Debug visual para o Fone apenas no mobile
                 >
-              <div className="product-card" style={product.name === 'Fone' && isMobile ? { width: '60px', height: '60px' } : {}}>
+              <div className="product-card product-card-transparent">
                 <img 
                   src={product.image} 
                   alt={product.alt} 
                   className="product-image"
-                  style={product.name === 'Fone' && isMobile ? { 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover',
-                    borderRadius: '8px'
-                  } : {}}
                 />
               </div>
               
-              {/* Ícones especiais para alguns produtos */}
-              {product.name === 'Blusa Creme' && (
+              {/* Ícones especiais para alguns produtos - APENAS DESKTOP */}
+              {product.name === 'Blusa Creme' && !isMobile && (
                 <div 
                   className="product-icon star-icon"
                 >

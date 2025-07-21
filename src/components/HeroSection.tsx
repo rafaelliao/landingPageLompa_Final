@@ -1,6 +1,8 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import LogoIcon from './LogoIcon'
 import ProductsSection from './ProductsSection'
 import { useResponsive } from '../hooks/useResponsive'
@@ -10,9 +12,15 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ className = '' }: HeroSectionProps) => {
-  const titleRef = useRef<HTMLHeadingElement>(null)
-  const iconRef = useRef<HTMLDivElement>(null)
   const { isMobile } = useResponsive()
+  
+  // Refs para animação
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const centralIconRef = useRef<HTMLDivElement>(null)
+  const mockupRef = useRef<HTMLDivElement>(null)
+  const mockupMobileRef = useRef<HTMLDivElement>(null)
+  const mobileCardsRef = useRef<HTMLDivElement>(null)
+  const desktopCardsRef = useRef<HTMLDivElement>(null)
 
   // Debug logs
   console.log('🏗️ HeroSection renderizando:', {
@@ -20,16 +28,156 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'N/A'
   })
 
+  // Animação GSAP com ScrollTrigger
+  useEffect(() => {
+    console.log('🎬 useEffect iniciado')
+    if (typeof window === 'undefined') {
+      console.log('❌ Window não disponível')
+      return
+    }
+
+    console.log('✅ Window disponível, registrando ScrollTrigger')
+    gsap.registerPlugin(ScrollTrigger)
+
+    // Aguardar um frame para garantir que todos os elementos estejam renderizados
+    const initAnimation = () => {
+      console.log('🔍 initAnimation chamada')
+      const title = titleRef.current
+      const centralIcon = centralIconRef.current
+      const mockup = mockupRef.current
+      const mockupMobile = mockupMobileRef.current
+      const mobileCards = mobileCardsRef.current
+      const desktopCards = desktopCardsRef.current
+
+      console.log('🔍 Elementos encontrados:', {
+        title: !!title,
+        centralIcon: !!centralIcon,
+        mockup: !!mockup,
+        mockupMobile: !!mockupMobile,
+        mobileCards: !!mobileCards,
+        desktopCards: !!desktopCards
+      })
+
+      if (!title || !centralIcon || !mockup || !mockupMobile || !mobileCards || !desktopCards) {
+        console.warn('⚠️ Elementos não encontrados para animação - tentando novamente...')
+        setTimeout(initAnimation, 100)
+        return
+      }
+
+      // Usar o mockup e cards corretos baseado no dispositivo
+      const targetMockup = isMobile ? mockupMobile : mockup
+      const targetCards = isMobile ? mobileCards : desktopCards
+      console.log('🎯 Usando mockup:', isMobile ? 'MOBILE' : 'DESKTOP')
+      console.log('🎯 Usando cards:', isMobile ? 'MOBILE CONTAINER' : 'DESKTOP CONTAINER')
+
+      console.log('✅ Todos os elementos encontrados, iniciando animações...')
+      
+      // Limpar ScrollTriggers existentes
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+
+      // Timeline para animação dos cards
+      const tlCards = gsap.timeline({
+        scrollTrigger: {
+          trigger: 'body',
+          start: 'top top',
+          end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh',
+          scrub: 3.5,
+          onUpdate: (self) => {
+            const scrollY = window.scrollY
+            const viewportHeight = window.innerHeight
+            const scrollVh = scrollY / viewportHeight
+            
+            console.log('Scroll VH:', scrollVh.toFixed(2) + 'vh')
+          },
+          onEnter: () => console.log('🎬 ANIMAÇÃO INICIADA'),
+          onLeave: () => console.log('🏁 ANIMAÇÃO FINALIZADA'),
+          onEnterBack: () => console.log('🔄 ANIMAÇÃO REVERTENDO'),
+          onLeaveBack: () => console.log('🔄 ANIMAÇÃO RESETANDO')
+        }
+      })
+
+      // Animar cards e seus ícones
+      const cardElements = targetCards.querySelectorAll('.product-card-transparent')
+      cardElements.forEach((card, index) => {
+        const cardRect = card.getBoundingClientRect()
+        const mockupRect = targetMockup.getBoundingClientRect()
+        
+        const cardCenterX = cardRect.left + cardRect.width / 2
+        const cardCenterY = cardRect.top + cardRect.height / 2
+        const mockupCenterX = mockupRect.left + mockupRect.width / 2
+        const mockupCenterY = mockupRect.top + mockupRect.height / 2
+        
+        const deltaX = mockupCenterX - cardCenterX
+        const deltaY = mockupCenterY - cardCenterY
+
+        // Encontrar o container pai do card (product-item) que contém o card e o ícone
+        const productItem = card.closest('.product-item')
+        if (productItem) {
+          tlCards.fromTo(productItem, 
+            { x: 0, y: 0, scale: 1, rotation: 0 },
+            { 
+              x: deltaX, 
+              y: deltaY, 
+              scale: index === 0 ? 1.8 : 0.7,
+              rotation: index === 0 ? 0 : (index % 2 === 0 ? -25 : 25), // Garrafa sem rotação
+              ease: 'power3.out'
+            },
+            0
+          )
+        } else {
+          // Fallback: animar apenas o card se não encontrar o container
+          tlCards.fromTo(card, 
+            { x: 0, y: 0, scale: 1, rotation: 0 },
+            { 
+              x: deltaX, 
+              y: deltaY, 
+              scale: index === 0 ? 1.8 : 0.7,
+              rotation: index === 0 ? 0 : (index % 2 === 0 ? -25 : 25), // Garrafa sem rotação
+              ease: 'power3.out'
+            },
+            0
+          )
+        }
+      })
+
+      // Timeline independente para animação do título
+      const tlTitle = gsap.timeline({
+        scrollTrigger: {
+          trigger: 'body',
+          start: 'top top',
+          end: '+=400vh', // Timeline ainda mais longa para o título
+          scrub: 1,
+          onEnter: () => console.log('🎬 ANIMAÇÃO DO TÍTULO INICIADA'),
+          onLeave: () => console.log('🏁 ANIMAÇÃO DO TÍTULO FINALIZADA')
+        }
+      })
+
+      // Animar título e ícone (exit) - timeline independente
+      console.log('🎬 Configurando animação do título:', { title: !!title, centralIcon: !!centralIcon })
+      
+      // Animação do título - duração ainda mais aumentada
+      tlTitle.fromTo([title, centralIcon], 
+        { y: 0, opacity: 1 },
+        { y: -50, opacity: 0, ease: 'power3.out', duration: 2.0 }, // Animação ainda mais suave e longa
+        0 // Começa imediatamente
+      )
+      
+      console.log('✅ Animação do título configurada com timeline independente - teste agressivo')
+
+      ScrollTrigger.refresh()
+    }
+
+    console.log('⏰ Configurando setTimeout para initAnimation')
+    setTimeout(initAnimation, 200)
+  }, [])
+
   return (
     <section className={`hero-section ${className}`}>
-      {/* Seção de produtos ao fundo */}
-      <ProductsSection />
-      
       {/* Container centralizado */}
       <div className="hero-container">
         {/* Ícone centralizado */}
         <div
-          ref={iconRef}
+          ref={centralIconRef}
           className="hero-icon"
         >
           <LogoIcon size="lg" />
@@ -38,15 +186,26 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         {/* Título centralizado */}
         <h1
           ref={titleRef}
-          className="hero-title"
+          className="hero-title hero-title-mobile"
         >
           O FUTURO <span className="text-accent">DAS VENDAS</span> É SOCIAL, VISUAL E<br />
           ACESSÍVEL. E ELE<br />
           <span className="text-accent">COMEÇA AQUI</span>
         </h1>
 
+        {/* Container para cards no mobile - mesma altura do título */}
+        <div ref={mobileCardsRef} className="mobile-cards-container">
+          <ProductsSection />
+        </div>
+
+        {/* Container para cards no desktop - mesma altura do título */}
+        <div ref={desktopCardsRef} className="desktop-cards-container">
+          <ProductsSection />
+        </div>
+
         {/* Splash Screen - Desktop */}
         <div
+          ref={mockupRef}
           className="smartphone-mockup"
           id="smartphone-mockup-desktop"
           data-testid="mockup-element-desktop"
@@ -81,6 +240,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
         {/* Splash Screen - Mobile */}
         <div
+          ref={mockupMobileRef}
           className="smartphone-mockup"
           id="smartphone-mockup-mobile"
           data-testid="mockup-element-mobile"
