@@ -6,6 +6,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import LogoIcon from './LogoIcon'
 import ProductsSection from './ProductsSection'
 import { useResponsive } from '../hooks/useResponsive'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
 
 interface HeroSectionProps {
   className?: string
@@ -207,20 +209,24 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       
       console.log('✅ Animação do título configurada com timeline independente - teste agressivo')
 
-      // Desaparecimento permanente dos cards (exceto garrafa) em 150vh (mobile)
-      if (isMobile) {
-        console.log('🎬 Configurando desaparecimento permanente dos cards em 150vh')
-        
+      // Desaparecimento permanente dos cards (exceto garrafa) em 750vh (desktop)
+      if (!isMobile && desktopCardsRef.current && mockupRef.current) {
+        const cardElements = Array.from(desktopCardsRef.current.querySelectorAll('.product-card-transparent'));
+        const garrafaIndex = cardElements.findIndex(card => card.querySelector('img')?.alt === 'Garrafa Stanley');
+        // Selecionar ícones especiais
+        const starIcons = Array.from(desktopCardsRef.current.querySelectorAll('.star-icon'));
+        const likeIcons = Array.from(desktopCardsRef.current.querySelectorAll('.like-icon'));
+        const bagIcons = Array.from(desktopCardsRef.current.querySelectorAll('.bag-icon'));
+        const allIcons = [...starIcons, ...likeIcons, ...bagIcons];
         ScrollTrigger.create({
           trigger: 'body',
-          start: '+=250vh',
-          end: '+=260vh', // Duração de 10vh para o efeito
+          start: '+=750vh',
+          end: '+=760vh', // Duração curta para o efeito
           scrub: 0.5,
           onEnter: () => {
-            console.log('📱 CARDS - DESAPARECIMENTO PERMANENTE INICIADO (250vh)')
-            // Fazer cards (exceto garrafa) desaparecerem permanentemente
+            console.log('🖥️ CARDS/ÍCONES - DESAPARECIMENTO PERMANENTE INICIADO (750vh)')
             cardElements.forEach((card, index) => {
-              if (index !== 0) { // Exceto a garrafa (index 0)
+              if (index !== garrafaIndex) {
                 gsap.to(card, {
                   opacity: 0,
                   scale: 0.3,
@@ -230,19 +236,30 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
                   onComplete: () => {
                     gsap.set(card, { pointerEvents: 'none' })
                   }
-                })
+                });
               }
-            })
-            console.log('📱 Cards secundários desapareceram (garrafa permanece)')
-          },
-          onLeave: () => {
-            console.log('📱 CARDS - DESAPARECIMENTO PERMANENTE FINALIZADO (260vh)')
+            });
+            allIcons.forEach(icon => {
+              gsap.to(icon, {
+                opacity: 0,
+                scale: 0.3,
+                y: -30,
+                duration: 0.8,
+                ease: 'back.in(1.7)',
+                onComplete: () => {
+                  gsap.set(icon, { pointerEvents: 'none' })
+                }
+              });
+            });
+            console.log('🖥️ Cards e ícones desapareceram (garrafa permanece)');
           },
           onEnterBack: () => {
-            console.log('📱 CARDS - DESAPARECIMENTO PERMANENTE REVERTENDO')
-            // Restaurar cards quando voltar
+            console.log('🖥️ CARDS/ÍCONES - SCROLL REVERSO DENTRO DO RANGE (sem reversão)');
+          },
+          onLeaveBack: () => {
+            console.log('🖥️ CARDS/ÍCONES - DESAPARECIMENTO PERMANENTE REVERTENDO (antes do start)');
             cardElements.forEach((card, index) => {
-              if (index !== 0) { // Exceto a garrafa (index 0)
+              if (index !== garrafaIndex) {
                 gsap.to(card, {
                   opacity: 1,
                   scale: 1,
@@ -252,15 +269,24 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
                   onComplete: () => {
                     gsap.set(card, { pointerEvents: 'auto' })
                   }
-                })
+                });
               }
-            })
-            console.log('📱 Cards secundários restaurados')
-          },
-          onLeaveBack: () => {
-            console.log('📱 CARDS - DESAPARECIMENTO PERMANENTE RESETANDO')
+            });
+            allIcons.forEach(icon => {
+              gsap.to(icon, {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.5,
+                ease: 'back.out(1.7)',
+                onComplete: () => {
+                  gsap.set(icon, { pointerEvents: 'auto' })
+                }
+              });
+            });
+            console.log('🖥️ Cards e ícones restaurados');
           }
-        })
+        });
       }
 
       // Efeito de saída da garrafa (mobile) - considerando mockup fixado
@@ -326,6 +352,55 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
             console.log('📱 GARRAFA - EFEITO DE SAÍDA RESETANDO')
           }
         })
+      }
+
+      // Efeito de saída da garrafa (desktop) - independente do mobile
+      if (!isMobile && desktopCardsRef.current && mockupRef.current) {
+        const garrafaCard = Array.from(desktopCardsRef.current.querySelectorAll('.product-card-transparent'))
+          .find(card => card.querySelector('img')?.alt === 'Garrafa Stanley');
+        console.log('🖥️ Elemento garrafaCard encontrado para saída:', garrafaCard);
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=80vh', // Inicia o efeito de saída em 80vh
+          end: '+=110vh',  // Termina em 110vh (antes do carousel)
+          scrub: 0.5,
+          onEnter: () => {
+            if (garrafaCard) {
+              console.log('🖥️ Ativando efeito de saída da garrafa (desktop)', garrafaCard);
+              gsap.to(garrafaCard, {
+                scale: 0.3,
+                y: -50,
+                rotation: 180,
+                opacity: 0,
+                duration: 1.5,
+                ease: 'back.in(1.7)',
+                onComplete: () => {
+                  console.log('🖥️ GARRAFA - Saída concluída (desktop)')
+                }
+              });
+            } else {
+              console.log('🖥️ Nenhum elemento garrafaCard encontrado para saída (desktop)');
+            }
+          },
+          onEnterBack: () => {
+            if (garrafaCard) {
+              console.log('🖥️ Revertendo efeito de saída da garrafa (desktop)', garrafaCard);
+              gsap.to(garrafaCard, {
+                scale: 1,
+                y: 0,
+                rotation: 0,
+                opacity: 1,
+                duration: 1.0,
+                ease: 'back.out(1.7)',
+                onComplete: () => {
+                  console.log('🖥️ GARRAFA - Saída revertida (desktop)')
+                }
+              });
+            } else {
+              console.log('🖥️ Nenhum elemento garrafaCard encontrado para reversão (desktop)');
+            }
+          }
+        });
       }
 
       // Timeline independente para mockup mobile com PIN
@@ -447,12 +522,168 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
         console.log('✅ PIN do mockup desktop configurado')
       }
 
+      // Desaparecimento permanente dos cards (exceto garrafa) no mobile
+      if (isMobile && mobileCardsRef.current && mockupMobileRef.current) {
+        const cardElements = Array.from(mobileCardsRef.current.querySelectorAll('.product-card-transparent'));
+        const garrafaIndex = cardElements.findIndex(card => card.querySelector('img')?.alt === 'Garrafa Stanley');
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=120vh',
+          end: '+=130vh', // Duração curta para o efeito
+          scrub: 0.5,
+          onEnter: () => {
+            cardElements.forEach((card, index) => {
+              if (index !== garrafaIndex) {
+                gsap.to(card, {
+                  opacity: 0,
+                  scale: 0.3,
+                  y: -30,
+                  duration: 0.8,
+                  ease: 'back.in(1.7)',
+                  onComplete: () => {
+                    gsap.set(card, { pointerEvents: 'none' })
+                  }
+                });
+              }
+            });
+            // console.log('📱 Cards (exceto garrafa) desapareceram permanentemente (mobile)');
+          },
+          onEnterBack: () => {
+            // console.log('📱 Cards (mobile) - SCROLL REVERSO DENTRO DO RANGE (sem reversão)');
+          },
+          onLeaveBack: () => {
+            cardElements.forEach((card, index) => {
+              if (index !== garrafaIndex) {
+                gsap.to(card, {
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  duration: 0.5,
+                  ease: 'back.out(1.7)',
+                  onComplete: () => {
+                    gsap.set(card, { pointerEvents: 'auto' })
+                  }
+                });
+              }
+            });
+            // console.log('📱 Cards (exceto garrafa) restaurados (mobile)');
+          }
+        });
+      }
+
       ScrollTrigger.refresh()
     }
 
     console.log('⏰ Configurando setTimeout para initAnimation')
     setTimeout(initAnimation, 200)
   }, [])
+
+  // Carousel de vídeos para desktop
+  const [carouselIndex, setCarouselIndex] = useState(0)
+  const [showCarousel, setShowCarousel] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const videoList = [
+    '/Garrafa_Reels.mp4',
+    '/bolsa_reels_final.mp4',
+    '/parafusadeira_reels.mp4',
+  ]
+
+  useEffect(() => {
+    setMounted(true)
+    if (!isMobile) {
+      const handleScroll = () => {
+        const scrollY = window.scrollY
+        const viewportHeight = window.innerHeight
+        const scrollVh = (scrollY / viewportHeight) * 100
+        setShowCarousel(scrollVh >= 110 && scrollVh <= 250)
+        console.log('[CAROUSEL DEBUG] scrollY:', scrollY, 'viewportHeight:', viewportHeight, 'scrollVh:', scrollVh, 'showCarousel:', scrollVh >= 110 && scrollVh <= 250)
+      }
+      window.addEventListener('scroll', handleScroll)
+      handleScroll()
+      return () => window.removeEventListener('scroll', handleScroll)
+    } else {
+      setShowCarousel(false)
+      return undefined
+    }
+  }, [isMobile])
+
+  useEffect(() => {
+    console.log('[CAROUSEL DEBUG] mounted:', mounted, 'isMobile:', isMobile, 'showCarousel:', showCarousel, 'carouselIndex:', carouselIndex)
+    if (showCarousel && !isMobile) {
+      if (!intervalRef.current) {
+        intervalRef.current = setInterval(() => {
+          setCarouselIndex(prev => (prev + 1) % videoList.length)
+        }, 3000)
+        console.log('[CAROUSEL DEBUG] Interval iniciado')
+      }
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+        setCarouselIndex(0)
+        console.log('[CAROUSEL DEBUG] Interval parado e carouselIndex resetado')
+      }
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+        console.log('[CAROUSEL DEBUG] Interval limpo no unmount')
+      }
+    }
+  }, [showCarousel, isMobile, videoList.length])
+
+  // Carousel de vídeos para mobile
+  const [carouselIndexMobile, setCarouselIndexMobile] = useState(0)
+  const [showCarouselMobile, setShowCarouselMobile] = useState(false)
+  const [mountedMobile, setMountedMobile] = useState(false)
+  const intervalRefMobile = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    setMountedMobile(true)
+    if (isMobile) {
+      const handleScroll = () => {
+        const scrollY = window.scrollY
+        const viewportHeight = window.innerHeight
+        const scrollVh = (scrollY / viewportHeight) * 100
+        // Carousel mobile: range ajustado para aparecer como no desktop
+        setShowCarouselMobile(scrollVh >= 110 && scrollVh <= 250)
+        // console.log('[CAROUSEL MOBILE DEBUG] scrollY:', scrollY, 'viewportHeight:', viewportHeight, 'scrollVh:', scrollVh, 'showCarouselMobile:', scrollVh >= 110 && scrollVh <= 250)
+      }
+      window.addEventListener('scroll', handleScroll)
+      handleScroll()
+      return () => window.removeEventListener('scroll', handleScroll)
+    } else {
+      setShowCarouselMobile(false)
+      return undefined
+    }
+  }, [isMobile])
+
+  useEffect(() => {
+    if (showCarouselMobile && isMobile) {
+      if (!intervalRefMobile.current) {
+        intervalRefMobile.current = setInterval(() => {
+          setCarouselIndexMobile(prev => (prev + 1) % videoList.length)
+        }, 3000)
+        // console.log('[CAROUSEL MOBILE DEBUG] Interval iniciado')
+      }
+    } else {
+      if (intervalRefMobile.current) {
+        clearInterval(intervalRefMobile.current)
+        intervalRefMobile.current = null
+        setCarouselIndexMobile(0)
+        // console.log('[CAROUSEL MOBILE DEBUG] Interval parado e carouselIndexMobile resetado')
+      }
+    }
+    return () => {
+      if (intervalRefMobile.current) {
+        clearInterval(intervalRefMobile.current)
+        intervalRefMobile.current = null
+        // console.log('[CAROUSEL MOBILE DEBUG] Interval limpo no unmount')
+      }
+    }
+  }, [showCarouselMobile, isMobile, videoList.length])
 
   return (
     <section className={`hero-section ${className}`}>
@@ -504,12 +735,31 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           data-testid="mockup-element-desktop"
           data-device="desktop"
         >
-          <div className="mockup-screen">
-            <img 
-              src="/Splash_screen.svg" 
-              alt="Splash Screen" 
-              className="w-full h-full object-cover"
-            />
+          <div className="mockup-screen relative w-full h-full">
+            {/* Corrigido: só renderiza o carousel no client e no range correto */}
+            {mounted && !isMobile && showCarousel ? (
+              <AnimatePresence mode="wait">
+                <motion.video
+                  key={carouselIndex}
+                  src={videoList[carouselIndex]}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute top-0 left-0 w-full h-full object-fill z-10"
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.8, ease: 'easeInOut' }}
+                />
+              </AnimatePresence>
+            ) : (
+              <img 
+                src="/Splash_screen.svg" 
+                alt="Splash Screen" 
+                className="w-full h-full object-cover z-0"
+              />
+            )}
           </div>
           
           {/* Elemento invisível fixo no centro do mockup - Desktop */}
@@ -539,12 +789,31 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           data-testid="mockup-element-mobile"
           data-device="mobile"
         >
-          <div className="mockup-screen">
-            <img 
-              src="/Splash_screen.svg" 
-              alt="Splash Screen" 
-              className="w-full h-full object-cover"
-            />
+          <div className="mockup-screen relative w-full h-full">
+            {/* Carousel de vídeos: só renderiza no mobile e no range correto */}
+            {mountedMobile && isMobile && showCarouselMobile ? (
+              <AnimatePresence mode="wait">
+                <motion.video
+                  key={carouselIndexMobile}
+                  src={videoList[carouselIndexMobile]}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute top-0 left-0 w-full h-full object-fill z-10"
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.8, ease: 'easeInOut' }}
+                />
+              </AnimatePresence>
+            ) : (
+              <img 
+                src="/Splash_screen.svg" 
+                alt="Splash Screen" 
+                className="w-full h-full object-cover z-0"
+              />
+            )}
           </div>
           
           {/* Elemento invisível fixo no centro do mockup - Mobile */}
