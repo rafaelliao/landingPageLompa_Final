@@ -136,6 +136,17 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
 
         // Encontrar o container pai do card (product-item) que contém o card e o ícone
         const productItem = card.closest('.product-item')
+        // Obter nome do produto
+        const productName = productItem?.querySelector('img')?.alt || ''
+        // Definir rotação
+        let rotation = 0
+        if (index === 0) {
+          rotation = 0
+        } else if (productName === 'Maquiagem Icon') {
+          rotation = 25
+        } else {
+          rotation = (index % 2 === 0 ? -25 : 25)
+        }
         if (productItem) {
           tlCards.fromTo(productItem, 
             { x: 0, y: 0, scale: 1, rotation: 0 },
@@ -143,7 +154,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
               x: deltaX, 
               y: deltaY, 
               scale: index === 0 ? 1.5 : 0.7, // Reduzido scale da garrafa de 1.8 para 1.5
-              rotation: index === 0 ? 0 : (index % 2 === 0 ? -25 : 25), // Garrafa sem rotação
+              rotation,
               ease: 'power2.out', // Easing mais suave para melhor qualidade
               duration: 1 // Duração explícita para melhor controle
             },
@@ -157,7 +168,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
               x: deltaX, 
               y: deltaY, 
               scale: index === 0 ? 1.5 : 0.7, // Reduzido scale da garrafa de 1.8 para 1.5
-              rotation: index === 0 ? 0 : (index % 2 === 0 ? -25 : 25), // Garrafa sem rotação
+              rotation,
               ease: 'power2.out', // Easing mais suave para melhor qualidade
               duration: 1 // Duração explícita para melhor controle
             },
@@ -270,12 +281,13 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
             
             if (mockupPinActive) {
               console.log('📱 MOCKUP FIXADO - Aplicando efeito de saída da garrafa')
+              // Saída da garrafa (efeito)
               gsap.to(mobileCardRefs.garrafaRef.current, {
                 scale: 0.3,
                 y: -50,
                 rotation: 180,
                 opacity: 0,
-                duration: 0.8,
+                duration: 1.5, // duração aumentada
                 ease: 'back.in(1.7)',
                 onComplete: () => {
                   console.log('📱 GARRAFA - Saída concluída (mockup fixado)')
@@ -296,12 +308,13 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
             )
             
             if (mockupPinActive) {
+              // Reversão da garrafa (efeito)
               gsap.to(mobileCardRefs.garrafaRef.current, {
                 scale: 1,
                 y: 0,
                 rotation: 0,
                 opacity: 1,
-                duration: 0.5,
+                duration: 1.0, // duração suavizada
                 ease: 'back.out(1.7)',
                 onComplete: () => {
                   console.log('📱 GARRAFA - Saída revertida (mockup fixado)')
@@ -328,15 +341,81 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           pinSpacing: true, // Mantém o espaçamento como no page2
           onEnter: () => {
             console.log('📱 MOCKUP MOBILE PIN - INICIADO (200vh) - Mockup fixado na tela')
+            // Se o scroll já passou do ponto de desaparecimento dos cards, aplicar o efeito imediatamente
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const scrollVh = (scrollY / viewportHeight) * 100;
+            if (scrollVh >= 250) {
+              const cardElements = mobileCardsRef.current?.querySelectorAll('.product-card-transparent') || [];
+              cardElements.forEach((card, index) => {
+                if (index !== 0) { // Exceto a garrafa (index 0)
+                  gsap.to(card, {
+                    opacity: 0,
+                    scale: 0.3,
+                    y: -30,
+                    duration: 0.8,
+                    ease: 'back.in(1.7)',
+                    onComplete: () => {
+                      gsap.set(card, { pointerEvents: 'none' })
+                    }
+                  });
+                }
+              });
+              console.log('📱 Cards secundários desapareceram imediatamente após pin (scroll > 250vh)');
+            }
           },
           onLeave: () => {
             console.log('📱 MOCKUP MOBILE PIN - FINALIZADO (800vh) - Mockup liberado')
           },
           onEnterBack: () => {
             console.log('📱 MOCKUP MOBILE PIN - REVERTENDO - Mockup será fixado novamente')
+            // Se o scroll já passou do ponto de desaparecimento dos cards, aplicar o efeito imediatamente
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const scrollVh = (scrollY / viewportHeight) * 100;
+            if (scrollVh >= 250) {
+              const cardElements = mobileCardsRef.current?.querySelectorAll('.product-card-transparent') || [];
+              cardElements.forEach((card, index) => {
+                if (index !== 0) { // Exceto a garrafa (index 0)
+                  gsap.to(card, {
+                    opacity: 0,
+                    scale: 0.3,
+                    y: -30,
+                    duration: 0.8,
+                    ease: 'back.in(1.7)',
+                    onComplete: () => {
+                      gsap.set(card, { pointerEvents: 'none' })
+                    }
+                  });
+                }
+              });
+              console.log('📱 Cards secundários desapareceram imediatamente após pin (scroll > 250vh)');
+            }
           },
           onLeaveBack: () => {
             console.log('📱 MOCKUP MOBILE PIN - RESETANDO - Mockup liberado')
+            // Se o scroll está antes do ponto de desaparecimento dos cards, reverter o efeito
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const scrollVh = (scrollY / viewportHeight) * 100;
+            if (scrollVh < 250) {
+              const cardElements = mobileCardsRef.current?.querySelectorAll('.product-card-transparent') || [];
+              cardElements.forEach((card, index) => {
+                if (index !== 0) { // Exceto a garrafa (index 0)
+                  gsap.to(card, {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)',
+                    onComplete: () => {
+                      gsap.set(card, { pointerEvents: 'auto' })
+                    }
+                  });
+                }
+              });
+              console.log('📱 Cards secundários restaurados após unpin (scroll < 250vh)');
+            }
           }
         })
         

@@ -217,7 +217,7 @@ const ProductsSection = ({
         case 'right-top':
           return 'top-24 right-0'      // Óculos: right: 0px, top: 6rem
         case 'right-center':
-          return 'top-40 right-1'      // Maquiagem: right: 5px, top: 10rem
+          return 'top-10 right-0'      // Maquiagem - grupo da direita, alinhado
         case 'right-bottom':
           return 'top-48 right-2'      // Ventilador: right: 10px, top: 12rem
         case 'right-bottom-inner':
@@ -256,11 +256,11 @@ const ProductsSection = ({
       case 'right-top':
         return '-top-68 right-5'
       case 'right-center':
-        return '-top-30 right-15'      // Maquiagem - movido mais para a esquerda (era right-28)
+        return 'top-10 right-5'      // Maquiagem - ao lado do Boné, mais para baixo
       case 'right-bottom':
-        return '-top-33 -right-5'      // Tênis - movido mais para a esquerda (era -right-10)
+        return '-top-68 right-0'      // Tênis - agora no grupo da direita, bem acima
       case 'right-bottom-inner':
-        return '-top-1 right-15'       // Boné - movido mais para a esquerda (era right-22)
+        return '-top-1 right-0'       // Boné - mais à direita
       case 'right-extra':
         return 'top-15 right-5'
       case 'right-center-inner':
