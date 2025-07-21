@@ -160,11 +160,14 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       })
 
       // Timeline independente para animação do título
+      const titleAnimationRange = window.innerWidth <= 768 ? '60vh' : '400vh' // Desktop muito mais longo
+      console.log('🎯 Range da animação do título:', titleAnimationRange)
+      
       const tlTitle = gsap.timeline({
         scrollTrigger: {
           trigger: 'body',
           start: 'top top',
-          end: '+=60vh', // Timeline do título em 60vh
+          end: `+=${titleAnimationRange}`,
           scrub: 1,
           onEnter: () => console.log('🎬 ANIMAÇÃO DO TÍTULO INICIADA'),
           onLeave: () => console.log('🏁 ANIMAÇÃO DO TÍTULO FINALIZADA')
@@ -175,9 +178,12 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       console.log('🎬 Configurando animação do título:', { title: !!title, centralIcon: !!centralIcon })
       
       // Animação do título - duração ainda mais aumentada
+      const titleDuration = window.innerWidth <= 768 ? 2.0 : 4.0 // Desktop mais lento
+      const titleEase = window.innerWidth <= 768 ? 'power3.out' : 'power1.out' // Desktop mais suave
+      
       tlTitle.fromTo([title, centralIcon], 
         { y: 0, opacity: 1 },
-        { y: -50, opacity: 0, ease: 'power3.out', duration: 2.0 }, // Animação ainda mais suave e longa
+        { y: -50, opacity: 0, ease: titleEase, duration: titleDuration }, // Desktop mais lento e suave
         0 // Começa imediatamente
       )
       

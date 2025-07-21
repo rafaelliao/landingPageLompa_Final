@@ -32,6 +32,9 @@ export const useScrollMonitor = () => {
       if (scrollVH === 80) {
         console.log(`🎯 PONTO 80vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE MOBILE!`);
       }
+      if (scrollVH === 400 && window.innerWidth > 768) {
+        console.log(`🎯 PONTO 400vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE DO TÍTULO DESKTOP!`);
+      }
       if (scrollVH === 800) {
         console.log(`🎯 PONTO 800vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE DESKTOP!`);
       }
