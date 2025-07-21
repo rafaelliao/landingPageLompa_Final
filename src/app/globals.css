@@ -941,10 +941,10 @@
       z-index: 1002 !important;
     }
     
-    /* Fone */
+    /* Bolsa */
     .product-item.top-12.left-10 {
       left: 40px !important;
-      top: 3rem !important;
+      top: 2.5rem !important; /* Movido um pouco para cima (era 3rem) */
     }
     
     /* Câmera Card */
