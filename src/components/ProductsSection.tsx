@@ -256,11 +256,11 @@ const ProductsSection = ({
       case 'right-top':
         return '-top-68 right-5'
       case 'right-center':
-        return '-top-30 right-28'
+        return '-top-30 right-15'      // Maquiagem - movido mais para a esquerda (era right-28)
       case 'right-bottom':
-        return '-top-33 -right-10'
+        return '-top-33 -right-5'      // Tênis - movido mais para a esquerda (era -right-10)
       case 'right-bottom-inner':
-        return '-top-1 right-22'
+        return '-top-1 right-15'       // Boné - movido mais para a esquerda (era right-22)
       case 'right-extra':
         return 'top-15 right-5'
       case 'right-center-inner':
