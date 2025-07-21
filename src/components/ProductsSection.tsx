@@ -149,7 +149,7 @@ const mobileVisibleCards = [
   'Bolsa',              // ✅ Card importante
   'Blusa Creme',        // ✅ Card com estrela
   'Urso Pelúcia',       // ✅ Novo card inserido no grupo da esquerda
-  'Câmera Card',        // ✅ Card visual
+  // 'Câmera Card',     // ❌ Removido do mobile
   // 'Fone',            // ❌ Removido do mobile
   
   // GRUPO DIREITA - 4 cards
@@ -256,11 +256,11 @@ const ProductsSection = ({
       case 'right-top':
         return '-top-68 right-5'
       case 'right-center':
-        return 'top-10 right-5'      // Maquiagem - ao lado do Boné, mais para baixo
+        return 'top-10 right-20'      // Maquiagem - mais ao centro
       case 'right-bottom':
-        return '-top-68 right-0'      // Tênis - agora no grupo da direita, bem acima
+        return 'top-20 right-0'      // Tênis - colado na borda direita
       case 'right-bottom-inner':
-        return '-top-1 right-0'       // Boné - mais à direita
+        return '-top-16 right-20'       // Boné - volta para mais à direita
       case 'right-extra':
         return 'top-15 right-5'
       case 'right-center-inner':
