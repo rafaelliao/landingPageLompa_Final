@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
@@ -8,6 +9,7 @@ import MainLayout from '@/components/MainLayout'
 import HeroSection from '@/components/HeroSection'
 import FeaturesSection from '@/components/FeaturesSection'
 import { MobileProvider } from '@/contexts/MobileContext'
+import { CardRefsProvider, useCardRefs } from '@/contexts/CardRefsContext'
 
 import type { NavItem, Feature, FooterSection } from '@/types'
 
@@ -92,7 +94,9 @@ const footerSections: FooterSection[] = [
   }
 ]
 
-export default function HomePage() {
+function HomePageContent() {
+  const cardRefs = useCardRefs()
+
   return (
     <MobileProvider>
       <main className="min-h-screen" style={{ border: 'none', outline: 'none' }}>
@@ -103,7 +107,9 @@ export default function HomePage() {
             <Navigation items={navigationItems} />
         
         {/* Hero Section */}
-        <HeroSection />
+        <HeroSection 
+          mobileCardRefs={cardRefs}
+        />
         
         {/* Features Section */}
         <FeaturesSection features={featuresData} />
@@ -157,5 +163,13 @@ export default function HomePage() {
           <Footer sections={footerSections} />
       </main>
     </MobileProvider>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <CardRefsProvider>
+      <HomePageContent />
+    </CardRefsProvider>
   )
 } 

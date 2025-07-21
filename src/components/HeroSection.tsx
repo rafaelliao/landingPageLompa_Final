@@ -9,9 +9,20 @@ import { useResponsive } from '../hooks/useResponsive'
 
 interface HeroSectionProps {
   className?: string
+  mobileCardRefs?: {
+    garrafaRef: React.RefObject<HTMLDivElement>
+    ursopeluciaRef: React.RefObject<HTMLDivElement>
+    blusaRef: React.RefObject<HTMLDivElement>
+    bolsaRef: React.RefObject<HTMLDivElement>
+    maquiagemRef: React.RefObject<HTMLDivElement>
+    tenisRef: React.RefObject<HTMLDivElement>
+    boneRef: React.RefObject<HTMLDivElement>
+    relogioRef: React.RefObject<HTMLDivElement>
+    cameraRef: React.RefObject<HTMLDivElement>
+  }
 }
 
-const HeroSection = ({ className = '' }: HeroSectionProps) => {
+const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
   const { isMobile } = useResponsive()
   
   // Refs para animação
@@ -21,6 +32,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
   const mockupMobileRef = useRef<HTMLDivElement>(null)
   const mobileCardsRef = useRef<HTMLDivElement>(null)
   const desktopCardsRef = useRef<HTMLDivElement>(null)
+
+
 
   // Debug logs
   console.log('🏗️ HeroSection renderizando:', {
@@ -195,7 +208,17 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
         {/* Container para cards no mobile - mesma altura do título */}
         <div ref={mobileCardsRef} className="mobile-cards-container">
-          <ProductsSection />
+          <ProductsSection 
+            garrafaRef={mobileCardRefs?.garrafaRef}
+            ursopeluciaRef={mobileCardRefs?.ursopeluciaRef}
+            blusaRef={mobileCardRefs?.blusaRef}
+            bolsaRef={mobileCardRefs?.bolsaRef}
+            maquiagemRef={mobileCardRefs?.maquiagemRef}
+            tenisRef={mobileCardRefs?.tenisRef}
+            boneRef={mobileCardRefs?.boneRef}
+            relogioRef={mobileCardRefs?.relogioRef}
+            cameraRef={mobileCardRefs?.cameraRef}
+          />
         </div>
 
         {/* Container para cards no desktop - mesma altura do título */}

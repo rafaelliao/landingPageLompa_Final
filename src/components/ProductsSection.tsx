@@ -12,6 +12,18 @@ interface Product {
   position: 'left-top' | 'left-center' | 'left-bottom' | 'left-bottom-inner' | 'left-center-inner' | 'left-extra' | 'left-top-inner' | 'left-bottom-extra' | 'right-top' | 'right-center' | 'right-bottom' | 'right-bottom-inner' | 'right-extra' | 'right-center-inner' | 'right-top-inner' | 'right-bottom-extra'
 }
 
+interface ProductsSectionProps {
+  garrafaRef?: React.RefObject<HTMLDivElement>
+  ursopeluciaRef?: React.RefObject<HTMLDivElement>
+  blusaRef?: React.RefObject<HTMLDivElement>
+  bolsaRef?: React.RefObject<HTMLDivElement>
+  maquiagemRef?: React.RefObject<HTMLDivElement>
+  tenisRef?: React.RefObject<HTMLDivElement>
+  boneRef?: React.RefObject<HTMLDivElement>
+  relogioRef?: React.RefObject<HTMLDivElement>
+  cameraRef?: React.RefObject<HTMLDivElement>
+}
+
 const allProducts: Product[] = [
   // ===== GRUPO ESQUERDA - Cards à esquerda do título =====
   {
@@ -147,7 +159,17 @@ const mobileVisibleCards = [
   // 'Ventilador'       // ❌ Removido do mobile
 ]
 
-const ProductsSection = () => {
+const ProductsSection = ({ 
+  garrafaRef,
+  ursopeluciaRef,
+  blusaRef,
+  bolsaRef,
+  maquiagemRef,
+  tenisRef,
+  boneRef,
+  relogioRef,
+  cameraRef
+}: ProductsSectionProps = {}) => {
   const { isMobile: isMobileResponsive } = useResponsive()
 
   const productRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -257,12 +279,39 @@ const ProductsSection = () => {
       <div className="products-container">
         {/* Grid de produtos posicionados em meias-luas */}
         <div className="products-grid">
-          {products.map((product: Product, index: number) => (
-                <div
-                  key={product.id}
-                  ref={product.name === 'Garrafa Stanley' ? garrafaCardRef : (el) => { productRefs.current[index] = el; }}
-                  className={`product-item ${getPositionClasses(product.position)}`}
-                >
+          {products.map((product: Product, index: number) => {
+            // Determinar qual ref usar baseado no nome do produto
+            const getProductRef = (productName: string) => {
+              switch (productName) {
+                case 'Garrafa Stanley':
+                  return garrafaRef || garrafaCardRef
+                case 'Urso Pelúcia':
+                  return ursopeluciaRef
+                case 'Blusa Creme':
+                  return blusaRef
+                case 'Bolsa':
+                  return bolsaRef
+                case 'Maquiagem':
+                  return maquiagemRef
+                case 'Tênis':
+                  return tenisRef
+                case 'Boné':
+                  return boneRef
+                case 'Relógio':
+                  return relogioRef
+                case 'Câmera Card':
+                  return cameraRef
+                default:
+                  return (el: HTMLDivElement | null) => { productRefs.current[index] = el; }
+              }
+            }
+
+            return (
+              <div
+                key={product.id}
+                ref={getProductRef(product.name)}
+                className={`product-item ${getPositionClasses(product.position)}`}
+              >
               <div className="product-card product-card-transparent">
                 <img 
                   src={product.image} 
@@ -296,7 +345,7 @@ const ProductsSection = () => {
                 </div>
               )}
             </div>
-          ))}
+          )})}
         </div>
       </div>
     </section>
