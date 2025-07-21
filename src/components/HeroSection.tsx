@@ -89,18 +89,22 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
 
       // Timeline para animação dos cards
+      const animationRange = window.innerWidth <= 768 ? '80vh' : '800vh'
+      console.log('🎯 Range da animação:', animationRange)
+      
       const tlCards = gsap.timeline({
         scrollTrigger: {
           trigger: 'body',
           start: 'top top',
-          end: window.innerWidth <= 768 ? '+=400vh' : '+=800vh',
+          end: `+=${animationRange}`,
           scrub: 3.5,
           onUpdate: (self) => {
             const scrollY = window.scrollY
             const viewportHeight = window.innerHeight
-            const scrollVh = scrollY / viewportHeight
+            const scrollVh = (scrollY / viewportHeight) * 100
+            const progress = self.progress * 100
             
-            console.log('Scroll VH:', scrollVh.toFixed(2) + 'vh')
+            console.log('📊 Scroll:', Math.round(scrollVh) + 'vh | Progresso:', Math.round(progress) + '%')
           },
           onEnter: () => console.log('🎬 ANIMAÇÃO INICIADA'),
           onLeave: () => console.log('🏁 ANIMAÇÃO FINALIZADA'),
@@ -131,9 +135,10 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
             { 
               x: deltaX, 
               y: deltaY, 
-              scale: index === 0 ? 1.8 : 0.7,
+              scale: index === 0 ? 1.5 : 0.7, // Reduzido scale da garrafa de 1.8 para 1.5
               rotation: index === 0 ? 0 : (index % 2 === 0 ? -25 : 25), // Garrafa sem rotação
-              ease: 'power3.out'
+              ease: 'power2.out', // Easing mais suave para melhor qualidade
+              duration: 1 // Duração explícita para melhor controle
             },
             0
           )
@@ -144,9 +149,10 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
             { 
               x: deltaX, 
               y: deltaY, 
-              scale: index === 0 ? 1.8 : 0.7,
+              scale: index === 0 ? 1.5 : 0.7, // Reduzido scale da garrafa de 1.8 para 1.5
               rotation: index === 0 ? 0 : (index % 2 === 0 ? -25 : 25), // Garrafa sem rotação
-              ease: 'power3.out'
+              ease: 'power2.out', // Easing mais suave para melhor qualidade
+              duration: 1 // Duração explícita para melhor controle
             },
             0
           )
@@ -158,7 +164,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
         scrollTrigger: {
           trigger: 'body',
           start: 'top top',
-          end: '+=400vh', // Timeline ainda mais longa para o título
+          end: '+=60vh', // Timeline do título em 60vh
           scrub: 1,
           onEnter: () => console.log('🎬 ANIMAÇÃO DO TÍTULO INICIADA'),
           onLeave: () => console.log('🏁 ANIMAÇÃO DO TÍTULO FINALIZADA')
@@ -201,7 +207,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           ref={titleRef}
           className="hero-title hero-title-mobile"
         >
-          O FUTURO <span className="text-accent">DAS VENDAS</span> É SOCIAL, VISUAL E<br />
+          O FUTURO <span className="text-accent">DO ECOMMERCE</span> É SOCIAL, VISUAL E<br />
           ACESSÍVEL. E ELE<br />
           <span className="text-accent">COMEÇA AQUI</span>
         </h1>
