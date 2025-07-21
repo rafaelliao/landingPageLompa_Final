@@ -422,6 +422,31 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
         console.log('✅ PIN do mockup mobile configurado')
       }
 
+      // Pin do mockup desktop (regra separada)
+      if (!isMobile && mockupRef.current) {
+        console.log('🖥️ Configurando PIN do mockup desktop')
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=800vh', // Inicia em 800vh
+          end: '+=1400vh',   // Termina em 1400vh
+          pin: mockupRef.current.parentElement, // Pin no parente do mockup desktop
+          pinSpacing: true,
+          onEnter: () => {
+            console.log('🖥️ MOCKUP DESKTOP PIN - INICIADO (800vh) - Mockup fixado na tela')
+          },
+          onLeave: () => {
+            console.log('🖥️ MOCKUP DESKTOP PIN - FINALIZADO (1400vh) - Mockup liberado')
+          },
+          onEnterBack: () => {
+            console.log('🖥️ MOCKUP DESKTOP PIN - REVERTENDO - Mockup será fixado novamente')
+          },
+          onLeaveBack: () => {
+            console.log('🖥️ MOCKUP DESKTOP PIN - RESETANDO - Mockup liberado')
+          }
+        })
+        console.log('✅ PIN do mockup desktop configurado')
+      }
+
       ScrollTrigger.refresh()
     }
 
