@@ -89,7 +89,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
 
       // Timeline para animação dos cards
-      const animationRange = window.innerWidth <= 768 ? '80vh' : '800vh'
+      const animationRange = window.innerWidth <= 768 ? '250vh' : '800vh'
       console.log('🎯 Range da animação:', animationRange)
       
       const tlCards = gsap.timeline({
@@ -104,12 +104,19 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
             const scrollVh = (scrollY / viewportHeight) * 100
             const progress = self.progress * 100
             
-            console.log('📊 Scroll:', Math.round(scrollVh) + 'vh | Progresso:', Math.round(progress) + '%')
+            // Log apenas a cada 20vh para não sobrecarregar o console
+            if (Math.floor(scrollVh) % 20 === 0 && scrollVh > 0) {
+              console.log('📊 Scroll:', Math.round(scrollVh) + 'vh | Progresso:', Math.round(progress) + '%')
+            }
           },
-          onEnter: () => console.log('🎬 ANIMAÇÃO INICIADA'),
-          onLeave: () => console.log('🏁 ANIMAÇÃO FINALIZADA'),
-          onEnterBack: () => console.log('🔄 ANIMAÇÃO REVERTENDO'),
-          onLeaveBack: () => console.log('🔄 ANIMAÇÃO RESETANDO')
+          onEnter: () => console.log('🎬 ANIMAÇÃO DOS CARDS INICIADA (0vh)'),
+          onLeave: () => {
+            console.log('🏁 ANIMAÇÃO DOS CARDS FINALIZADA (250vh)')
+          },
+          onEnterBack: () => console.log('🔄 ANIMAÇÃO DOS CARDS REVERTENDO'),
+          onLeaveBack: () => {
+            console.log('🔄 ANIMAÇÃO DOS CARDS RESETANDO')
+          }
         }
       })
 
@@ -188,6 +195,153 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       )
       
       console.log('✅ Animação do título configurada com timeline independente - teste agressivo')
+
+      // Desaparecimento permanente dos cards (exceto garrafa) em 150vh (mobile)
+      if (isMobile) {
+        console.log('🎬 Configurando desaparecimento permanente dos cards em 150vh')
+        
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=250vh',
+          end: '+=260vh', // Duração de 10vh para o efeito
+          scrub: 0.5,
+          onEnter: () => {
+            console.log('📱 CARDS - DESAPARECIMENTO PERMANENTE INICIADO (250vh)')
+            // Fazer cards (exceto garrafa) desaparecerem permanentemente
+            cardElements.forEach((card, index) => {
+              if (index !== 0) { // Exceto a garrafa (index 0)
+                gsap.to(card, {
+                  opacity: 0,
+                  scale: 0.3,
+                  y: -30,
+                  duration: 0.8,
+                  ease: 'back.in(1.7)',
+                  onComplete: () => {
+                    gsap.set(card, { pointerEvents: 'none' })
+                  }
+                })
+              }
+            })
+            console.log('📱 Cards secundários desapareceram (garrafa permanece)')
+          },
+          onLeave: () => {
+            console.log('📱 CARDS - DESAPARECIMENTO PERMANENTE FINALIZADO (260vh)')
+          },
+          onEnterBack: () => {
+            console.log('📱 CARDS - DESAPARECIMENTO PERMANENTE REVERTENDO')
+            // Restaurar cards quando voltar
+            cardElements.forEach((card, index) => {
+              if (index !== 0) { // Exceto a garrafa (index 0)
+                gsap.to(card, {
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  duration: 0.5,
+                  ease: 'back.out(1.7)',
+                  onComplete: () => {
+                    gsap.set(card, { pointerEvents: 'auto' })
+                  }
+                })
+              }
+            })
+            console.log('📱 Cards secundários restaurados')
+          },
+          onLeaveBack: () => {
+            console.log('📱 CARDS - DESAPARECIMENTO PERMANENTE RESETANDO')
+          }
+        })
+      }
+
+      // Efeito de saída da garrafa (mobile) - considerando mockup fixado
+      if (isMobile && mobileCardRefs?.garrafaRef?.current) {
+        console.log('🎬 Configurando efeito de saída da garrafa (mockup fixado)')
+        
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=300vh', // Inicia após o mockup estar fixado
+          end: '+=340vh', // Duração de 40vh
+          scrub: 0.5,
+          onEnter: () => {
+            console.log('📱 GARRAFA - EFEITO DE SAÍDA INICIADO (300vh) - Mockup fixado')
+            // Verificar se o mockup está fixado antes de animar a garrafa
+            const mockupPinActive = ScrollTrigger.getAll().some(trigger => 
+              trigger.vars.pin === mockupMobileRef.current?.parentElement && trigger.isActive
+            )
+            
+            if (mockupPinActive) {
+              console.log('📱 MOCKUP FIXADO - Aplicando efeito de saída da garrafa')
+              gsap.to(mobileCardRefs.garrafaRef.current, {
+                scale: 0.3,
+                y: -50,
+                rotation: 180,
+                opacity: 0,
+                duration: 0.8,
+                ease: 'back.in(1.7)',
+                onComplete: () => {
+                  console.log('📱 GARRAFA - Saída concluída (mockup fixado)')
+                }
+              })
+            } else {
+              console.log('📱 MOCKUP NÃO FIXADO - Efeito de saída da garrafa adiado')
+            }
+          },
+          onLeave: () => {
+            console.log('📱 GARRAFA - EFEITO DE SAÍDA FINALIZADO (340vh)')
+          },
+          onEnterBack: () => {
+            console.log('📱 GARRAFA - EFEITO DE SAÍDA REVERTENDO (scroll reverso)')
+            // Reverter o efeito apenas se o mockup estiver fixado
+            const mockupPinActive = ScrollTrigger.getAll().some(trigger => 
+              trigger.vars.pin === mockupMobileRef.current?.parentElement && trigger.isActive
+            )
+            
+            if (mockupPinActive) {
+              gsap.to(mobileCardRefs.garrafaRef.current, {
+                scale: 1,
+                y: 0,
+                rotation: 0,
+                opacity: 1,
+                duration: 0.5,
+                ease: 'back.out(1.7)',
+                onComplete: () => {
+                  console.log('📱 GARRAFA - Saída revertida (mockup fixado)')
+                }
+              })
+            }
+          },
+          onLeaveBack: () => {
+            console.log('📱 GARRAFA - EFEITO DE SAÍDA RESETANDO')
+          }
+        })
+      }
+
+      // Timeline independente para mockup mobile com PIN
+      if (isMobile && mockupMobileRef.current) {
+        console.log('🎬 Configurando PIN do mockup mobile')
+        
+        // Pin do mockup mobile de 200vh a 800vh
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=200vh', // Inicia em 200vh
+          end: '+=800vh', // Termina em 800vh
+          pin: mockupMobileRef.current?.parentElement, // Pin no parent element
+          pinSpacing: true, // Mantém o espaçamento como no page2
+          onEnter: () => {
+            console.log('📱 MOCKUP MOBILE PIN - INICIADO (200vh) - Mockup fixado na tela')
+          },
+          onLeave: () => {
+            console.log('📱 MOCKUP MOBILE PIN - FINALIZADO (800vh) - Mockup liberado')
+          },
+          onEnterBack: () => {
+            console.log('📱 MOCKUP MOBILE PIN - REVERTENDO - Mockup será fixado novamente')
+          },
+          onLeaveBack: () => {
+            console.log('📱 MOCKUP MOBILE PIN - RESETANDO - Mockup liberado')
+          }
+        })
+        
+        console.log('✅ PIN do mockup mobile configurado')
+      }
 
       ScrollTrigger.refresh()
     }
