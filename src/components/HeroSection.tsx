@@ -619,8 +619,8 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
         const scrollY = window.scrollY
         const viewportHeight = window.innerHeight
         const scrollVh = (scrollY / viewportHeight) * 100
-        setShowCarousel(scrollVh >= 110 && scrollVh <= 250)
-        console.log('[CAROUSEL DEBUG] scrollY:', scrollY, 'viewportHeight:', viewportHeight, 'scrollVh:', scrollVh, 'showCarousel:', scrollVh >= 110 && scrollVh <= 250)
+        setShowCarousel(scrollVh >= 80 && scrollVh <= 250)
+        console.log('[CAROUSEL DEBUG] scrollY:', scrollY, 'viewportHeight:', viewportHeight, 'scrollVh:', scrollVh, 'showCarousel:', scrollVh >= 80 && scrollVh <= 250)
       }
       window.addEventListener('scroll', handleScroll)
       handleScroll()
@@ -633,6 +633,10 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
 
   useEffect(() => {
     console.log('[CAROUSEL DEBUG] mounted:', mounted, 'isMobile:', isMobile, 'showCarousel:', showCarousel, 'carouselIndex:', carouselIndex)
+    // Resetar para o vídeo 1 sempre que o carrossel for ativado no desktop
+    if (showCarousel && !isMobile) {
+      setCarouselIndex(0);
+    }
     if (showCarousel && !isMobile) {
       if (!intervalRef.current) {
         intervalRef.current = setInterval(() => {
@@ -724,7 +728,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           <span style={{ whiteSpace: 'nowrap' }}>
             <span style={{ color: '#E11BFF', fontWeight: 700 }}>social</span>, <span style={{ color: '#B388FF', fontWeight: 700 }}>visual</span> e
           </span>
-          {typeof window !== 'undefined' && window.innerWidth > 768 && <br />}
+          <br />
           <span style={{ color: '#3D0099', fontWeight: 700 }}>acessível</span>
           <br />
           <span className="hero-title-highlight">
