@@ -571,6 +571,23 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
         });
       }
 
+      // Carousel mobile ativado por ScrollTrigger com valores VH fixos
+      if (isMobile && mockupMobileRef.current) {
+        const carouselTriggerMobile = ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=300vh',
+          end: '+=700vh',
+          onEnter: () => setShowCarouselMobile(true),
+          onEnterBack: () => setShowCarouselMobile(true),
+          onLeave: () => setShowCarouselMobile(false),
+          onLeaveBack: () => setShowCarouselMobile(false),
+        });
+        // Cleanup
+        return () => {
+          carouselTriggerMobile.kill();
+        };
+      }
+
       ScrollTrigger.refresh()
     }
 
@@ -643,17 +660,9 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
   useEffect(() => {
     setMountedMobile(true)
     if (isMobile) {
-      const handleScroll = () => {
-        const scrollY = window.scrollY
-        const viewportHeight = window.innerHeight
-        const scrollVh = (scrollY / viewportHeight) * 100
-        // Carousel mobile: range ajustado para aparecer como no desktop
-        setShowCarouselMobile(scrollVh >= 110 && scrollVh <= 250)
-        // console.log('[CAROUSEL MOBILE DEBUG] scrollY:', scrollY, 'viewportHeight:', viewportHeight, 'scrollVh:', scrollVh, 'showCarouselMobile:', scrollVh >= 110 && scrollVh <= 250)
-      }
-      window.addEventListener('scroll', handleScroll)
-      handleScroll()
-      return () => window.removeEventListener('scroll', handleScroll)
+      // Carousel mobile controlado apenas pelo ScrollTrigger
+      setShowCarouselMobile(false)
+      return undefined
     } else {
       setShowCarouselMobile(false)
       return undefined
@@ -788,8 +797,20 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           id="smartphone-mockup-mobile"
           data-testid="mockup-element-mobile"
           data-device="mobile"
+          style={{
+            position: 'relative',
+            zIndex: 20,
+            overflow: 'visible' // Permite que o conteúdo interno seja alterado
+          }}
         >
-          <div className="mockup-screen relative w-full h-full">
+          <div 
+            className="mockup-screen relative w-full h-full"
+            style={{
+              position: 'relative',
+              zIndex: 10,
+              overflow: 'hidden' // Contém o conteúdo mas permite mudanças
+            }}
+          >
             {/* Carousel de vídeos: só renderiza no mobile e no range correto */}
             {mountedMobile && isMobile && showCarouselMobile ? (
               <AnimatePresence mode="wait">
