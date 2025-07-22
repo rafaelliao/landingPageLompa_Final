@@ -296,8 +296,8 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
         
         ScrollTrigger.create({
           trigger: 'body',
-          start: '+=300vh', // Inicia após o mockup estar fixado
-          end: '+=340vh', // Duração de 40vh
+          start: '+=320vh', // Inicia após o mockup estar fixado
+          end: '+=360vh', // Duração de 40vh
           scrub: 0.5,
           onEnter: () => {
             console.log('📱 GARRAFA - EFEITO DE SAÍDA INICIADO (300vh) - Mockup fixado')
@@ -413,10 +413,10 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       if (isMobile && mockupMobileRef.current) {
         console.log('🎬 Configurando PIN do mockup mobile')
         
-        // Pin do mockup mobile de 200vh a 800vh
+        // Pin do mockup mobile de 300vh a 800vh
         ScrollTrigger.create({
           trigger: 'body',
-          start: '+=200vh', // Inicia em 200vh
+          start: '+=300vh', // Inicia em 300vh
           end: '+=800vh', // Termina em 800vh
           pin: mockupMobileRef.current?.parentElement, // Pin no parent element
           pinSpacing: true, // Mantém o espaçamento como no page2
@@ -582,7 +582,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
         const carouselTriggerMobile = ScrollTrigger.create({
           trigger: 'body',
           start: '+=300vh',
-          end: '+=700vh',
+          end: '+=750vh',
           onEnter: () => setShowCarouselMobile(true),
           onEnterBack: () => setShowCarouselMobile(true),
           onLeave: () => setShowCarouselMobile(false),
@@ -876,16 +876,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
             }}
           />
           
-          {/* Setinha abaixo do mockup mobile */}
-          <div className="arrow-container">
-            <Image
-              src="/setinha.svg"
-              alt="Setinha"
-              width={40}
-              height={40}
-              className="arrow-icon"
-            />
-          </div>
+
         </div>
       </div>
 
