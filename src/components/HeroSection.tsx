@@ -736,19 +736,21 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           <span className="hero-title-highlight">
             <span className="hero-title-bar hero-title-bar-mobile"></span>
             E ELE COMEÇA AQUI!
+            
+            {/* Setinha abaixo do título */}
+            <div className="arrow-container">
+              <Image
+                src="/setinha.svg"
+                alt="Setinha"
+                width={40}
+                height={40}
+                className="arrow-icon"
+              />
+            </div>
           </span>
-          
-          {/* Setinha abaixo do título */}
-          <div className="arrow-container">
-            <Image
-              src="/setinha.svg"
-              alt="Setinha"
-              width={40}
-              height={40}
-              className="arrow-icon"
-            />
-          </div>
+          <br className="only-desktop" />
         </h1>
+        
         {/* Container para cards no mobile - mesma altura do título */}
         <div ref={mobileCardsRef} className="mobile-cards-container">
           <ProductsSection 
@@ -873,19 +875,19 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
               pointerEvents: 'none'
             }}
           />
+          
+          {/* Setinha abaixo do mockup mobile */}
+          <div className="arrow-container">
+            <Image
+              src="/setinha.svg"
+              alt="Setinha"
+              width={40}
+              height={40}
+              className="arrow-icon"
+            />
+          </div>
         </div>
       </div>
-
-      {/* Setinha abaixo do título */}
-      {/* <div className="arrow-container">
-        <Image
-          src="/setinha.svg"
-          alt="Setinha"
-          width={40}
-          height={40}
-          className="arrow-icon"
-        />
-      </div> */}
 
     </section>
   )

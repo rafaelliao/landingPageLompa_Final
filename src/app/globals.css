@@ -231,7 +231,7 @@
     transform: scale(1.1);
   }
 
-  /* Smartphone Mockup */
+    /* Smartphone Mockup */
   .smartphone-mockup {
     width: 288px;
     height: 576px;
@@ -239,13 +239,9 @@
     position: relative;
     z-index: 20;
     order: 3;
-    border: 2.5px solid rgba(225, 27, 255, 0.45); /* Rosa mais intenso */
-    box-shadow: 0 0 0 8px rgba(225, 27, 255, 0.18), 0 2px 32px 0 rgba(225, 27, 255, 0.15);
-    border-radius: 3rem;
-    transition: box-shadow 0.3s, border 0.3s;
   }
-
-  /* Mockup Desktop - referência específica */
+  
+    /* Mockup Desktop - referência específica */
   #smartphone-mockup-desktop {
     width: 336px;
     height: 672px;
@@ -898,6 +894,7 @@
       width: 100%;
       height: 100%;
       margin: 0; /* Removida margem para estar dentro do container */
+      margin-top: 4rem !important; /* Espaçamento do topo */
       z-index: 5; /* Mobile: fica atrás dos cards de produtos (z-index: 50-1002) */
       display: block !important; /* Garantir que está visível no mobile */
       overflow: hidden !important; /* Garantir que não há rolagem interna */
@@ -939,7 +936,7 @@
     .products-section {
       min-height: 120vh; /* Aumentar altura do container */
       /* transform: translateY(-40px); */
-      position: relative;
+    position: relative;
       top: -4rem; /* Mover mais para cima para centralizar com o título */
       z-index: 50; /* Aumentar para ficar acima do mockup mobile (z-index: 5) */
     }
@@ -1624,7 +1621,7 @@
   bottom: -60px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 9999;
+  z-index: 99999;
 }
 
 .arrow-icon {
@@ -1651,8 +1648,16 @@
 
 @media (max-width: 768px) {
   .arrow-container {
-    bottom: -50px;
-    z-index: 9999;
+    position: absolute;
+    top: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    overflow: visible !important;
+  }
+  
+  #smartphone-mockup-mobile {
+    overflow: visible !important;
   }
   
   .arrow-icon {
@@ -1662,10 +1667,32 @@
   
   .hero-container {
     gap: 3rem !important;
+    overflow: visible !important;
+    position: relative;
+    z-index: 1;
   }
   
   .hero-title {
     position: relative;
-    overflow: visible;
+    overflow: visible !important;
   }
-} 
+  
+  .hero-title-highlight {
+    margin-left: -10px;
+  }
+  
+  .hero-section {
+    overflow: visible !important;
+    padding-top: 2rem;
+  }
+  
+
+  
+  .hero-container {
+    padding-top: 2rem;
+  }
+}
+
+
+
+ 

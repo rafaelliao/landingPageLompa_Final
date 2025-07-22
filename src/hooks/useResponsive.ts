@@ -43,12 +43,12 @@ export function useResponsive(): ResponsiveConfig {
     }
     
     return {
-      isMobile: false,
-      isTablet: false,
-      isDesktop: false,
-      screenWidth: 0,
-      screenHeight: 0,
-      breakpoint: 'xs'
+    isMobile: false,
+    isTablet: false,
+    isDesktop: false,
+    screenWidth: 0,
+    screenHeight: 0,
+    breakpoint: 'xs'
     }
   })
 

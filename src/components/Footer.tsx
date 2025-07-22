@@ -72,24 +72,24 @@ export default function Footer({ sections, className }: FooterProps) {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/20 mt-12 pt-8">
-                      <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <p className="text-white/60 text-sm">
-                © 2024 Lompa. Todos os direitos reservados.
-              </p>
-              <div className="flex items-center space-x-6 text-sm">
-                <a href="/privacidade" className="text-white/60 hover:text-white transition-colors">
-                  Política de Privacidade
-                </a>
-                <a href="/termos" className="text-white/60 hover:text-white transition-colors">
-                  Termos de Uso
-                </a>
-                <a href="/cookies" className="text-white/60 hover:text-white transition-colors">
-                  Cookies
-                </a>
-              </div>
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-white/60 text-sm">
+              © 2024 Lompa. Todos os direitos reservados.
+            </p>
+            <div className="flex items-center space-x-6 text-sm">
+              <a href="/privacidade" className="text-white/60 hover:text-white transition-colors">
+                Política de Privacidade
+              </a>
+              <a href="/termos" className="text-white/60 hover:text-white transition-colors">
+                Termos de Uso
+              </a>
+              <a href="/cookies" className="text-white/60 hover:text-white transition-colors">
+                Cookies
+              </a>
             </div>
           </div>
-        </div>
-      </footer>
-    )
-  } 
+          </div>
+      </div>
+    </footer>
+  )
+} 

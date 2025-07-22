@@ -143,8 +143,8 @@ export default function Navigation({ items, className }: NavigationProps) {
               </div>
               <div
                 className="relative z-10 transition-transform duration-300 group-hover:opacity-0"
-              >
-                <HeadphonesIcon className="w-4 h-4" />
+            >
+              <HeadphonesIcon className="w-4 h-4" />
               </div>
             </button>
             <button
@@ -178,14 +178,14 @@ export default function Navigation({ items, className }: NavigationProps) {
       </nav>
 
       {/* Mobile Menu Overlay */}
-      {isOpen && (
-        <>
-          {/* Backdrop */}
+        {isOpen && (
+          <>
+            {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998] lg:hidden"
-            onClick={() => setIsOpen(false)}
-          />
-          
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998] lg:hidden"
+              onClick={() => setIsOpen(false)}
+            />
+            
           {/* Mobile Menu Expanded */}
           <div className="fixed top-0 left-0 right-0 z-[9999] lg:hidden mobile-menu">
             <div
@@ -205,21 +205,21 @@ export default function Navigation({ items, className }: NavigationProps) {
                 </button>
               </div>
 
-              {/* Links de Navegação */}
+                {/* Links de Navegação */}
               <div className="px-4 pb-4">
                 <div className="space-y-2">
-                  {items.map((item) => (
+                    {items.map((item) => (
                     <a
-                      key={item.label}
-                      href={item.href}
+                        key={item.label}
+                        href={item.href}
                       className="block text-white/80 hover:text-white transition-colors duration-200 font-medium py-3 px-4 rounded-xl hover:bg-white/10"
-                      onClick={() => setIsOpen(false)}
-                      target={item.external ? '_blank' : undefined}
-                      rel={item.external ? 'noopener noreferrer' : undefined}
-                    >
-                      {item.label}
+                        onClick={() => setIsOpen(false)}
+                        target={item.external ? '_blank' : undefined}
+                        rel={item.external ? 'noopener noreferrer' : undefined}
+                      >
+                        {item.label}
                     </a>
-                  ))}
+                    ))}
                 </div>
 
                 {/* Botões de Ação */}
@@ -231,22 +231,22 @@ export default function Navigation({ items, className }: NavigationProps) {
                       boxShadow: '0 4px 15px rgba(72, 7, 173, 0.3)'
                     }}
                     onClick={() => {
-                        setIsOpen(false)
-                        console.log('Abrindo acesso vendedor...')
-                      }}
-                    >
-                      Acesso Vendedor
+                      setIsOpen(false)
+                      console.log('Abrindo acesso vendedor...')
+                    }}
+                  >
+                    Acesso Vendedor
                     </button>
-                    
+                  
                     <button
                       className="flex items-center justify-center w-full py-3 button-custom-rounded border-2 border-white/30 text-white hover:border-white/60 hover:bg-white/10 transition-all duration-200 font-semibold"
-                      onClick={() => {
-                        setIsOpen(false)
-                        console.log('Abrindo suporte...')
-                      }}
-                    >
-                      <HeadphonesIcon className="w-4 h-4 mr-2" />
-                      Suporte
+                    onClick={() => {
+                      setIsOpen(false)
+                      console.log('Abrindo suporte...')
+                    }}
+                  >
+                    <HeadphonesIcon className="w-4 h-4 mr-2" />
+                    Suporte
                     </button>
                   </div>
                 </div>
