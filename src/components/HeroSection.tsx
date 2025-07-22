@@ -328,28 +328,33 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           },
           onEnterBack: () => {
             console.log('📱 GARRAFA - EFEITO DE SAÍDA REVERTENDO (scroll reverso)')
-            // Reverter o efeito apenas se o mockup estiver fixado
-            const mockupPinActive = ScrollTrigger.getAll().some(trigger => 
-              trigger.vars.pin === mockupMobileRef.current?.parentElement && trigger.isActive
-            )
-            
-            if (mockupPinActive) {
-              // Reversão da garrafa (efeito)
-              gsap.to(mobileCardRefs.garrafaRef.current, {
-                scale: 1,
-                y: 0,
-                rotation: 0,
-                opacity: 1,
-                duration: 1.0, // duração suavizada
-                ease: 'back.out(1.7)',
-                onComplete: () => {
-                  console.log('📱 GARRAFA - Saída revertida (mockup fixado)')
-                }
-              })
-            }
+            // Reversão da garrafa (efeito) SEM checar o pin
+            gsap.to(mobileCardRefs.garrafaRef.current, {
+              scale: 1,
+              y: 0,
+              rotation: 0,
+              opacity: 1,
+              duration: 1.0, // duração suavizada
+              ease: 'back.out(1.7)',
+              onComplete: () => {
+                console.log('📱 GARRAFA - Saída revertida (scroll reverso)')
+              }
+            })
           },
           onLeaveBack: () => {
-            console.log('📱 GARRAFA - EFEITO DE SAÍDA RESETANDO')
+            console.log('📱 GARRAFA - EFEITO DE SAÍDA RESETANDO (scroll voltou antes do início)')
+            // Reversão da garrafa (efeito) SEM checar o pin
+            gsap.to(mobileCardRefs.garrafaRef.current, {
+              scale: 1,
+              y: 0,
+              rotation: 0,
+              opacity: 1,
+              duration: 1.0, // duração suavizada
+              ease: 'back.out(1.7)',
+              onComplete: () => {
+                console.log('📱 GARRAFA - Saída resetada (scroll voltou antes do início)')
+              }
+            })
           }
         })
       }
@@ -672,6 +677,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
 
   useEffect(() => {
     if (showCarouselMobile && isMobile) {
+      setCarouselIndexMobile(0); // Sempre começa do primeiro vídeo
       if (!intervalRefMobile.current) {
         intervalRefMobile.current = setInterval(() => {
           setCarouselIndexMobile(prev => (prev + 1) % videoList.length)
@@ -756,6 +762,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
                   loop
                   muted
                   playsInline
+                  preload="auto"
                   className="absolute top-0 left-0 w-full h-full object-fill z-10"
                   initial={{ opacity: 0, scale: 1.1 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -822,6 +829,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
                   loop
                   muted
                   playsInline
+                  preload="auto"
                   className="absolute top-0 left-0 w-full h-full object-fill z-10"
                   initial={{ opacity: 0, scale: 1.1 }}
                   animate={{ opacity: 1, scale: 1 }}

@@ -226,8 +226,8 @@
 
   /* Smartphone Mockup */
   .smartphone-mockup {
-    width: 336px;
-    height: 672px;
+    width: 288px;
+    height: 576px;
     margin: 0;
     position: relative;
     z-index: 20;
@@ -244,8 +244,8 @@
 
   /* Mockup Mobile - referência específica */
   #smartphone-mockup-mobile {
-    width: 240px;
-    height: 480px;
+    width: 288px;
+    height: 576px;
     z-index: 5; /* Mobile: fica atrás dos cards de produtos (z-index: 50-1002) */
     display: none; /* Mobile oculto por padrão */
   }
@@ -1199,15 +1199,15 @@
     }
     
     .smartphone-mockup {
-      width: 200px;
-      height: 400px;
+      width: 240px;
+      height: 480px;
       margin: 1.5rem auto 0;
     }
     
     /* Mockup Mobile específico - mobile pequeno */
     #smartphone-mockup-mobile {
-      width: 200px;
-      height: 400px;
+      width: 240px;
+      height: 480px;
       margin: 1.5rem auto 0;
       z-index: 5; /* Mobile: fica atrás dos cards de produtos (z-index: 50-1002) */
       display: block !important; /* Garantir que está visível no mobile pequeno */
