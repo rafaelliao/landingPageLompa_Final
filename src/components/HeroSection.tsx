@@ -637,7 +637,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       if (!intervalRef.current) {
         intervalRef.current = setInterval(() => {
           setCarouselIndex(prev => (prev + 1) % videoList.length)
-        }, 3000)
+        }, 5000) // Alterado de 3000 para 5000ms
         console.log('[CAROUSEL DEBUG] Interval iniciado')
       }
     } else {
@@ -681,7 +681,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       if (!intervalRefMobile.current) {
         intervalRefMobile.current = setInterval(() => {
           setCarouselIndexMobile(prev => (prev + 1) % videoList.length)
-        }, 3000)
+        }, 5000) // Alterado de 3000 para 5000ms
         // console.log('[CAROUSEL MOBILE DEBUG] Interval iniciado')
       }
     } else {
@@ -704,7 +704,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
   return (
     <section className={`hero-section ${className}`}>
       {/* Container centralizado */}
-      <div className="hero-container">
+      <div className="hero-container" style={{ gap: '2.5rem', flexDirection: 'column', alignItems: 'center' }}>
         {/* Ícone centralizado */}
         <div
           ref={centralIconRef}
@@ -717,12 +717,21 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
         <h1
           ref={titleRef}
           className="hero-title hero-title-mobile"
+          style={{ marginBottom: 0 }}
         >
-          O FUTURO <span className="text-accent">DO ECOMMERCE</span> É SOCIAL, VISUAL E<br />
-          ACESSÍVEL. E ELE<br />
-          <span className="text-accent">COMEÇA AQUI</span>
+          O futuro do<br />
+          ecommerce é<br />
+          <span style={{ whiteSpace: 'nowrap' }}>
+            <span style={{ color: '#E11BFF', fontWeight: 700 }}>social</span>, <span style={{ color: '#B388FF', fontWeight: 700 }}>visual</span> e
+          </span>
+          {typeof window !== 'undefined' && window.innerWidth > 768 && <br />}
+          <span style={{ color: '#3D0099', fontWeight: 700 }}>acessível</span>
+          <br />
+          <span className="hero-title-highlight">
+            <span className="hero-title-bar"></span>
+            E ELE COMEÇA AQUI!
+          </span>
         </h1>
-
         {/* Container para cards no mobile - mesma altura do título */}
         <div ref={mobileCardsRef} className="mobile-cards-container">
           <ProductsSection 
@@ -778,25 +787,9 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
               />
             )}
           </div>
-          
-          {/* Elemento invisível fixo no centro do mockup - Desktop */}
-          <div 
-            id="mockup-center-reference-desktop"
-            className="mockup-center-reference"
-            data-device="desktop"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '1px',
-              height: '1px',
-              backgroundColor: 'transparent',
-              zIndex: 1000,
-              pointerEvents: 'none'
-            }}
-          />
         </div>
+        {/* Bloco decorativo deve vir abaixo do conteúdo principal */}
+        {/* Remover a div vazia decorativa logo após o título */}
 
         {/* Splash Screen - Mobile */}
         <div
