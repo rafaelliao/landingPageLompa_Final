@@ -121,7 +121,7 @@
       min-height: 100vh !important;
       justify-content: center !important;
       align-items: center !important;
-      padding-top: clamp(15rem, 22vh, 18rem) !important;
+      padding-top: 6rem !important;
     }
     
     /* Aumentar espaçamento entre título e mockup no desktop */
@@ -1582,5 +1582,15 @@
     #mockup-center-reference-mobile {
       display: block !important; /* Mostrar referência mobile */
     }
+  }
+} 
+
+/* Exibe apenas no desktop, esconde no mobile */
+.only-desktop {
+  display: inline;
+}
+@media (max-width: 768px) {
+  .only-desktop {
+    display: none;
   }
 } 

@@ -728,7 +728,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           <span style={{ whiteSpace: 'nowrap' }}>
             <span style={{ color: '#E11BFF', fontWeight: 700 }}>social</span>, <span style={{ color: '#B388FF', fontWeight: 700 }}>visual</span> e
           </span>
-          <br />
+          {!isMobile && <br />}
           <span style={{ color: '#3D0099', fontWeight: 700 }}>acessível</span>
           <br />
           <span className="hero-title-highlight">
