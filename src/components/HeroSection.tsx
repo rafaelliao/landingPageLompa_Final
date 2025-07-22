@@ -589,6 +589,7 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
       }
 
       ScrollTrigger.refresh()
+      return undefined // Garante que todas as rotas retornem algo
     }
 
     console.log('⏰ Configurando setTimeout para initAnimation')
