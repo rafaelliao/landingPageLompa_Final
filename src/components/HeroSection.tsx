@@ -8,6 +8,7 @@ import ProductsSection from './ProductsSection'
 import { useResponsive } from '../hooks/useResponsive'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
+import Image from 'next/image'
 
 interface HeroSectionProps {
   className?: string
@@ -728,13 +729,25 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
           <span style={{ whiteSpace: 'nowrap' }}>
             <span style={{ color: '#E11BFF', fontWeight: 700 }}>social</span>, <span style={{ color: '#B388FF', fontWeight: 700 }}>visual</span> e
           </span>
-          {!isMobile && <br />}
+          <br className="only-desktop" />
           <span style={{ color: '#3D0099', fontWeight: 700 }}>acessível</span>
-          <br />
+          <br className="only-desktop" />
+          <br className="only-mobile" />
           <span className="hero-title-highlight">
-            <span className="hero-title-bar"></span>
+            <span className="hero-title-bar hero-title-bar-mobile"></span>
             E ELE COMEÇA AQUI!
           </span>
+          
+          {/* Setinha abaixo do título */}
+          <div className="arrow-container">
+            <Image
+              src="/setinha.svg"
+              alt="Setinha"
+              width={40}
+              height={40}
+              className="arrow-icon"
+            />
+          </div>
         </h1>
         {/* Container para cards no mobile - mesma altura do título */}
         <div ref={mobileCardsRef} className="mobile-cards-container">
@@ -863,6 +876,16 @@ const HeroSection = ({ className = '', mobileCardRefs }: HeroSectionProps) => {
         </div>
       </div>
 
+      {/* Setinha abaixo do título */}
+      {/* <div className="arrow-container">
+        <Image
+          src="/setinha.svg"
+          alt="Setinha"
+          width={40}
+          height={40}
+          className="arrow-icon"
+        />
+      </div> */}
 
     </section>
   )
