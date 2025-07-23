@@ -1101,6 +1101,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       return () => window.removeEventListener('scroll', updateCTA);
     } else {
       setCtaVisible(false);
+      return undefined;
     }
   }, [isMobile]);
 
