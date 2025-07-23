@@ -1016,9 +1016,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
   // Novo carousel mobile tipo TikTok
   const mobileVideoList = [
-    '/Garrafa_Reels.mp4',
-    '/bolsa2_reels.mp4',
-    '/parafusadeira_reels.mp4',
+    '/Garrafa_Reels_GIF.gif',
+    '/bolsa_reels_GIF.gif',
+    '/parafusadeira_reels_GIF.gif',
   ];
 
   const [mobileCarouselIndex, setMobileCarouselIndex] = useState(0);
@@ -1465,9 +1465,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                     {mobileVideoList.map((src, i) => {
                       // Associa cada vídeo ao seu frame
                       const frame =
-                        src === '/Garrafa_Reels.mp4' ? '/frame_video1.png' :
-                        src === '/bolsa2_reels.mp4' ? '/frame_bolsa.png' :
-                        src === '/parafusadeira_reels.mp4' ? '/frame_parafusadeira.png' : undefined;
+                        src === '/Garrafa_Reels_GIF.gif' ? '/frame_video1.png' :
+                        src === '/bolsa_reels_GIF.gif' ? '/frame_bolsa.png' :
+                        src === '/parafusadeira_reels_GIF.gif' ? '/frame_parafusadeira.png' : undefined;
                       return i === mobileCarouselIndex ? (
                         <motion.div
                           key={src}
@@ -1486,20 +1486,32 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                             animate={{ opacity: 0 }}
                             transition={{ delay: 0.3, duration: 0.5 }}
                           />
-                          <motion.video
-                            src={src}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            preload="auto"
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 2 }}
-                            initial={{ opacity: 0, y: 100 }}
-                            animate={{ opacity: 1, y: 0, zIndex: 2 }}
-                            exit={{ opacity: 0, y: -100, zIndex: 1 }}
-                            transition={{ duration: 0.6, ease: 'easeInOut' }}
-                            poster={src === '/Garrafa_Reels.mp4' ? '/frame_video1.png' : undefined}
-                          />
+                          {src.endsWith('.gif') ? (
+                            <motion.img
+                              src={src}
+                              alt="GIF do carousel"
+                              style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 2 }}
+                              initial={{ opacity: 0, y: 100 }}
+                              animate={{ opacity: 1, y: 0, zIndex: 2 }}
+                              exit={{ opacity: 0, y: -100, zIndex: 1 }}
+                              transition={{ duration: 0.6, ease: 'easeInOut' }}
+                            />
+                          ) : (
+                            <motion.video
+                              src={src}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              preload="auto"
+                              style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 2 }}
+                              initial={{ opacity: 0, y: 100 }}
+                              animate={{ opacity: 1, y: 0, zIndex: 2 }}
+                              exit={{ opacity: 0, y: -100, zIndex: 1 }}
+                              transition={{ duration: 0.6, ease: 'easeInOut' }}
+                              poster={src === '/Garrafa_Reels.mp4' ? '/frame_video1.png' : undefined}
+                            />
+                          )}
                         </motion.div>
                       ) : null;
                     })}
