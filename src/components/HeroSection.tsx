@@ -166,7 +166,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             // PIN do mockup mobile (mantido em 300-800vh)
             ScrollTrigger.create({
               trigger: 'body',
-              start: '320vh top', // Inicia em 320vh de scroll (ajustado para mockup maior)
+              start: '350vh top', // Inicia em 350vh de scroll (ajustado para mockup mais compacto)
               end: '800vh top',   // Termina em 800vh de scroll
               pin: mockupMobileRef.current, // Pin no próprio mockup
               pinSpacing: true, // Habilitar pinSpacing para criar espaço e evitar sobreposição

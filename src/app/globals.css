@@ -760,7 +760,7 @@
       min-height: auto !important;
       margin: 0 !important;
       align-items: center !important; /* Centralizar elementos */
-      padding-top: clamp(10rem, 15vh, 12rem) !important; /* Restaurar padding-top */
+      padding-top: clamp(10rem, 15vh, 12rem) !important; /* Restaurado valor anterior */
       margin-top: 0 !important;
       position: relative !important;
       top: 0 !important;

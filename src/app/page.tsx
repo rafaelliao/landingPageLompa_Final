@@ -148,7 +148,7 @@ function HomePageContent() {
                      <div style={{ color: '#6C1EB1', fontFamily: 'Inter', fontWeight: 600, fontSize: 16, textAlign: 'center', marginBottom: 6.4 }}>No Lompa, você vê o produto de verdade, na mão de quem está vendendo.</div>
                      <div style={{ color: '#6C1EB1', fontFamily: 'Inter', fontWeight: 400, fontSize: 12, textAlign: 'center', marginBottom: 12.8, lineHeight: '17.6px' }}>
                        <span style={{ fontWeight: 700, color: '#6C1EB1' }}>É FÁCIL, VISUAL E DIRETO!</span><br />
-                       Toque para comprar, pague com segurança<br />e receba em casa.
+                       Toque para comprar, pague com<br />segurança e receba em casa.
                      </div>
                      <button style={{ background: '#442085', color: '#FBF7FF', fontFamily: 'Inter', fontWeight: 600, fontSize: 12.8, border: 'none', borderRadius: 12.8, padding: '14.4px 0', width: '100%', marginTop: 6.4, boxShadow: '0 2px 8px rgba(68,32,133,0.08)', cursor: 'pointer' }}>
                        Quero comprar com segurança

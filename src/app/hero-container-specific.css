@@ -31,7 +31,7 @@
     max-width: 100%;
     gap: 1rem;
     padding: 0 1rem;
-    padding-top: 3rem; /* Evitar corte dos cards */
+    padding-top: 5rem;
     justify-content: flex-start;
     align-items: center;
     min-height: auto;
