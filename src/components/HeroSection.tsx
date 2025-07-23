@@ -1016,7 +1016,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
   // Novo carousel mobile tipo TikTok
   const mobileVideoList = [
-    '/Garrafa_Reels_GIF.gif',
+    '/garrafa_reels_GIF.gif',
     '/bolsa_reels_GIF.gif',
     '/parafusadeira_reels_GIF.gif',
   ];
@@ -1465,7 +1465,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                     {mobileVideoList.map((src, i) => {
                       // Associa cada vídeo ao seu frame
                       const frame =
-                        src === '/Garrafa_Reels_GIF.gif' ? '/frame_video1.png' :
+                        src === '/garrafa_reels_GIF.gif' ? '/frame_video1.png' :
                         src === '/bolsa_reels_GIF.gif' ? '/frame_bolsa.png' :
                         src === '/parafusadeira_reels_GIF.gif' ? '/frame_parafusadeira.png' : undefined;
                       return i === mobileCarouselIndex ? (
