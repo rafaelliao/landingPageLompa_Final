@@ -1031,7 +1031,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         const scrollY = window.scrollY;
         const viewportHeight = window.innerHeight;
         const scrollVh = (scrollY / viewportHeight) * 100;
-        setShowMobileCarousel(scrollVh >= 30 && scrollVh <= 80);
+        setShowMobileCarousel(scrollVh >= 30 && scrollVh <= 100);
       };
       window.addEventListener('scroll', handleScroll);
       handleScroll();
@@ -1149,13 +1149,13 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
       const scrollVh = (scrollY / viewportHeight) * 100;
-      if (scrollVh >= 80 && scrollVh <= 160) {
+      if (scrollVh >= 100 && scrollVh <= 160) {
         // Calcular o centro Y do mockup mobile na tela
         const mockupRect = mockupMobile.getBoundingClientRect();
         const centerY = mockupRect.top + mockupRect.height / 2;
         // Ajustar o botão para o centro do mockup
         gsap.to(ctaBtn, { top: centerY, duration: 0.4, ease: 'power2.out' });
-      } else if (scrollVh < 80) {
+      } else if (scrollVh < 100) {
         // Voltar para a posição original (top fixo)
         gsap.to(ctaBtn, { top: 'calc(50% - 260px)', duration: 0.3, ease: 'power2.out' });
       }
@@ -1252,7 +1252,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         const scrollY = window.scrollY;
         const viewportHeight = window.innerHeight;
         const scrollVh = (scrollY / viewportHeight) * 100;
-        setShowMockupContent(scrollVh > 80);
+        setShowMockupContent(scrollVh > 100);
       };
       window.addEventListener('scroll', handleScroll);
       handleScroll();
