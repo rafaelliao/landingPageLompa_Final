@@ -959,76 +959,45 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     }, 500)
   }, [isMobile]) // Adicionar isMobile como dependência
 
-  // Carousel de vídeos para desktop
-  const [carouselIndex, setCarouselIndex] = useState(0)
-  const [showCarousel, setShowCarousel] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  // Novo carousel desktop tipo TikTok
   const videoList = [
     '/Garrafa_Reels.mp4',
-    '/bolsa_reels_final.mp4',
     '/bolsa2_reels.mp4',
-  ]
+    '/parafusadeira_reels.mp4',
+  ];
 
-  // Novo estado para controlar a pilha de vídeos ativos
-  const [videoStack, setVideoStack] = useState([{ key: 0, index: 0 }])
-
-  // Novo estado para controlar se está em transição
-  const [isTransitioning, setIsTransitioning] = useState(false)
-
-  // Função para avançar o carousel (desktop)
-  const nextVideo = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    const nextIndex = (carouselIndex + 1) % videoList.length;
-    setVideoStack([
-      { key: carouselIndex, index: carouselIndex },
-      { key: nextIndex, index: nextIndex }
-    ]);
-    setTimeout(() => {
-      setCarouselIndex(nextIndex);
-      setVideoStack([{ key: nextIndex, index: nextIndex }]);
-      setIsTransitioning(false);
-    }, 400);
-  }
-
-  // 1. Estados para controlar se o vídeo está pronto
-  const [isVideoReady, setIsVideoReady] = useState(true)
-  const [pendingIndex, setPendingIndex] = useState<number|null>(null)
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [showCarousel, setShowCarousel] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    setMounted(true)
     if (!isMobile) {
       const handleScroll = () => {
-        const scrollY = window.scrollY
-        const viewportHeight = window.innerHeight
-        const scrollVh = (scrollY / viewportHeight) * 100
-        setShowCarousel(scrollVh >= 80 && scrollVh <= 250)
-        console.log('[CAROUSEL DEBUG] scrollY:', scrollY, 'viewportHeight:', viewportHeight, 'scrollVh:', scrollVh, 'showCarousel:', scrollVh >= 80 && scrollVh <= 250)
-      }
-      window.addEventListener('scroll', handleScroll)
-      handleScroll()
-      return () => window.removeEventListener('scroll', handleScroll)
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const scrollVh = (scrollY / viewportHeight) * 100;
+        setShowCarousel(scrollVh >= 80 && scrollVh <= 250);
+      };
+      window.addEventListener('scroll', handleScroll);
+      handleScroll();
+      return () => window.removeEventListener('scroll', handleScroll);
     } else {
-      setShowCarousel(false)
-      return undefined
+      setShowCarousel(false);
+      return undefined;
     }
-  }, [isMobile])
+  }, [isMobile]);
 
-  // No setInterval, só chamar nextVideo/nextVideoMobile se não estiver em transição
   useEffect(() => {
-    if (!isMobile) {
-      if (showCarousel) {
+    if (!isMobile && showCarousel) {
         if (!intervalRef.current) {
           intervalRef.current = setInterval(() => {
-            if (!isTransitioning) nextVideo();
+          setCarouselIndex((prev) => (prev + 1) % videoList.length);
           }, 5000);
         }
       } else {
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
           intervalRef.current = null;
-        }
       }
     }
     return () => {
@@ -1037,18 +1006,65 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         intervalRef.current = null;
       }
     };
-  }, [showCarousel, isMobile, isTransitioning]);
+  }, [showCarousel, isMobile]);
 
-  // 2. Função para trocar o vídeo do carousel DESKTOP
+  // Novo carousel mobile tipo TikTok
+  const mobileVideoList = [
+    '/Garrafa_Reels.mp4',
+    '/bolsa2_reels.mp4',
+    '/parafusadeira_reels.mp4',
+  ];
+
+  const [mobileCarouselIndex, setMobileCarouselIndex] = useState(0);
+  const [showMobileCarousel, setShowMobileCarousel] = useState(false);
+  const mobileIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
-    if (pendingIndex !== null && isVideoReady) {
-      setCarouselIndex(pendingIndex)
-      setPendingIndex(null)
-      setIsVideoReady(false)
+    if (isMobile) {
+      const handleScroll = () => {
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const scrollVh = (scrollY / viewportHeight) * 100;
+        setShowMobileCarousel(scrollVh >= 30 && scrollVh <= 250);
+      };
+      window.addEventListener('scroll', handleScroll);
+      handleScroll();
+      return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      setShowMobileCarousel(false);
+      return undefined;
     }
-  }, [pendingIndex, isVideoReady])
+  }, [isMobile]);
 
-  // Carousel de vídeos para mobile
+  useEffect(() => {
+    if (isMobile && showMobileCarousel) {
+      if (!mobileIntervalRef.current) {
+        mobileIntervalRef.current = setInterval(() => {
+          setMobileCarouselIndex((prev) => (prev + 1) % mobileVideoList.length);
+        }, 5000);
+      }
+    } else {
+      if (mobileIntervalRef.current) {
+        clearInterval(mobileIntervalRef.current);
+        mobileIntervalRef.current = null;
+      }
+    }
+    return () => {
+      if (mobileIntervalRef.current) {
+        clearInterval(mobileIntervalRef.current);
+        mobileIntervalRef.current = null;
+      }
+    };
+  }, [showMobileCarousel, isMobile]);
+
+  // Remover todos os estados, funções, useEffects e JSX relacionados ao carousel desktop
+  // Remover:
+  // - carouselIndex, showCarousel, mounted, intervalRef, videoList, videoStack, isTransitioning, isVideoReady, pendingIndex
+  // - nextVideo
+  // - todos os useEffects do carousel
+  // - bloco JSX do carousel (motion.div, vídeos, etc)
+  //
+  // Deixe o espaço pronto para implementar um novo carousel do zero.
 
 
   return (
@@ -1109,36 +1125,24 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           data-device="desktop"
         >
           <div className="mockup-screen relative w-full h-full" style={{ overflow: 'hidden' }}>
-            {mounted && !isMobile && showCarousel ? (
-              <motion.div
-                animate={{ y: `-${carouselIndex * 100}%` }}
-                transition={{ duration: 0.5, ease: 'easeInOut' }}
-                style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  height: '100%',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-              >
-                {videoList.map((src, i) => (
-                  <video
-                    key={i}
-                    src={src}
+            {!isMobile && showCarousel ? (
+              <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+                <AnimatePresence initial={false}>
+                  <motion.video
+                    key={carouselIndex}
+                    src={videoList[carouselIndex]}
                     autoPlay
                     loop
                     muted
                     playsInline
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover',
-                      flexShrink: 0,
-                      minHeight: '100%'
-                    }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -100, opacity: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
                   />
-                ))}
-              </motion.div>
+                </AnimatePresence>
+              </div>
             ) : (
               <img 
                 src="/Splash_screen.svg" 
@@ -1183,15 +1187,33 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         >
           <div 
             className="mockup-screen relative w-full h-full"
-          style={{ position: 'relative', zIndex: 1, overflow: 'hidden' }}
+            style={{ position: 'relative', zIndex: 1, overflow: 'hidden' }}
           >
-              <img 
-                src="/Splash_screen.svg" 
-                alt="Splash Screen" 
-                className="w-full h-full object-cover z-0"
-              />
+            {isMobile && showMobileCarousel ? (
+              <div className="mobile-carousel-container" style={{ width: '100%', height: '100%' }}>
+                <AnimatePresence initial={false}>
+                  <motion.video
+                    key={mobileCarouselIndex}
+                    src={mobileVideoList[mobileCarouselIndex]}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -100, opacity: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                  />
+                </AnimatePresence>
+              </div>
+            ) : null}
+            <img 
+              src="/Splash_screen.svg" 
+              alt="Splash Screen" 
+              className="w-full h-full object-cover z-0"
+            />
           </div>
-          
           {/* Elemento invisível fixo no centro do mockup - Mobile */}
           <div 
             id="mockup-center-reference-mobile"
