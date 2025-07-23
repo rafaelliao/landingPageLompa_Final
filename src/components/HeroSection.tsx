@@ -1305,6 +1305,21 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     );
   };
 
+  // Ícone de fundo especial na altura de 100vh no mobile
+  const [showLompaFundo, setShowLompaFundo] = useState(false);
+  useEffect(() => {
+    if (!isMobile) return;
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const scrollVh = (scrollY / viewportHeight) * 100;
+      setShowLompaFundo(scrollVh >= 60);
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isMobile]);
+
   return (
     <>
       {/* Pré-carregamento dos vídeos do carousel */}
@@ -1436,7 +1451,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             style={{
               position: 'relative',
               zIndex: 1, // Fica atrás dos cards (z-index: 300) e título (z-index: 200)
-              overflow: 'visible' // Permite que o conteúdo interno seja alterado
+              overflow: 'visible', // Permite que o conteúdo interno seja alterado
             }}
           >
             <div 
@@ -1555,6 +1570,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       {/* Botão CTA Baixar - Mobile via Portal */}
       {isMobile && ctaVisible && <DownloadCTAButton visible={ctaVisible} />}
       {isMobile && showMockupContent && <DownloadIconPortal />}
+      {/* Ícone de fundo especial mobile em 100vh */}
     </>
   )
 }

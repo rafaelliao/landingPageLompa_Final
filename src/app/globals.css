@@ -1617,3 +1617,35 @@
   padding: 8px;
   box-sizing: border-box;
 }
+
+.hero-container,
+.hero-container-mobile {
+  background-image: url('/lompa_fundo_icon.svg');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 96vw;
+  /* Opacidade do SVG controlada no próprio arquivo, se necessário */
+}
+
+/* Transparência leve no background usando ::before */
+.hero-container::before,
+.hero-container-mobile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: inherit;
+  background-repeat: inherit;
+  background-position: inherit;
+  background-size: inherit;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Garantir que o conteúdo fique acima do ::before */
+.hero-container, .hero-container-mobile {
+  position: relative;
+  z-index: 1;
+}

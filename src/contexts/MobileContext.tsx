@@ -1,11 +1,9 @@
 'use client'
 
 import React, { createContext, useContext, ReactNode, useMemo } from 'react'
-import { useResponsive, ResponsiveConfig } from '@/hooks/useResponsive'
+import { useResponsive } from '@/hooks/useResponsive'
 
-interface MobileContextType extends ResponsiveConfig {
-  // Contexto simplificado apenas com responsividade
-}
+type MobileContextType = ReturnType<typeof useResponsive>;
 
 const MobileContext = createContext<MobileContextType | undefined>(undefined)
 
