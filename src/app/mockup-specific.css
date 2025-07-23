@@ -58,7 +58,6 @@
   z-index: 1; /* Mobile: fica atrás dos cards (z-index: 300) e título (z-index: 200) */
   display: none; /* Mobile oculto por padrão */
   border: 2px solid #E321FF;
-  box-shadow: inset 0px 4px 4px #E321FF;
   border-radius: 27px;
   transition: none;
   order: 3; /* Após o título (order: 2) */
@@ -144,7 +143,6 @@
     flex-shrink: 0;
     order: 3; /* Após o título (order: 2) */
     border: 2px solid #E321FF !important;
-    box-shadow: inset 0px 4px 4px #E321FF !important;
     border-radius: 27px !important;
   }
   

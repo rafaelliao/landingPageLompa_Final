@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import Image from 'next/image'
 import Carousel from 'framer-motion-carousel'
+import ReactDOM from 'react-dom'
 
 interface HeroSectionProps {
   className?: string
@@ -1030,7 +1031,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         const scrollY = window.scrollY;
         const viewportHeight = window.innerHeight;
         const scrollVh = (scrollY / viewportHeight) * 100;
-        setShowMobileCarousel(scrollVh >= 30 && scrollVh <= 250);
+        setShowMobileCarousel(scrollVh >= 30 && scrollVh <= 80);
       };
       window.addEventListener('scroll', handleScroll);
       handleScroll();
@@ -1082,6 +1083,225 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     '/bolsa2_reels.mp4',
     '/parafusadeira_reels.mp4',
   ];
+
+  const [ctaVisible, setCtaVisible] = useState(false);
+
+  // Regra de visibilidade do botão CTA
+  useEffect(() => {
+    if (isMobile) {
+      // Controlar visibilidade do botão CTA via ScrollTrigger
+      const updateCTA = () => {
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const scrollVh = (scrollY / viewportHeight) * 100;
+        setCtaVisible(scrollVh >= 30 && scrollVh <= 120);
+      };
+      window.addEventListener('scroll', updateCTA);
+      updateCTA();
+      return () => window.removeEventListener('scroll', updateCTA);
+    } else {
+      setCtaVisible(false);
+    }
+  }, [isMobile]);
+
+  // Efeito de entrada e pulsante do botão CTA
+  useEffect(() => {
+    let pulseTween: gsap.core.Tween | null = null;
+    if (ctaVisible && isMobile) {
+      const ctaBtn = document.getElementById('cta-download-mobile');
+      if (ctaBtn) {
+        gsap.fromTo(
+          ctaBtn,
+          { opacity: 0, y: 36, scale: 0.85, boxShadow: '0 2px 12px rgba(0,0,0,0.08)' },
+          { 
+            opacity: 1, 
+            y: 0, 
+            scale: 1.04, 
+            duration: 0.8, 
+            ease: 'back.out(1.7)',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+            onComplete: () => {
+              gsap.to(ctaBtn, { scale: 1, duration: 0.4, ease: 'power1.out', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', onComplete: () => {
+                // Efeito pulsante CTA sem brilho rosa
+                pulseTween = gsap.to(ctaBtn, {
+                  scale: 1.08,
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                  duration: 0.38,
+                  ease: 'power1.inOut',
+                  yoyo: true,
+                  repeat: -1,
+                  repeatDelay: 1.1
+                });
+              }});
+            }
+          }
+        );
+      }
+    }
+    // Efeito de mover o botão para baixo entre 80vh e 120vh
+    let moveTween: gsap.core.Tween | null = null;
+    const handleScroll = () => {
+      if (!ctaVisible || !isMobile) return;
+      const ctaBtn = document.getElementById('cta-download-mobile');
+      const mockupMobile = document.getElementById('smartphone-mockup-mobile');
+      if (!ctaBtn || !mockupMobile) return;
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const scrollVh = (scrollY / viewportHeight) * 100;
+      if (scrollVh >= 80 && scrollVh <= 120) {
+        // Calcular o centro Y do mockup mobile na tela
+        const mockupRect = mockupMobile.getBoundingClientRect();
+        const centerY = mockupRect.top + mockupRect.height / 2;
+        // Ajustar o botão para o centro do mockup
+        gsap.to(ctaBtn, { top: centerY, duration: 0.4, ease: 'power2.out' });
+      } else if (scrollVh < 80) {
+        // Voltar para a posição original (top fixo)
+        gsap.to(ctaBtn, { top: 'calc(50% - 260px)', duration: 0.3, ease: 'power2.out' });
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    // Cleanup
+    return () => {
+      if (pulseTween) {
+        pulseTween.kill();
+        pulseTween = null;
+      }
+      if (moveTween) {
+        moveTween.kill();
+        moveTween = null;
+      }
+      window.removeEventListener('scroll', handleScroll);
+      const ctaBtn = document.getElementById('cta-download-mobile');
+      if (ctaBtn) {
+        gsap.set(ctaBtn, { scale: 1, opacity: 1, y: 0 });
+      }
+    };
+  }, [ctaVisible, isMobile]);
+
+  // Componente do botão CTA usando portal
+  const DownloadCTAButton = ({ visible }: { visible: boolean }) => {
+    if (typeof window === 'undefined') return null;
+    return ReactDOM.createPortal(
+      <div
+        id="cta-download-mobile"
+        style={{
+          position: 'fixed',
+          left: '50%',
+          top: 'calc(50% - 260px)', // Movido 20px para baixo
+          transform: 'translateX(-50%)',
+          zIndex: 9999,
+          pointerEvents: visible ? 'auto' : 'none',
+          opacity: visible ? 1 : 0,
+          transition: 'opacity 0.3s',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <button
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '18px 24px',
+            gap: '7px',
+            position: 'relative',
+            width: '148px',
+            height: '50px',
+            background: '#E321FF',
+            borderRadius: '18px 0px',
+            border: 'none',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+            cursor: 'pointer',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'Inter',
+              fontStyle: 'normal',
+              fontWeight: 600,
+              fontSize: '12px',
+              lineHeight: '12px',
+              color: '#FBF7FF',
+              // Propriedades experimentais:
+              // @ts-ignore
+              leadingTrim: 'both',
+              // @ts-ignore
+              textEdge: 'cap',
+              flex: 'none',
+              order: 0,
+              flexGrow: 0,
+              display: 'block',
+              textAlign: 'center',
+            }}
+          >
+            Descubra agora!
+          </span>
+        </button>
+      </div>,
+      document.body
+    );
+  };
+
+  const [showMockupContent, setShowMockupContent] = useState(false);
+  useEffect(() => {
+    if (isMobile) {
+      const handleScroll = () => {
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const scrollVh = (scrollY / viewportHeight) * 100;
+        setShowMockupContent(scrollVh > 80);
+      };
+      window.addEventListener('scroll', handleScroll);
+      handleScroll();
+      return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      setShowMockupContent(false);
+    }
+  }, [isMobile]);
+
+  // Ícone de download via portal, posicionado na base do mockup mobile
+  const DownloadIconPortal = () => {
+    const [coords, setCoords] = useState<{left: number, top: number}>({ left: 0, top: 0 });
+    useEffect(() => {
+      if (typeof window === 'undefined') return;
+      const updatePosition = () => {
+        const mockupMobile = document.getElementById('smartphone-mockup-mobile');
+        if (!mockupMobile || !isMobile || !showMockupContent) return;
+        const rect = mockupMobile.getBoundingClientRect();
+        setCoords({
+          left: rect.left + rect.width / 2,
+          top: rect.bottom - 150 // mais para cima
+        });
+      };
+      updatePosition();
+      window.addEventListener('scroll', updatePosition);
+      window.addEventListener('resize', updatePosition);
+      return () => {
+        window.removeEventListener('scroll', updatePosition);
+        window.removeEventListener('resize', updatePosition);
+      };
+    }, [isMobile, showMockupContent]);
+    if (!isMobile || !showMockupContent) return null;
+    return ReactDOM.createPortal(
+      <img
+        src="/download_icon.svg"
+        alt="Download Icon"
+        style={{
+          position: 'fixed',
+          left: coords.left,
+          top: coords.top,
+          transform: 'translate(-50%, 0)',
+          width: 120,
+          height: 120,
+          zIndex: 20000,
+          pointerEvents: 'none',
+        }}
+      />,
+      document.body
+    );
+  };
 
   return (
     <>
@@ -1136,8 +1356,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           {/* Cards Produtos Mobile */}
           <MobileProductsSection />
           
-
-
           {/* Splash Screen - Desktop */}
           <div
             ref={mockupRef}
@@ -1223,6 +1441,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               className="mockup-screen relative w-full h-full"
               style={{ position: 'relative', zIndex: 1, overflow: 'hidden' }}
             >
+              {/* Renderização condicional do conteúdo do mockup mobile */}
               {isMobile && showMobileCarousel ? (
                 <div className="mobile-carousel-container" style={{ width: '100%', height: '100%' }}>
                   <AnimatePresence initial={false}>
@@ -1246,12 +1465,61 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                     )}
                   </AnimatePresence>
                 </div>
-              ) : null}
-              <img 
-                src="/Splash_screen.svg" 
-                alt="Splash Screen" 
-                className="w-full h-full object-cover z-0"
-              />
+              ) : isMobile && showMockupContent ? (
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  zIndex: 1001,
+                  pointerEvents: 'none',
+                }}>
+                  <span style={{
+                    display: 'block',
+                    marginTop: 24,
+                    fontFamily: 'Outfit',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    fontSize: 13,
+                    lineHeight: '13px',
+                    color: '#E321FF',
+                    textAlign: 'center',
+                    letterSpacing: 0.4,
+                    // @ts-ignore
+                    leadingTrim: 'both',
+                    // @ts-ignore
+                    textEdge: 'cap',
+                  }}>
+                    Bem vindo ao Lompa!
+                  </span>
+                  <span style={{
+                    display: 'block',
+                    marginTop: 16,
+                    marginLeft: 12,
+                    marginRight: 12,
+                    fontFamily: 'Outfit',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    fontSize: 18,
+                    lineHeight: '22px',
+                    color: '#FFFFFF',
+                    textAlign: 'center',
+                    letterSpacing: 0.4,
+                    // @ts-ignore
+                    leadingTrim: 'both',
+                    // @ts-ignore
+                    textEdge: 'cap',
+                  }}>
+                    O marketplace<br />brasileiro feito para transformar como as pessoas compram e vendem no digital.
+                  </span>
+                </div>
+              ) : (
+                <img 
+                  src="/Splash_screen.svg" 
+                  alt="Splash Screen" 
+                  className="w-full h-full object-cover z-0"
+                />
+              )}
             </div>
             {/* Elemento invisível fixo no centro do mockup - Mobile */}
             <div 
@@ -1281,6 +1549,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         </div>
 
       </section>
+      {/* Botão CTA Baixar - Mobile via Portal */}
+      {isMobile && ctaVisible && <DownloadCTAButton visible={ctaVisible} />}
+      {isMobile && showMockupContent && <DownloadIconPortal />}
     </>
   )
 }
