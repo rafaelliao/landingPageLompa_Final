@@ -166,7 +166,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             // PIN do mockup mobile (mantido em 300-800vh)
             ScrollTrigger.create({
               trigger: 'body',
-              start: '300vh top', // Inicia em 300vh de scroll
+              start: '320vh top', // Inicia em 320vh de scroll (ajustado para mockup maior)
               end: '800vh top',   // Termina em 800vh de scroll
               pin: mockupMobileRef.current, // Pin no próprio mockup
               pinSpacing: true, // Habilitar pinSpacing para criar espaço e evitar sobreposição
@@ -1460,27 +1460,49 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             >
               {/* Renderização condicional do conteúdo do mockup mobile */}
               {isMobile && showMobileCarousel ? (
-                <div className="mobile-carousel-container" style={{ width: '100%', height: '100%' }}>
+                <div className="mobile-carousel-container" style={{ width: '100%', height: '100%', position: 'relative' }}>
                   <AnimatePresence initial={false}>
-                    {mobileVideoList.map((src, i) =>
-                      i === mobileCarouselIndex ? (
-                        <motion.video
-                          key={i}
-                          src={src}
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          preload="auto"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 2 }}
-                          initial={{ opacity: 0, y: 100 }}
-                          animate={{ opacity: 1, y: 0, zIndex: 2 }}
-                          exit={{ opacity: 0, y: -100, zIndex: 1 }}
-                          transition={{ duration: 0.6, ease: 'easeInOut' }}
-                          poster="/frame_video1.png"
-                        />
-                      ) : null
-                    )}
+                    {mobileVideoList.map((src, i) => {
+                      // Associa cada vídeo ao seu frame
+                      const frame =
+                        src === '/Garrafa_Reels.mp4' ? '/frame_video1.png' :
+                        src === '/bolsa2_reels.mp4' ? '/frame_bolsa.png' :
+                        src === '/parafusadeira_reels.mp4' ? '/frame_parafusadeira.png' : undefined;
+                      return i === mobileCarouselIndex ? (
+                        <motion.div
+                          key={src}
+                          style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
+                          initial={{ opacity: 1 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          {/* Frame sobreposto enquanto o vídeo carrega/transiciona */}
+                          <motion.img
+                            src={frame}
+                            alt="Frame do vídeo"
+                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 3 }}
+                            initial={{ opacity: 1 }}
+                            animate={{ opacity: 0 }}
+                            transition={{ delay: 0.3, duration: 0.5 }}
+                          />
+                          <motion.video
+                            src={src}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            preload="auto"
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 2 }}
+                            initial={{ opacity: 0, y: 100 }}
+                            animate={{ opacity: 1, y: 0, zIndex: 2 }}
+                            exit={{ opacity: 0, y: -100, zIndex: 1 }}
+                            transition={{ duration: 0.6, ease: 'easeInOut' }}
+                            poster={src === '/Garrafa_Reels.mp4' ? '/frame_video1.png' : undefined}
+                          />
+                        </motion.div>
+                      ) : null;
+                    })}
                   </AnimatePresence>
                 </div>
               ) : isMobile && showMockupContent ? (

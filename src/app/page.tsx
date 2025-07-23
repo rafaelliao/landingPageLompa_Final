@@ -119,7 +119,7 @@ function HomePageContent() {
                <div style={{ width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32, minHeight: 1200 }}>
                  {/* Novo card (acima) */}
                  <div style={{
-                   width: 288,
+                   width: 249,
                    maxWidth: '81vw',
                    background: '#fff',
                    borderRadius: 32,
@@ -131,12 +131,12 @@ function HomePageContent() {
                    alignItems: 'center',
                  }}>
                    {/* Imagem de topo (placeholder) */}
-                   <div style={{ width: '100%', height: 189, position: 'relative', overflow: 'hidden' }}>
+                   <div style={{ width: '100%', height: 149, position: 'relative', overflow: 'hidden' }}>
                      <img src="/bolsa_card_central.png" alt="Bolsa Card Central" style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: 32, borderTopRightRadius: 32 }} />
                      <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.5) 80%)' }} />
                      <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 19 }}>
                        <span style={{ color: '#E321FF', fontFamily: 'Outfit, sans-serif', fontWeight: 500, fontSize: 13, marginBottom: 6 }}>Descubra como comprar</span>
-                       <span style={{ color: '#fff', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 17.6, textAlign: 'center', lineHeight: 1.2 }}>Veja vídeos de produtos<br />reais e compre com mais<br />confiança</span>
+                       <span style={{ color: '#fff', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 15, textAlign: 'center', lineHeight: 1.2 }}>Veja vídeos de produtos<br />reais e compre com mais<br />confiança</span>
                      </div>
                    </div>
                    {/* Card branco */}
@@ -151,13 +151,13 @@ function HomePageContent() {
                        Toque para comprar, pague com segurança<br />e receba em casa.
                      </div>
                      <button style={{ background: '#442085', color: '#FBF7FF', fontFamily: 'Inter', fontWeight: 600, fontSize: 12.8, border: 'none', borderRadius: 12.8, padding: '14.4px 0', width: '100%', marginTop: 6.4, boxShadow: '0 2px 8px rgba(68,32,133,0.08)', cursor: 'pointer' }}>
-                       Quero comprar om segurança
+                       Quero comprar com segurança
                      </button>
                    </div>
                  </div>
                  {/* Card anterior (abaixo) */}
                  <div style={{
-                   width: 288,
+                   width: 249,
                    maxWidth: '81vw',
                    background: '#fff',
                    borderRadius: 32,
@@ -169,12 +169,12 @@ function HomePageContent() {
                    alignItems: 'center',
                  }}>
                    {/* Imagem de topo */}
-                   <div style={{ width: '100%', height: 189, background: '#eee', position: 'relative', overflow: 'hidden' }}>
+                   <div style={{ width: '100%', height: 149, position: 'relative', overflow: 'hidden' }}>
                      <img src="/user_card_central.png" alt="Usuário Card Central" style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: 32, borderTopRightRadius: 32 }} />
                      <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.5) 80%)' }} />
                      <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 19 }}>
                        <span style={{ color: '#E321FF', fontFamily: 'Outfit', fontWeight: 500, fontSize: 13, marginBottom: 6 }}>Para quem vende</span>
-                       <span style={{ color: '#fff', fontFamily: 'Outfit', fontWeight: 700, fontSize: 17.6, textAlign: 'center', lineHeight: 1.2 }}>Crie sua loja, grave um vídeo<br />e comece a vender</span>
+                       <span style={{ color: '#fff', fontFamily: 'Outfit', fontWeight: 700, fontSize: 15, textAlign: 'center', lineHeight: 1.2 }}>Crie sua loja, grave um vídeo<br />e comece a vender</span>
                      </div>
                    </div>
                    {/* Card branco */}
