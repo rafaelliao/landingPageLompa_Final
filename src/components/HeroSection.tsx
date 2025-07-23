@@ -1259,6 +1259,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       return () => window.removeEventListener('scroll', handleScroll);
     } else {
       setShowMockupContent(false);
+      return undefined;
     }
   }, [isMobile]);
 
