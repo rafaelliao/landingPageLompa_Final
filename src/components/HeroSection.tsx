@@ -1149,20 +1149,32 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               {!isMobile && showCarousel ? (
                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                   <AnimatePresence initial={false}>
-                    <motion.video
-                      key={carouselIndex}
-                      src={videoList[carouselIndex]}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
-                      initial={{ y: 100, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: -100, opacity: 0 }}
-                      transition={{ duration: 0.6, ease: 'easeInOut' }}
-                      preload="auto"
-                    />
+                    {videoList.map((src, i) =>
+                      i === carouselIndex ? (
+                        <motion.video
+                          key={i}
+                          src={src}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          preload="auto"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            zIndex: 2,
+                          }}
+                          initial={{ opacity: 0, y: 100 }}
+                          animate={{ opacity: 1, y: 0, zIndex: 2 }}
+                          exit={{ opacity: 0, y: -100, zIndex: 1 }}
+                          transition={{ duration: 0.6, ease: 'easeInOut' }}
+                        />
+                      ) : null
+                    )}
                   </AnimatePresence>
                 </div>
               ) : (
@@ -1214,20 +1226,24 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               {isMobile && showMobileCarousel ? (
                 <div className="mobile-carousel-container" style={{ width: '100%', height: '100%' }}>
                   <AnimatePresence initial={false}>
-                    <motion.video
-                      key={mobileCarouselIndex}
-                      src={mobileVideoList[mobileCarouselIndex]}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      initial={{ y: 100, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: -100, opacity: 0 }}
-                      transition={{ duration: 0.6, ease: 'easeInOut' }}
-                      preload="auto"
-                    />
+                    {mobileVideoList.map((src, i) =>
+                      i === mobileCarouselIndex ? (
+                        <motion.video
+                          key={i}
+                          src={src}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          preload="auto"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 2 }}
+                          initial={{ opacity: 0, y: 100 }}
+                          animate={{ opacity: 1, y: 0, zIndex: 2 }}
+                          exit={{ opacity: 0, y: -100, zIndex: 1 }}
+                          transition={{ duration: 0.6, ease: 'easeInOut' }}
+                        />
+                      ) : null
+                    )}
                   </AnimatePresence>
                 </div>
               ) : null}
