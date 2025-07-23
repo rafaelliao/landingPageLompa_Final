@@ -124,16 +124,12 @@
       padding-top: 6rem !important;
     }
     
-    /* Aumentar espaçamento entre título e mockup no desktop */
-    .hero-container {
-      gap: 3rem !important;
-    }
+
     
-    .smartphone-mockup {
-      margin-top: 2rem !important;
-    }
+
   }
 
+  /* ===== HERO CONTAINER - CONFIGURAÇÕES BASE ===== */
   .hero-container {
     width: 100%;
     max-width: 800px;
@@ -151,6 +147,8 @@
     padding-top: 0;
     margin-top: 0;
   }
+
+
 
   .hero-icon {
     display: flex;
@@ -179,8 +177,8 @@
     transform: translateY(0) !important; /* Forçar que a animação funcione */
     will-change: transform !important; /* Otimização para animações */
     transition: none !important; /* Remover transições CSS que possam interferir */
-    z-index: 200; /* Título na frente dos cards */
-    position: relative; /* Necessário para z-index funcionar */
+    z-index: 500 !important; /* Título na frente dos mockups (z-index: 1) e cards */
+    position: relative !important; /* Necessário para z-index funcionar */
   }
 
   .hero-title .hero-title-highlight { font-size: 0.7rem !important; }
@@ -206,6 +204,7 @@
     z-index: 100;
     pointer-events: none;
     width: 130%; /* Aumenta mais a largura total */
+    order: 4; /* Após os mockups (order: 3) */
   }
 
   .text-accent {
@@ -231,107 +230,11 @@
     transform: scale(1.1);
   }
 
-    /* Smartphone Mockup */
-  .smartphone-mockup {
-    width: 288px;
-    height: 576px;
-    margin: 0;
-    position: relative;
-    z-index: 20;
-    order: 3;
-  }
+
   
-    /* Mockup Desktop - referência específica */
-  #smartphone-mockup-desktop {
-    width: 336px;
-    height: 672px;
-    display: block; /* Desktop visível por padrão */
-    border: 2.5px solid rgba(225, 27, 255, 0.45);
-    box-shadow: 0 0 0 8px rgba(225, 27, 255, 0.18), 0 2px 32px 0 rgba(225, 27, 255, 0.15);
-    border-radius: 3rem;
-    transition: box-shadow 0.3s, border 0.3s;
-  }
-
-  /* Mockup Mobile - referência específica */
-  #smartphone-mockup-mobile {
-    width: 288px;
-    height: 576px;
-    z-index: 5; /* Mobile: fica atrás dos cards de produtos (z-index: 50-1002) */
-    display: none; /* Mobile oculto por padrão */
-    border: 2.5px solid rgba(225, 27, 255, 0.45);
-    box-shadow: 0 0 0 8px rgba(225, 27, 255, 0.18), 0 2px 32px 0 rgba(225, 27, 255, 0.15);
-    border-radius: 3rem;
-    transition: box-shadow 0.3s, border 0.3s;
-  }
-
-  /* Ponto de referência dinâmico no centro - Mobile */
-  #mockup-center-reference-mobile {
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 1px !important;
-    height: 1px !important;
-    background-color: transparent !important;
-    z-index: 1000 !important;
-    pointer-events: none !important;
-    display: none; /* Oculto por padrão */
-  }
-
-  /* Ponto de referência dinâmico no centro - Desktop */
-  #mockup-center-reference-desktop {
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 1px !important;
-    height: 1px !important;
-    background-color: transparent !important;
-    z-index: 1000 !important;
-    pointer-events: none !important;
-    display: block; /* Visível por padrão */
-  }
-
-    .mockup-screen {
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    /* backdrop-filter: blur(20px); Removido para otimização */
-    border-radius: 3rem;
-    padding: 0;
-    margin: 0; /* Garantir que não há margem */
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box; /* Garantir que padding não adicione altura */
-    /* Sombras removidas para eliminar contorno indesejado */
-  }
-
-  /* Imagem do mockup - preenchimento completo */
-  .mockup-screen img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block; /* Remove espaços em branco */
-    margin: 0;
-    padding: 0;
-  }
 
 
 
-  .mockup-screen::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, 
-      rgba(72, 7, 173, 0.1) 0%, 
-      rgba(227, 33, 255, 0.1) 50%, 
-      rgba(72, 7, 173, 0.1) 100%);
-    border-radius: 3rem;
-    z-index: -1;
-  }
 
 
 
@@ -488,7 +391,7 @@
   .product-item.-top-68.left-5 {
     top: -70px;
     left: 20px;
-    z-index: 1500; /* Garrafa Stanley - sempre na frente */
+    z-index: 2000; /* Garrafa Stanley - sempre na frente de todos os outros cards */
     transform-origin: center center; /* Garantir que escala a partir do centro */
   }
 
@@ -588,6 +491,41 @@
 
   .product-card-transparent {
     will-change: transform; /* Otimização GPU */
+  }
+  
+  /* Mobile: otimizações específicas para animações */
+  @media (max-width: 768px) {
+    .product-card-transparent {
+      will-change: transform !important; /* Otimização para animações */
+      transform-origin: center center !important; /* Origem da transformação */
+      backface-visibility: hidden !important; /* Evita distorção durante animação */
+    }
+    
+    /* Permitir que GSAP sobrescreva transformações */
+    .product-item {
+      transition: none !important; /* Remover transições CSS que possam interferir */
+    }
+    
+      /* Forçar que as animações GSAP funcionem */
+  .product-item.gsap-animating {
+    transform: none !important; /* Remover transformações CSS durante animação GSAP */
+  }
+  
+  /* Permitir que GSAP sobrescreva todas as transformações */
+  .product-item[style*="transform"] {
+    transition: none !important;
+  }
+  
+  /* Forçar que as animações funcionem no mobile */
+  @media (max-width: 768px) {
+    .product-item {
+      transform: scale(0.84) !important;
+    }
+    
+    .product-item.gsap-animating {
+      transform: none !important;
+    }
+  }
   }
 
   .product-card:hover {
@@ -785,24 +723,22 @@
       overflow: visible !important;
     }
     
-    /* Container para cards no mobile - mesma altura do título */
+    /* Container para cards no mobile - altura limitada */
     .mobile-cards-container {
       display: flex !important;
       align-items: center !important; /* Centralizar verticalmente */
       justify-content: center !important; /* Centralizar horizontalmente */
       position: absolute !important;
-      top: -4rem !important; /* Mover mais para cima */
+      top: 2rem !important; /* Mover para baixo - era -2rem */
       left: 0 !important;
       right: 0 !important;
-      bottom: 0 !important; /* Ocupar toda a altura */
+      height: 20rem !important; /* Altura fixa limitada */
       z-index: 300 !important; /* Z-index maior que o título (200) */
       pointer-events: none !important;
+      order: 4; /* Após os mockups (order: 3) */
     }
     
-    /* Esconder container desktop no mobile */
-    .desktop-cards-container {
-      display: none !important;
-    }
+
     
     .main-layout {
       padding: 0;
@@ -822,24 +758,21 @@
       padding: 0 !important;
       min-height: auto !important;
       margin: 0 !important;
-      align-items: flex-start !important;
-      padding-top: 0 !important;
+      align-items: center !important; /* Centralizar elementos */
+      padding-top: clamp(10rem, 15vh, 12rem) !important; /* Restaurar padding-top */
       margin-top: 0 !important;
       position: relative !important;
       top: 0 !important;
       justify-content: flex-start !important;
       height: auto !important;
       max-height: none !important;
+      display: flex !important;
+      flex-direction: column !important;
     }
     
+    /* Aplicar classe específica para mobile */
     .hero-container {
-      padding: 0 1rem !important;
-      max-width: none;
-      gap: 0.25rem;
-      align-items: center;
-      padding-top: 0 !important;
-      justify-content: flex-start !important;
-      margin-top: 0 !important;
+      composes: hero-container-mobile;
     }
     
     .hero-icon {
@@ -880,64 +813,27 @@
       display: inline;
     }
     
-    .smartphone-mockup {
-      width: 240px;
-      height: 480px;
-      margin: 2rem auto 0;
-    }
+
     
 
 
 
-    /* Mockup Mobile específico */
-    #smartphone-mockup-mobile {
-      width: 100%;
-      height: 100%;
-      margin: 0; /* Removida margem para estar dentro do container */
-      margin-top: 4rem !important; /* Espaçamento do topo */
-      z-index: 5; /* Mobile: fica atrás dos cards de produtos (z-index: 50-1002) */
-      display: block !important; /* Garantir que está visível no mobile */
-      overflow: hidden !important; /* Garantir que não há rolagem interna */
-      position: relative !important; /* Forçar position relative */
-      box-sizing: border-box !important; /* Garantir que padding não adicione altura */
-    }
+
 
     /* Prevenir overflow quando o mockup está pinado */
     .hero-section {
       overflow-x: hidden !important; /* Previne rolagem horizontal */
     }
     
-    /* Mockup Desktop específico */
-    #smartphone-mockup-desktop {
-      width: 336px;
-      height: 672px;
-      margin: 2rem auto 0;
-      display: none !important; /* Garantir que está oculto no mobile */
-    }
+
     
-    /* Ponto de referência dinâmico - Mobile responsivo */
-    #mockup-center-reference-mobile {
-      position: absolute !important;
-      top: 50% !important;
-      left: 50% !important;
-      transform: translate(-50%, -50%) !important;
-      width: 1px !important;
-      height: 1px !important;
-      background-color: transparent !important;
-      z-index: 1000 !important;
-      pointer-events: none !important;
-      display: block !important; /* Garantir que está visível no mobile */
-    }
-    
-    #mockup-center-reference-desktop {
-      display: none !important; /* Garantir que está oculto no mobile */
-    }
+
     
     .products-section {
-      min-height: 120vh; /* Aumentar altura do container */
+      min-height: 80vh; /* Reduzir altura do container */
       /* transform: translateY(-40px); */
     position: relative;
-      top: -4rem; /* Mover mais para cima para centralizar com o título */
+      top: -2rem; /* Reduzir movimento para cima */
       z-index: 50; /* Aumentar para ficar acima do mockup mobile (z-index: 5) */
     }
     
@@ -945,11 +841,15 @@
       transform: scale(0.84);
       position: absolute !important; /* Position absolute restaurado para posicionamento dentro do container */
       z-index: 100 !important; /* Garantir que fique acima do mockup mobile (z-index: 5) */
+      will-change: transform !important; /* Otimização para animações */
+      transform-origin: center center !important; /* Origem da transformação */
     }
     
     .product-card {
       width: 70px;
       height: 84px;
+      will-change: transform !important; /* Otimização para animações */
+      transform-origin: center center !important; /* Origem da transformação */
     }
     
     .icon-image {
@@ -957,13 +857,13 @@
       height: 63px !important;
     }
     
-    /* Coordenadas aplicadas para mobile dentro do container */
+    /* Coordenadas aplicadas para mobile dentro do container - distribuídas melhor */
     
     /* Garrafa Stanley */
     .product-item.top-24.left-2 {
       left: 10px !important;
-      top: 6rem !important;
-      z-index: 1500 !important;
+      top: 2rem !important; /* Reduzido de 6rem para 2rem */
+      z-index: 2000 !important; /* Aumentado para garantir que fique na frente de todos os outros cards */
       /* Otimizações específicas para qualidade da garrafa */
       transform-origin: center center !important;
       will-change: transform !important;
@@ -982,13 +882,13 @@
     /* Urso Pelúcia */
     .product-item.top-40.left-1 {
       left: 5px !important;
-      top: 12rem !important; /* Movido para baixo (era 8rem) */
+      top: 8rem !important; /* Reduzido de 12rem para 8rem */
     }
     
     /* Blusa Creme */
     .product-item.top-24.left-85 {
       left: 85% !important;
-      top: 6rem !important;
+      top: 2rem !important; /* Reduzido de 6rem para 2rem */
       z-index: 1000 !important;
     }
     
@@ -1001,40 +901,40 @@
     
     /* Bolsa */
     .product-item.top-12.left-10 {
-      left: 30px !important; /* Movido levemente para a esquerda (era 40px) */
-      top: 2rem !important; /* Movido mais para cima (era 2.5rem) */
+      left: 30px !important;
+      top: 1rem !important; /* Reduzido de 2rem para 1rem */
     }
     
     /* Câmera Card */
     .product-item.top-24.left-4 {
       left: 15px !important;
-      top: 6rem !important;
+      top: 4rem !important; /* Reduzido de 6rem para 4rem */
       z-index: 1000 !important;
     }
     
     /* Ring Light */
     .product-item.top-8.left-5 {
       left: 20px !important;
-      top: 2rem !important;
+      top: 1rem !important; /* Reduzido de 2rem para 1rem */
       z-index: 1000 !important;
     }
     
     /* Óculos */
     .product-item.top-24.right-0 {
       right: 0px !important;
-      top: 6rem !important;
+      top: 2rem !important; /* Reduzido de 6rem para 2rem */
     }
     
     /* Maquiagem */
     .product-item.top-40.right-1 {
       right: 5px !important;
-      top: 10rem !important;
+      top: 8rem !important; /* Reduzido de 10rem para 8rem */
     }
     
     /* Ventilador */
     .product-item.top-48.right-2 {
       right: 10px !important;
-      top: 12rem !important;
+      top: 10rem !important; /* Reduzido de 12rem para 10rem */
     }
     
     /* Boné */
@@ -1046,21 +946,21 @@
     /* Tenis */
     .product-item.top-48.right-6 {
       right: 15px !important;
-      top: 12rem !important;
+      top: 10rem !important; /* Reduzido de 12rem para 10rem */
       z-index: 1000 !important;
     }
     
     /* Ursinho */
     .product-item.top-40.right-6 {
       right: 24px !important;
-      top: 10rem !important;
+      top: 8rem !important; /* Reduzido de 10rem para 8rem */
       z-index: 1000 !important;
     }
     
     /* Relógio */
     .product-item.top-40.right-5 {
       right: 5px !important;
-      top: 10rem !important;
+      top: 8rem !important; /* Reduzido de 10rem para 8rem */
       z-index: 1000 !important;
     }
     
@@ -1145,15 +1045,9 @@
       padding-top: clamp(9rem, 13vh, 11rem) !important;
     }
     
+    /* Aplicar classe específica para mobile */
     .hero-container {
-      width: 100% !important;
-      max-width: 100% !important;
-      padding: 0 0.5rem !important;
-      margin: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      gap: 0.75rem !important;
+      composes: hero-container-mobile;
     }
     
     .hero-icon {
@@ -1169,10 +1063,7 @@
       text-align: center !important;
     }
     
-    .smartphone-mockup {
-      margin: 1.5rem auto 0 !important;
-      order: 3 !important;
-    }
+
     
     .products-section {
       position: absolute !important;
@@ -1210,40 +1101,9 @@
       display: inline;
     }
     
-    .smartphone-mockup {
-      width: 240px;
-      height: 480px;
-      margin: 1.5rem auto 0;
-      border: 2.5px solid rgba(225, 27, 255, 0.45);
-      box-shadow: 0 0 0 8px rgba(225, 27, 255, 0.18), 0 2px 32px 0 rgba(225, 27, 255, 0.15);
-      border-radius: 3rem;
-    }
+
     
-    /* Mockup Mobile específico - mobile pequeno */
-    #smartphone-mockup-mobile {
-      width: 240px;
-      height: 480px;
-      margin: 1.5rem auto 0;
-      z-index: 5; /* Mobile: fica atrás dos cards de produtos (z-index: 50-1002) */
-      display: block !important; /* Garantir que está visível no mobile pequeno */
-    }
-    
-    /* Mockup Desktop específico - mobile pequeno */
-    #smartphone-mockup-desktop {
-      width: 200px;
-      height: 400px;
-      margin: 1.5rem auto 0;
-      display: none !important; /* Garantir que está oculto no mobile pequeno */
-    }
-    
-    /* Ponto de referência dinâmico - Mobile pequeno */
-    #mockup-center-reference-mobile {
-      display: block !important; /* Garantir que está visível no mobile pequeno */
-    }
-    
-    #mockup-center-reference-desktop {
-      display: none !important; /* Garantir que está oculto no mobile pequeno */
-    }
+
     
     .product-item {
       /* transform: scale(0.7); */
@@ -1287,14 +1147,12 @@
       align-items: center !important;
     }
     
-    /* Aumentar ainda mais o espaçamento entre título e mockup no desktop grande */
+    /* Aplicar classe específica para desktop grande */
     .hero-container {
-      gap: 4rem !important;
+      composes: hero-container-desktop-large;
     }
     
-    .smartphone-mockup {
-      margin-top: 3rem !important;
-    }
+
   }
   
   /* Desktop extra grande - máximo espaçamento */
@@ -1306,14 +1164,12 @@
       align-items: center !important;
     }
     
-    /* Máximo espaçamento entre título e mockup no desktop extra grande */
+    /* Aplicar classe específica para desktop extra grande */
     .hero-container {
-      gap: 5rem !important;
+      composes: hero-container-desktop-extra-large;
     }
     
-    .smartphone-mockup {
-      margin-top: 4rem !important;
-    }
+
   }
 
   @media (min-width: 1024px) {
@@ -1348,8 +1204,9 @@
       padding: 0 0.75rem;
     }
 
+    /* Aplicar classe específica para mobile */
     .hero-container {
-      padding: 0 0.5rem;
+      composes: hero-container-mobile;
     }
 
     .features-container {
@@ -1513,16 +1370,9 @@
       padding-top: clamp(10rem, 15vh, 12rem) !important;
     }
     
-    /* Container do hero */
+    /* Aplicar classe específica para mobile */
     .hero-container {
-      width: 100% !important;
-      max-width: 100% !important;
-      padding: 0 1rem !important;
-      margin: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      gap: 1rem !important;
+      composes: hero-container-mobile;
     }
     
     /* Elementos do hero */
@@ -1541,45 +1391,12 @@
       position: relative !important;
     }
     
-    .smartphone-mockup {
-      margin: 2rem auto 0 !important;
-      order: 3 !important;
-    }
+
     
-    /* Produtos reposicionados */
-    .products-section {
-      position: absolute !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      height: 100% !important;
-      pointer-events: none !important;
-      z-index: 50 !important; /* Aumentar para ficar acima do mockup mobile (z-index: 5) */
-    }
-    
-    .product-item {
-      pointer-events: auto !important;
-    }
+
   }
 
-  /* Media query para mobile - mostrar mockup mobile e ocultar desktop */
-  @media (max-width: 767px) {
-    #smartphone-mockup-desktop {
-      display: none !important; /* Ocultar desktop no mobile */
-    }
-    
-    #smartphone-mockup-mobile {
-      display: block !important; /* Mostrar mobile */
-    }
-    
-    #mockup-center-reference-desktop {
-      display: none !important; /* Ocultar referência desktop */
-    }
-    
-    #mockup-center-reference-mobile {
-      display: block !important; /* Mostrar referência mobile */
-    }
-  }
+
 } 
 
 /* Exibe apenas no desktop, esconde no mobile */
@@ -1649,24 +1466,23 @@
 @media (max-width: 768px) {
   .arrow-container {
     position: absolute;
-    top: 130%;
+    top: 120%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 99999;
     overflow: visible !important;
   }
   
-  #smartphone-mockup-mobile {
-    overflow: visible !important;
-  }
+
   
   .arrow-icon {
     width: 20px !important;
     height: 20px !important;
   }
   
+  /* Aplicar classe específica para desktop */
   .hero-container {
-    gap: 3rem !important;
+    composes: hero-container-desktop;
     overflow: visible !important;
     position: relative;
     z-index: 1;
@@ -1688,11 +1504,115 @@
   
 
   
+
+  
+  /* Forçar espaçamento no hero-container mobile */
+  .hero-container > #smartphone-mockup-mobile {
+    margin-top: 5rem !important; /* Aumentado de 3rem para 5rem */
+  }
+  
+  /* Quando o mockup estiver fixado (pinned), garantir que fique acima de tudo */
+  #smartphone-mockup-mobile.gsap-marker-pin-start {
+    z-index: 9999 !important; /* Z-index muito alto quando fixado */
+    position: fixed !important; /* Posição fixa quando pinado */
+  }
+  
+
+  
+
+  
+
+  
+  /* Aplicar classe específica para mobile */
   .hero-container {
-    padding-top: 2rem;
+    composes: hero-container-mobile;
   }
 }
 
+/* ===== PRODUTOS - MOBILE ===== */
+.mobile-products-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
 
+/* Esconder cards desktop no mobile */
+@media (max-width: 768px) {
+  .desktop-cards-container {
+    display: none !important;
+  }
+  
+  .products-section {
+    display: none !important;
+  }
+}
 
- 
+/* Garantir que cards desktop apareçam apenas no desktop */
+@media (min-width: 769px) {
+  .desktop-cards-container {
+    display: block !important;
+  }
+  
+  .products-section {
+    display: block !important;
+  }
+  
+  .mobile-products-section {
+    display: none !important;
+  }
+}
+
+.mobile-products-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mobile-products-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mobile-product-item {
+  position: absolute;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+/* Garrafa mobile sempre na frente dos outros cards mobile */
+.mobile-garrafa-card {
+  z-index: 100 !important; /* Z-index muito maior que os outros cards mobile (z-index: 10) */
+}
+
+.mobile-product-card {
+  width: 54px; /* 60px - 10% = 54px */
+  height: 72px; /* 80px - 10% = 72px (mantendo proporção 3:4) */
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-product-card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  padding: 8px;
+  box-sizing: border-box;
+}

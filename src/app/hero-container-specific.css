@@ -1,0 +1,41 @@
+/* ===== HERO CONTAINER - CONFIGURAÇÕES ESPECÍFICAS ===== */
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .hero-container-desktop {
+    max-width: 800px;
+    gap: 3rem;
+    padding-top: 0;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+/* Desktop Grande (1200px+) */
+@media (min-width: 1200px) {
+  .hero-container-desktop-large {
+    gap: 4rem;
+  }
+}
+
+/* Desktop Extra Grande (1400px+) */
+@media (min-width: 1400px) {
+  .hero-container-desktop-extra-large {
+    gap: 5rem;
+  }
+}
+
+/* Mobile (768px-) */
+@media (max-width: 768px) {
+  .hero-container-mobile {
+    max-width: 100%;
+    gap: 1rem;
+    padding: 0 1rem;
+    padding-top: 3rem; /* Evitar corte dos cards */
+    justify-content: flex-start;
+    align-items: center;
+    min-height: auto;
+  }
+}
+
+ 

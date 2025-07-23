@@ -9,7 +9,8 @@ import MainLayout from '@/components/MainLayout'
 import HeroSection from '@/components/HeroSection'
 import FeaturesSection from '@/components/FeaturesSection'
 import { MobileProvider } from '@/contexts/MobileContext'
-import { CardRefsProvider, useCardRefs } from '@/contexts/CardRefsContext'
+import { CardRefsProvider } from '@/contexts/CardRefsContext'
+import { useResponsive } from '@/hooks/useResponsive'
 
 import type { NavItem, Feature, FooterSection } from '@/types'
 
@@ -95,8 +96,8 @@ const footerSections: FooterSection[] = [
 ]
 
 function HomePageContent() {
-  const cardRefs = useCardRefs()
-
+  const { isMobile } = useResponsive()
+  
   return (
     <MobileProvider>
       <main className="min-h-screen" style={{ border: 'none', outline: 'none' }}>
@@ -107,12 +108,10 @@ function HomePageContent() {
             <Navigation items={navigationItems} />
         
         {/* Hero Section */}
-        <HeroSection 
-          mobileCardRefs={cardRefs}
-        />
+        <HeroSection />
         
-        {/* Features Section */}
-        <FeaturesSection features={featuresData} />
+        {/* Features Section - Apenas Desktop */}
+        {!isMobile && <FeaturesSection features={featuresData} />}
           
           {/* Pricing Section - Placeholder */}
           <section id="pricing" className="py-20">

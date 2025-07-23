@@ -142,22 +142,7 @@ const allProducts: Product[] = [
   }
 ]
 
-// Cards visíveis apenas na versão mobile (4 de cada lado)
-const mobileVisibleCards = [
-  // GRUPO ESQUERDA - 4 cards
-  'Garrafa Stanley',    // ✅ Garantido - Card principal
-  'Bolsa',              // ✅ Card importante
-  'Blusa Creme',        // ✅ Card com estrela
-  'Urso Pelúcia',       // ✅ Novo card inserido no grupo da esquerda
-  // 'Câmera Card',     // ❌ Removido do mobile
-  // 'Fone',            // ❌ Removido do mobile
-  
-  // GRUPO DIREITA - 4 cards
-  'Boné',               // ✅ Card importante
-  'Óculos',             // ✅ Novo card inserido no grupo da direita
-  'Relógio',            // ✅ Card visual
-  // 'Ventilador'       // ❌ Removido do mobile
-]
+
 
 const ProductsSection = ({ 
   garrafaRef,
@@ -184,7 +169,7 @@ const ProductsSection = ({
   // Filtrar produtos baseado no dispositivo
   const products = useMemo(() => {
     if (isMobile) {
-      return allProducts.filter(product => mobileVisibleCards.includes(product.name))
+      return allProducts // Mostrar todos os produtos no mobile
     } else {
       return allProducts.filter(product => product.name !== 'Creme Icon')
     }

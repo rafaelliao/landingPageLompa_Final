@@ -1,92 +1,70 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
-export interface ResponsiveConfig {
-  isMobile: boolean
-  isTablet: boolean
-  isDesktop: boolean
-  screenWidth: number
-  screenHeight: number
-  breakpoint: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-}
-
-export const BREAKPOINTS = {
-  xs: 0,
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  '2xl': 1536
-} as const
-
-export function useResponsive(): ResponsiveConfig {
-  const [responsiveConfig, setResponsiveConfig] = useState<ResponsiveConfig>(() => {
-    // Inicialização com valores corretos baseados no tamanho atual da janela
-    if (typeof window !== 'undefined') {
-      const width = window.innerWidth
-      const height = window.innerHeight
-      
-      let breakpoint: ResponsiveConfig['breakpoint'] = 'xs'
-      if (width >= BREAKPOINTS['2xl']) breakpoint = '2xl'
-      else if (width >= BREAKPOINTS.xl) breakpoint = 'xl'
-      else if (width >= BREAKPOINTS.lg) breakpoint = 'lg'
-      else if (width >= BREAKPOINTS.md) breakpoint = 'md'
-      else if (width >= BREAKPOINTS.sm) breakpoint = 'sm'
-      
-      return {
-        isMobile: width < BREAKPOINTS.md,
-        isTablet: width >= BREAKPOINTS.md && width < BREAKPOINTS.lg,
-        isDesktop: width >= BREAKPOINTS.lg,
-        screenWidth: width,
-        screenHeight: height,
-        breakpoint
-      }
-    }
-    
-    return {
-    isMobile: false,
-    isTablet: false,
-    isDesktop: false,
-    screenWidth: 0,
-    screenHeight: 0,
-    breakpoint: 'xs'
-    }
-  })
+export const useResponsive = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    const updateResponsiveConfig = () => {
-      const width = window.innerWidth
-      const height = window.innerHeight
+    console.log('📱 useResponsive - useEffect executado');
+    const checkScreenSize = () => {
+      if (typeof window === 'undefined') {
+        console.log('📱 useResponsive - Window não está disponível (SSR)');
+        return;
+      }
+      
+      const width = window.innerWidth;
+      console.log('📱 useResponsive - Window width:', width);
+      console.log('📱 useResponsive - Window existe:', typeof window !== 'undefined');
+      console.log('📱 useResponsive - Window.innerWidth existe:', typeof window.innerWidth !== 'undefined');
+      console.log('📱 useResponsive - Breakpoint mobile (<=768):', width <= 768);
+      console.log('📱 useResponsive - Breakpoint tablet (768-1024):', width > 768 && width <= 1024);
+      console.log('📱 useResponsive - Breakpoint desktop (>1024):', width > 1024);
+      
+      setIsMobile(width <= 768);
+      setIsTablet(width > 768 && width <= 1024);
+      setIsDesktop(width > 1024);
+      
+      console.log('📱 useResponsive - Estados definidos:', { 
+        isMobile: width <= 768, 
+        isTablet: width > 768 && width <= 1024, 
+        isDesktop: width > 1024 
+      });
+    };
 
-      // Determinar breakpoint
-      let breakpoint: ResponsiveConfig['breakpoint'] = 'xs'
-      if (width >= BREAKPOINTS['2xl']) breakpoint = '2xl'
-      else if (width >= BREAKPOINTS.xl) breakpoint = 'xl'
-      else if (width >= BREAKPOINTS.lg) breakpoint = 'lg'
-      else if (width >= BREAKPOINTS.md) breakpoint = 'md'
-      else if (width >= BREAKPOINTS.sm) breakpoint = 'sm'
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
 
-      setResponsiveConfig({
-        isMobile: width < BREAKPOINTS.md,
-        isTablet: width >= BREAKPOINTS.md && width < BREAKPOINTS.lg,
-        isDesktop: width >= BREAKPOINTS.lg,
-        screenWidth: width,
-        screenHeight: height,
-        breakpoint
-      })
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  // Função para obter as classes específicas do hero-container
+  const getHeroContainerClasses = () => {
+    if (isMobile) {
+      return 'hero-container-mobile';
     }
-
-    // Configuração inicial
-    updateResponsiveConfig()
-
-    // Listener para mudanças de tamanho
-    window.addEventListener('resize', updateResponsiveConfig)
-    window.addEventListener('orientationchange', updateResponsiveConfig)
-
-    return () => {
-      window.removeEventListener('resize', updateResponsiveConfig)
-      window.removeEventListener('orientationchange', updateResponsiveConfig)
+    
+    if (isDesktop) {
+      if (window.innerWidth >= 1400) {
+        return 'hero-container-desktop-extra-large';
+      }
+      if (window.innerWidth >= 1200) {
+        return 'hero-container-desktop-large';
+      }
+      return 'hero-container-desktop';
     }
-  }, [])
+    
+    return 'hero-container-desktop'; // Fallback para tablet
+  };
 
-  return responsiveConfig
-} 
+  const result = {
+    isMobile,
+    isTablet,
+    isDesktop,
+    getHeroContainerClasses
+  };
+  
+  console.log('📱 useResponsive - Retornando estados:', result);
+  
+  return result;
+}; 

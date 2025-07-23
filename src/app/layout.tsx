@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import './hero-container-specific.css'
+import './mockup-specific.css'
 import { ScrollMonitor } from '../components/ScrollMonitor'
 
 const inter = Inter({ subsets: ['latin'] })

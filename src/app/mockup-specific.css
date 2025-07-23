@@ -1,0 +1,223 @@
+/* ===== MOCKUP - CONFIGURAÇÕES ESPECÍFICAS ===== */
+
+/* ===== CONFIGURAÇÕES BASE DOS MOCKUPS ===== */
+.mockup-screen {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 27px;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.mockup-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.mockup-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(72, 7, 173, 0.1) 0%, 
+    rgba(227, 33, 255, 0.1) 50%, 
+    rgba(72, 7, 173, 0.1) 100%);
+  border-radius: 27px;
+  z-index: -1;
+}
+
+/* ===== MOCKUP DESKTOP ===== */
+#smartphone-mockup-desktop {
+  width: 336px;
+  height: 672px;
+  display: block; /* Desktop visível por padrão */
+  border: 2px solid #E321FF;
+  box-shadow: inset 0px 4px 4px #E321FF;
+  border-radius: 27px;
+  transition: none;
+  z-index: 1; /* Desktop: fica atrás do título (z-index: 200) */
+  position: relative; /* Necessário para z-index funcionar */
+  order: 3; /* Após o título (order: 2) */
+}
+
+/* ===== MOCKUP MOBILE ===== */
+#smartphone-mockup-mobile {
+  width: 288px;
+  height: 576px;
+  z-index: 1; /* Mobile: fica atrás dos cards (z-index: 300) e título (z-index: 200) */
+  display: none; /* Mobile oculto por padrão */
+  border: 2px solid #E321FF;
+  box-shadow: inset 0px 4px 4px #E321FF;
+  border-radius: 27px;
+  transition: none;
+  order: 3; /* Após o título (order: 2) */
+}
+
+/* ===== PONTOS DE REFERÊNCIA ===== */
+#mockup-center-reference-mobile,
+#mockup-center-reference-desktop {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 1px !important;
+  height: 1px !important;
+  background-color: transparent !important;
+  z-index: 1000 !important;
+  pointer-events: none !important;
+}
+
+#mockup-center-reference-desktop {
+  display: block; /* Visível por padrão no desktop */
+}
+
+#mockup-center-reference-mobile {
+  display: none; /* Oculto por padrão */
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 1px !important;
+  height: 1px !important;
+  background-color: transparent !important;
+  z-index: 1000 !important;
+  pointer-events: none !important;
+}
+
+
+
+/* ===== CONFIGURAÇÕES RESPONSIVAS ===== */
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+  #smartphone-mockup-desktop {
+    width: 336px;
+    height: 672px;
+    margin: 2rem auto 0;
+    order: 3; /* Após o título (order: 2) */
+    border: 2px solid #E321FF !important;
+    box-shadow: inset 0px 4px 4px #E321FF !important;
+    border-radius: 27px !important;
+  }
+  
+  #smartphone-mockup-mobile {
+    display: none !important;
+  }
+  
+  #mockup-center-reference-desktop {
+    display: block !important;
+  }
+  
+  #mockup-center-reference-mobile {
+    display: none !important;
+  }
+  
+
+}
+
+/* Mobile (768px-) */
+@media (max-width: 768px) {
+  #smartphone-mockup-desktop {
+    display: none !important;
+  }
+  
+  #smartphone-mockup-mobile {
+    width: 280px;
+    height: 560px;
+    margin: 0 auto !important;
+    margin-top: 0 !important; /* Reset margin-top pois o container controla */
+    display: block;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    order: 3; /* Após o título (order: 2) */
+    border: 2px solid #E321FF !important;
+    box-shadow: inset 0px 4px 4px #E321FF !important;
+    border-radius: 27px !important;
+  }
+  
+  #mockup-center-reference-desktop {
+    display: none !important;
+  }
+  
+  #mockup-center-reference-mobile {
+    display: block !important;
+  }
+  
+
+}
+
+/* Mobile Pequeno (480px-) */
+@media (max-width: 480px) {
+  #smartphone-mockup-mobile {
+    width: 220px;
+    height: 440px;
+    margin: 1.5rem auto 0;
+    border-radius: 27px !important;
+  }
+}
+
+/* Mobile Extra Pequeno (360px-) */
+@media (max-width: 360px) {
+  #smartphone-mockup-mobile {
+    width: 200px;
+    height: 400px;
+    margin: 1.5rem auto 0;
+    border-radius: 27px !important;
+  }
+}
+
+/* ===== CONFIGURAÇÕES DE VÍDEO ===== */
+#smartphone-mockup-desktop video,
+#smartphone-mockup-mobile video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+}
+
+/* ===== CONFIGURAÇÕES ESPECÍFICAS DE VÍDEO MOBILE ===== */
+@media (max-width: 768px) {
+  #smartphone-mockup-mobile .mockup-screen {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius: 27px !important;
+  }
+  
+  #smartphone-mockup-mobile video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: relative;
+  }
+  
+  #smartphone-mockup-mobile .mockup-screen::before {
+    border-radius: 27px !important;
+  }
+  
+  /* Desktop mockup-screen border-radius */
+  #smartphone-mockup-desktop .mockup-screen {
+    border-radius: 27px !important;
+  }
+  
+  #smartphone-mockup-desktop .mockup-screen::before {
+    border-radius: 27px !important;
+  }
+} 
