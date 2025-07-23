@@ -53,8 +53,8 @@
 
 /* ===== MOCKUP MOBILE ===== */
 #smartphone-mockup-mobile {
-  width: 288px;
-  height: 576px;
+  width: 331.2px;
+  height: 662.4px;
   z-index: 1; /* Mobile: fica atrás dos cards (z-index: 300) e título (z-index: 200) */
   display: none; /* Mobile oculto por padrão */
   border: 2px solid #E321FF;
@@ -132,8 +132,8 @@
   }
   
   #smartphone-mockup-mobile {
-    width: 280px;
-    height: 560px;
+    width: 322px;
+    height: 644px;
     margin: 0 auto !important;
     margin-top: 0 !important; /* Reset margin-top pois o container controla */
     display: block;
@@ -160,8 +160,8 @@
 /* Mobile Pequeno (480px-) */
 @media (max-width: 480px) {
   #smartphone-mockup-mobile {
-    width: 220px;
-    height: 440px;
+    width: 253px;
+    height: 506px;
     margin: 1.5rem auto 0;
     border-radius: 27px !important;
   }
@@ -170,8 +170,8 @@
 /* Mobile Extra Pequeno (360px-) */
 @media (max-width: 360px) {
   #smartphone-mockup-mobile {
-    width: 200px;
-    height: 400px;
+    width: 230px;
+    height: 460px;
     margin: 1.5rem auto 0;
     border-radius: 27px !important;
   }

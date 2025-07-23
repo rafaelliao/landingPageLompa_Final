@@ -119,8 +119,8 @@ function HomePageContent() {
                <div style={{ width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32, minHeight: 1200 }}>
                  {/* Novo card (acima) */}
                  <div style={{
-                   width: 320,
-                   maxWidth: '90vw',
+                   width: 288,
+                   maxWidth: '81vw',
                    background: '#fff',
                    borderRadius: 32,
                    boxShadow: '0 4px 32px rgba(0,0,0,0.08)',
@@ -131,7 +131,7 @@ function HomePageContent() {
                    alignItems: 'center',
                  }}>
                    {/* Imagem de topo (placeholder) */}
-                   <div style={{ width: '100%', height: 210, position: 'relative', overflow: 'hidden' }}>
+                   <div style={{ width: '100%', height: 189, position: 'relative', overflow: 'hidden' }}>
                      <img src="/bolsa_card_central.png" alt="Bolsa Card Central" style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: 32, borderTopRightRadius: 32 }} />
                      <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.5) 80%)' }} />
                      <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 19 }}>
@@ -142,8 +142,8 @@ function HomePageContent() {
                    {/* Card branco */}
                    <div style={{ width: '100%', padding: '25.6px 19.2px 19.2px 19.2px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                      {/* Ícone check */}
-                     <div style={{ width: 32, height: 32, borderRadius: 16, background: '#E321FF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12.8 }}>
-                       <svg width="19.2" height="19.2" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E321FF"/><path d="M7 12.5l3 3 7-7" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                     <div style={{ width: 18, height: 18, borderRadius: 9, background: '#E321FF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12.8 }}>
+                       <svg width="10" height="10" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E321FF"/><path d="M7 12.5l3 3 7-7" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                      </div>
                      <div style={{ color: '#6C1EB1', fontFamily: 'Inter', fontWeight: 600, fontSize: 16, textAlign: 'center', marginBottom: 6.4 }}>No Lompa, você vê o produto de verdade, na mão de quem está vendendo.</div>
                      <div style={{ color: '#6C1EB1', fontFamily: 'Inter', fontWeight: 400, fontSize: 12, textAlign: 'center', marginBottom: 12.8, lineHeight: '17.6px' }}>
@@ -157,8 +157,8 @@ function HomePageContent() {
                  </div>
                  {/* Card anterior (abaixo) */}
                  <div style={{
-                   width: 320,
-                   maxWidth: '90vw',
+                   width: 288,
+                   maxWidth: '81vw',
                    background: '#fff',
                    borderRadius: 32,
                    boxShadow: '0 4px 32px rgba(0,0,0,0.08)',
@@ -169,7 +169,7 @@ function HomePageContent() {
                    alignItems: 'center',
                  }}>
                    {/* Imagem de topo */}
-                   <div style={{ width: '100%', height: 210, background: '#eee', position: 'relative', overflow: 'hidden' }}>
+                   <div style={{ width: '100%', height: 189, background: '#eee', position: 'relative', overflow: 'hidden' }}>
                      <img src="/user_card_central.png" alt="Usuário Card Central" style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: 32, borderTopRightRadius: 32 }} />
                      <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.5) 80%)' }} />
                      <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 19 }}>
@@ -180,8 +180,8 @@ function HomePageContent() {
                    {/* Card branco */}
                    <div style={{ width: '100%', padding: '25.6px 19.2px 19.2px 19.2px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                      {/* Ícone check */}
-                     <div style={{ width: 32, height: 32, borderRadius: 16, background: '#E321FF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12.8 }}>
-                       <svg width="19.2" height="19.2" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E321FF"/><path d="M7 12.5l3 3 7-7" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                     <div style={{ width: 18, height: 18, borderRadius: 9, background: '#E321FF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12.8 }}>
+                       <svg width="10" height="10" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E321FF"/><path d="M7 12.5l3 3 7-7" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                      </div>
                      <div style={{ color: '#5901B0', fontFamily: 'Inter', fontWeight: 600, fontSize: 16, textAlign: 'center', marginBottom: 6.4 }}>Você só precisa do seu celular</div>
                      <div style={{ color: '#5901B0', fontFamily: 'Inter', fontWeight: 400, fontSize: 12, textAlign: 'center', marginBottom: 12.8, lineHeight: '17.6px' }}>

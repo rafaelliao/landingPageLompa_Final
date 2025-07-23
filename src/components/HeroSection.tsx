@@ -1528,7 +1528,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                     // @ts-ignore
                     textEdge: 'cap',
                   }}>
-                    O marketplace<br />brasileiro feito para transformar como as pessoas compram e vendem no digital.
+                    O marketplace<br />brasileiro feito para transformar como<br />as pessoas compram e vendem no digital.
                   </span>
                 </div>
               ) : (
