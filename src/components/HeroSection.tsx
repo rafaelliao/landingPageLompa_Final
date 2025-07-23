@@ -1462,6 +1462,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                           animate={{ opacity: 1, y: 0, zIndex: 2 }}
                           exit={{ opacity: 0, y: -100, zIndex: 1 }}
                           transition={{ duration: 0.6, ease: 'easeInOut' }}
+                          poster="/frame_video1.png"
                         />
                       ) : null
                     )}
