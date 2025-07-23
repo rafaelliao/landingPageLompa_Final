@@ -1094,7 +1094,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         const scrollY = window.scrollY;
         const viewportHeight = window.innerHeight;
         const scrollVh = (scrollY / viewportHeight) * 100;
-        setCtaVisible(scrollVh >= 30 && scrollVh <= 120);
+        setCtaVisible(scrollVh >= 30 && scrollVh <= 160);
       };
       window.addEventListener('scroll', updateCTA);
       updateCTA();
@@ -1149,7 +1149,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
       const scrollVh = (scrollY / viewportHeight) * 100;
-      if (scrollVh >= 80 && scrollVh <= 120) {
+      if (scrollVh >= 80 && scrollVh <= 160) {
         // Calcular o centro Y do mockup mobile na tela
         const mockupRect = mockupMobile.getBoundingClientRect();
         const centerY = mockupRect.top + mockupRect.height / 2;
