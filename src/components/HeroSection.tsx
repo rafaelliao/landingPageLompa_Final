@@ -1008,6 +1008,11 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     };
   }, [showCarousel, isMobile]);
 
+  // Resetar carouselIndex para 0 sempre que showCarousel for ativado (desktop)
+  useEffect(() => {
+    if (showCarousel) setCarouselIndex(0);
+  }, [showCarousel]);
+
   // Novo carousel mobile tipo TikTok
   const mobileVideoList = [
     '/Garrafa_Reels.mp4',
@@ -1057,6 +1062,11 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     };
   }, [showMobileCarousel, isMobile]);
 
+  // Resetar mobileCarouselIndex para 0 sempre que showMobileCarousel for ativado (mobile)
+  useEffect(() => {
+    if (showMobileCarousel) setMobileCarouselIndex(0);
+  }, [showMobileCarousel]);
+
   // Remover todos os estados, funções, useEffects e JSX relacionados ao carousel desktop
   // Remover:
   // - carouselIndex, showCarousel, mounted, intervalRef, videoList, videoStack, isTransitioning, isVideoReady, pendingIndex
@@ -1066,182 +1076,196 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
   //
   // Deixe o espaço pronto para implementar um novo carousel do zero.
 
+  // Pré-carregar vídeos do carousel (desktop e mobile)
+  const allCarouselVideos = [
+    '/Garrafa_Reels.mp4',
+    '/bolsa2_reels.mp4',
+    '/parafusadeira_reels.mp4',
+  ];
 
   return (
-    <section className={`hero-section ${className}`}>
-      {/* Container centralizado */}
-      <div className={`hero-container ${getHeroContainerClasses()}`}>
-        {/* Ícone centralizado */}
-        <div
-          ref={centralIconRef}
-          className="hero-icon"
-        >
-          <LogoIcon size="lg" />
-        </div>
+    <>
+      {/* Pré-carregamento dos vídeos do carousel */}
+      {allCarouselVideos.map((src) => (
+        <video key={src} src={src} preload="auto" style={{ display: 'none' }} />
+      ))}
+      <section className={`hero-section ${className}`}>
+        {/* Container centralizado */}
+        <div className={`hero-container ${getHeroContainerClasses()}`}>
+          {/* Ícone centralizado */}
+          <div
+            ref={centralIconRef}
+            className="hero-icon"
+          >
+            <LogoIcon size="lg" />
+          </div>
 
-        {/* Título centralizado */}
-        <h1
-          ref={titleRef}
-          className="hero-title hero-title-mobile"
-          style={{ marginBottom: 0 }}
-        >
-          O futuro do<br />
-          ecommerce é<br />
-          <span style={{ whiteSpace: 'nowrap' }}>
-            <span style={{ color: '#E11BFF', fontWeight: 700 }}>social</span>, <span style={{ color: '#B388FF', fontWeight: 700 }}>visual</span> e
-          </span>
-          <br className="only-desktop" />
-          <span style={{ color: '#3D0099', fontWeight: 700 }}>acessível</span>
-          <br className="only-desktop" />
-          <br className="only-mobile" />
-          <span className="hero-title-highlight">
-            <span className="hero-title-bar hero-title-bar-mobile"></span>
-            E ELE COMEÇA AQUI!
-            
-            {/* Setinha abaixo do título */}
-            <div className="arrow-container">
-              <Image
-                src="/setinha.svg"
-                alt="Setinha"
-                width={40}
-                height={40}
-                className="arrow-icon"
-              />
-            </div>
-          </span>
-          <br className="only-desktop" />
-        </h1>
-        
-        {/* Cards Produtos Mobile */}
-        <MobileProductsSection />
-        
-
-
-        {/* Splash Screen - Desktop */}
-        <div
-          ref={mockupRef}
-          id="smartphone-mockup-desktop"
-          data-testid="mockup-element-desktop"
-          data-device="desktop"
-        >
-          <div className="mockup-screen relative w-full h-full" style={{ overflow: 'hidden' }}>
-            {!isMobile && showCarousel ? (
-              <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                <AnimatePresence initial={false}>
-                  <motion.video
-                    key={carouselIndex}
-                    src={videoList[carouselIndex]}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
-                    initial={{ y: 100, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -100, opacity: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  />
-                </AnimatePresence>
+          {/* Título centralizado */}
+          <h1
+            ref={titleRef}
+            className="hero-title hero-title-mobile"
+            style={{ marginBottom: 0 }}
+          >
+            O futuro do<br />
+            ecommerce é<br />
+            <span style={{ whiteSpace: 'nowrap' }}>
+              <span style={{ color: '#E11BFF', fontWeight: 700 }}>social</span>, <span style={{ color: '#B388FF', fontWeight: 700 }}>visual</span> e
+            </span>
+            <br className="only-desktop" />
+            <span style={{ color: '#3D0099', fontWeight: 700 }}>acessível</span>
+            <br className="only-desktop" />
+            <br className="only-mobile" />
+            <span className="hero-title-highlight">
+              <span className="hero-title-bar hero-title-bar-mobile"></span>
+              E ELE COMEÇA AQUI!
+              
+              {/* Setinha abaixo do título */}
+              <div className="arrow-container">
+                <Image
+                  src="/setinha.svg"
+                  alt="Setinha"
+                  width={40}
+                  height={40}
+                  className="arrow-icon"
+                />
               </div>
-            ) : (
+            </span>
+            <br className="only-desktop" />
+          </h1>
+          
+          {/* Cards Produtos Mobile */}
+          <MobileProductsSection />
+          
+
+
+          {/* Splash Screen - Desktop */}
+          <div
+            ref={mockupRef}
+            id="smartphone-mockup-desktop"
+            data-testid="mockup-element-desktop"
+            data-device="desktop"
+          >
+            <div className="mockup-screen relative w-full h-full" style={{ overflow: 'hidden' }}>
+              {!isMobile && showCarousel ? (
+                <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+                  <AnimatePresence initial={false}>
+                    <motion.video
+                      key={carouselIndex}
+                      src={videoList[carouselIndex]}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
+                      initial={{ y: 100, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -100, opacity: 0 }}
+                      transition={{ duration: 0.6, ease: 'easeInOut' }}
+                      preload="auto"
+                    />
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <img 
+                  src="/Splash_screen.svg" 
+                  alt="Splash Screen" 
+                  className="w-full h-full object-cover z-0"
+                />
+              )}
+            </div>
+            
+            {/* Elemento invisível fixo no centro do mockup - Desktop */}
+            <div 
+              id="mockup-center-reference-desktop"
+              className="mockup-center-reference"
+              data-device="desktop"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '1px',
+                height: '1px',
+                backgroundColor: 'transparent',
+                zIndex: 1000,
+                pointerEvents: 'none'
+              }}
+            />
+          </div>
+          {/* Bloco decorativo deve vir abaixo do conteúdo principal */}
+          {/* Remover a div vazia decorativa logo após o título */}
+
+          {/* Splash Screen - Mobile */}
+          <div
+            ref={mockupMobileRef}
+            id="smartphone-mockup-mobile"
+            data-testid="mockup-element-mobile"
+            data-device="mobile"
+            style={{
+              position: 'relative',
+              zIndex: 1, // Fica atrás dos cards (z-index: 300) e título (z-index: 200)
+              overflow: 'visible' // Permite que o conteúdo interno seja alterado
+            }}
+          >
+            <div 
+              className="mockup-screen relative w-full h-full"
+              style={{ position: 'relative', zIndex: 1, overflow: 'hidden' }}
+            >
+              {isMobile && showMobileCarousel ? (
+                <div className="mobile-carousel-container" style={{ width: '100%', height: '100%' }}>
+                  <AnimatePresence initial={false}>
+                    <motion.video
+                      key={mobileCarouselIndex}
+                      src={mobileVideoList[mobileCarouselIndex]}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      initial={{ y: 100, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -100, opacity: 0 }}
+                      transition={{ duration: 0.6, ease: 'easeInOut' }}
+                      preload="auto"
+                    />
+                  </AnimatePresence>
+                </div>
+              ) : null}
               <img 
                 src="/Splash_screen.svg" 
                 alt="Splash Screen" 
                 className="w-full h-full object-cover z-0"
               />
-            )}
-          </div>
-          
-          {/* Elemento invisível fixo no centro do mockup - Desktop */}
-          <div 
-            id="mockup-center-reference-desktop"
-            className="mockup-center-reference"
-            data-device="desktop"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '1px',
-              height: '1px',
-              backgroundColor: 'transparent',
-              zIndex: 1000,
-              pointerEvents: 'none'
-            }}
-          />
-        </div>
-        {/* Bloco decorativo deve vir abaixo do conteúdo principal */}
-        {/* Remover a div vazia decorativa logo após o título */}
-
-        {/* Splash Screen - Mobile */}
-        <div
-          ref={mockupMobileRef}
-          id="smartphone-mockup-mobile"
-          data-testid="mockup-element-mobile"
-          data-device="mobile"
-          style={{
-            position: 'relative',
-            zIndex: 1, // Fica atrás dos cards (z-index: 300) e título (z-index: 200)
-            overflow: 'visible' // Permite que o conteúdo interno seja alterado
-          }}
-        >
-          <div 
-            className="mockup-screen relative w-full h-full"
-            style={{ position: 'relative', zIndex: 1, overflow: 'hidden' }}
-          >
-            {isMobile && showMobileCarousel ? (
-              <div className="mobile-carousel-container" style={{ width: '100%', height: '100%' }}>
-                <AnimatePresence initial={false}>
-                  <motion.video
-                    key={mobileCarouselIndex}
-                    src={mobileVideoList[mobileCarouselIndex]}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    initial={{ y: 100, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -100, opacity: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  />
-                </AnimatePresence>
-              </div>
-            ) : null}
-            <img 
-              src="/Splash_screen.svg" 
-              alt="Splash Screen" 
-              className="w-full h-full object-cover z-0"
+            </div>
+            {/* Elemento invisível fixo no centro do mockup - Mobile */}
+            <div 
+              id="mockup-center-reference-mobile"
+              className="mockup-center-reference"
+              data-device="mobile"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '1px',
+                height: '1px',
+                backgroundColor: 'transparent',
+                zIndex: 1000,
+                pointerEvents: 'none'
+              }}
             />
-          </div>
-          {/* Elemento invisível fixo no centro do mockup - Mobile */}
-          <div 
-            id="mockup-center-reference-mobile"
-            className="mockup-center-reference"
-            data-device="mobile"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '1px',
-              height: '1px',
-              backgroundColor: 'transparent',
-              zIndex: 1000,
-              pointerEvents: 'none'
-            }}
-          />
-      </div>
+        </div>
           
 
 
-        {/* Container para cards no desktop - mesma altura do título */}
-        <div ref={desktopCardsRef} className="desktop-cards-container">
-          <ProductsSection />
+          {/* Container para cards no desktop - mesma altura do título */}
+          <div ref={desktopCardsRef} className="desktop-cards-container">
+            <ProductsSection />
+          </div>
         </div>
-      </div>
 
-    </section>
+      </section>
+    </>
   )
 }
 
