@@ -1155,9 +1155,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         const centerY = mockupRect.top + mockupRect.height / 2;
         // Ajustar o botão para o centro do mockup
         gsap.to(ctaBtn, { top: centerY, duration: 0.4, ease: 'power2.out' });
-      } else if (scrollVh < 100) {
-        // Voltar para a posição original (top fixo)
-        gsap.to(ctaBtn, { top: 'calc(50% - 260px)', duration: 0.3, ease: 'power2.out' });
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -1182,13 +1179,22 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
   // Componente do botão CTA usando portal
   const DownloadCTAButton = ({ visible }: { visible: boolean }) => {
     if (typeof window === 'undefined') return null;
+    
+    // Determinar posição inicial baseada no tamanho da tela
+    const getInitialTop = () => {
+      if (window.innerWidth <= 430) {
+        return '8vh'; // Posição mais alta para celulares grandes
+      }
+      return '12vh'; // Posição padrão para outros tamanhos
+    };
+    
     return ReactDOM.createPortal(
       <div
         id="cta-download-mobile"
         style={{
           position: 'fixed',
           left: '50%',
-          top: '12vh', // Mais para cima
+          top: getInitialTop(),
           transform: 'translateX(-50%)',
           zIndex: 9999,
           pointerEvents: visible ? 'auto' : 'none',
