@@ -6,24 +6,24 @@ export const useGSAP = () => {
 
   useEffect(() => {
     if (elementRef.current) {
-      console.log('🎬 useGSAP inicializado (versão simplificada)')
+      (process.env.NODE_ENV !== "production") && console.log('🎬 useGSAP inicializado (versão simplificada)')
     }
   }, [])
 
   const animateIn = () => {
     if (elementRef.current) {
-      console.log('🎬 Animação de entrada (versão simplificada)')
+      (process.env.NODE_ENV !== "production") && console.log('🎬 Animação de entrada (versão simplificada)')
     }
   }
 
   const animateOut = () => {
     if (elementRef.current) {
-      console.log('🎬 Animação de saída (versão simplificada)')
+      (process.env.NODE_ENV !== "production") && console.log('🎬 Animação de saída (versão simplificada)')
     }
   }
 
   const createTimeline = () => {
-    console.log('🎬 Timeline criado (versão simplificada)')
+    (process.env.NODE_ENV !== "production") && console.log('🎬 Timeline criado (versão simplificada)')
     return null
   }
 

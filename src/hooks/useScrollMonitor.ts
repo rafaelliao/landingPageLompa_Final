@@ -16,27 +16,27 @@ export const useScrollMonitor = () => {
       
       // Log otimizado - apenas a cada 50vh para reduzir spam
       if (scrollVH % 50 === 0 && scrollVH > 0) {
-        console.log(`🔄 Scroll: ${scrollVH}vh | Timeline Progress: ${timelineProgress}%`);
+        (process.env.NODE_ENV !== "production") && console.log(`🔄 Scroll: ${scrollVH}vh | Timeline Progress: ${timelineProgress}%`);
       }
       
       // Logs especiais para marcar pontos importantes
       if (scrollVH === 100) {
-        console.log(`🎯 PONTO 100vh | Timeline Progress: ${timelineProgress}%`);
+        (process.env.NODE_ENV !== "production") && console.log(`🎯 PONTO 100vh | Timeline Progress: ${timelineProgress}%`);
       }
       if (scrollVH === 200) {
-        console.log(`🎯 PONTO 200vh | Timeline Progress: ${timelineProgress}%`);
+        (process.env.NODE_ENV !== "production") && console.log(`🎯 PONTO 200vh | Timeline Progress: ${timelineProgress}%`);
       }
       if (scrollVH === 300) {
-        console.log(`🎯 PONTO 300vh | Timeline Progress: ${timelineProgress}%`);
+        (process.env.NODE_ENV !== "production") && console.log(`🎯 PONTO 300vh | Timeline Progress: ${timelineProgress}%`);
       }
       if (scrollVH === 80) {
-        console.log(`🎯 PONTO 80vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE MOBILE!`);
+        (process.env.NODE_ENV !== "production") && console.log(`🎯 PONTO 80vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE MOBILE!`);
       }
       if (scrollVH === 400 && window.innerWidth > 768) {
-        console.log(`🎯 PONTO 400vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE DO TÍTULO DESKTOP!`);
+        (process.env.NODE_ENV !== "production") && console.log(`🎯 PONTO 400vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE DO TÍTULO DESKTOP!`);
       }
       if (scrollVH === 800) {
-        console.log(`🎯 PONTO 800vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE DESKTOP!`);
+        (process.env.NODE_ENV !== "production") && console.log(`🎯 PONTO 800vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE DESKTOP!`);
       }
     };
 
@@ -44,11 +44,11 @@ export const useScrollMonitor = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     
     // Log inicial
-    console.log('🎯 Scroll Monitor ativado! Role a página para ver os dados...');
+    (process.env.NODE_ENV !== "production") && console.log('🎯 Scroll Monitor ativado! Role a página para ver os dados...');
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      console.log('🔚 Scroll Monitor desativado');
+      (process.env.NODE_ENV !== "production") && console.log('🔚 Scroll Monitor desativado');
     };
   }, []);
 }; 
