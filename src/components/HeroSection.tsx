@@ -1188,7 +1188,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         style={{
           position: 'fixed',
           left: '50%',
-          top: 'calc(50% - 260px)', // Movido 20px para baixo
+          top: '12vh', // Mais para cima
           transform: 'translateX(-50%)',
           zIndex: 9999,
           pointerEvents: visible ? 'auto' : 'none',

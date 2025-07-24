@@ -1625,19 +1625,33 @@
   z-index: 1;
 }
 
-.hero-container::before,
-.hero-container-mobile::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('/lompa_fundo_icon2.png');
-  background-repeat: no-repeat;
-  background-position: -80px center;
-  background-size: 96vw;
-  opacity: 0.32 !important;
-  pointer-events: none;
-  z-index: 0;
+/* Fundo especial só no mobile */
+@media (max-width: 768px) {
+  .hero-container::before,
+  .hero-container-mobile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/lompa_fundo_icon2.png');
+    background-repeat: no-repeat;
+    background-position: -80px center;
+    background-size: 96vw;
+    opacity: 0.32 !important;
+    pointer-events: none;
+    z-index: 0;
+    display: block;
+  }
+}
+
+/* Remove o fundo do desktop de forma absoluta */
+@media (min-width: 769px) {
+  .hero-container::before,
+  .hero-container-mobile::before {
+    background-image: none !important;
+    content: none !important;
+    display: none !important;
+  }
 }
