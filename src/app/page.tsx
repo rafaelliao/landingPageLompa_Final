@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
@@ -205,6 +205,7 @@ function AboutCarousel() {
 
 function HomePageContent() {
   const { isMobile } = useResponsive()
+  const [accordion, setAccordion] = useState([true, false, false]);
   
   return (
     <MobileProvider>
@@ -337,36 +338,114 @@ function HomePageContent() {
                   Com o Lompa, você vende online, alcança novos clientes e gerencia tudo em um só lugar.
                 </p>
                 
-                {/* Accordion 1 - Comprador digital (expandido) */}
+                {/* Accordion 1 - Comprador digital */}
                 <div style={{ background: '#F5F5F5', borderRadius: 16, marginBottom: 16, overflow: 'hidden', border: '1px solid rgba(0,0,0,0.1)' }}>
-                  <div style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                  <div
+                    style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                    onClick={() => setAccordion([!accordion[0], false, false])}
+                  >
                     <span style={{ color: '#5901B0', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 16 }}>Comprador digital</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
+                    {accordion[0] ? (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5V19M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    )}
                   </div>
-                  <div style={{ padding: '0 20px 20px 20px', color: '#333', fontFamily: 'Inter', fontWeight: 400, fontSize: 14, lineHeight: 1.6 }}>
+                  <div
+                    style={{
+                      padding: accordion[0] ? '0 20px 20px 20px' : '0 20px',
+                      color: '#333',
+                      fontFamily: 'Inter',
+                      fontWeight: 400,
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      maxHeight: accordion[0] ? 500 : 0,
+                      overflow: 'hidden',
+                      transition: 'max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s',
+                      opacity: accordion[0] ? 1 : 0,
+                      transitionProperty: 'max-height, opacity, padding',
+                      transitionDuration: '0.4s, 0.3s, 0.3s',
+                    }}
+                  >
                     Compre vendo o produto em vídeo — ao vivo ou gravado. Pagamento seguro via gateway próprio e envio pelos Correios com rastreio. E o melhor: se algo der errado, estamos aqui para mediar e garantir sua satisfação.
                   </div>
                 </div>
                 
-                {/* Accordion 2 - Criador independente ou revendedor (colapsado) */}
-                <div style={{ background: '#F5F5F5', borderRadius: 16, marginBottom: 16, border: '1px solid rgba(0,0,0,0.1)' }}>
-                  <div style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                {/* Accordion 2 - Criador independente ou revendedor */}
+                <div style={{ background: '#F5F5F5', borderRadius: 16, marginBottom: 16, border: '1px solid rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+                  <div
+                    style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                    onClick={() => setAccordion([false, !accordion[1], false])}
+                  >
                     <span style={{ color: '#5901B0', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 16 }}>Criador independente ou revendedor</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 5V19M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
+                    {accordion[1] ? (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5V19M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    )}
+                  </div>
+                  <div
+                    style={{
+                      padding: accordion[1] ? '0 20px 20px 20px' : '0 20px',
+                      color: '#333',
+                      fontFamily: 'Inter',
+                      fontWeight: 400,
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      maxHeight: accordion[1] ? 500 : 0,
+                      overflow: 'hidden',
+                      transition: 'max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s',
+                      opacity: accordion[1] ? 1 : 0,
+                      transitionProperty: 'max-height, opacity, padding',
+                      transitionDuration: '0.4s, 0.3s, 0.3s',
+                    }}
+                  >
+                    Venda como criador de conteúdo, influenciador, revendedor ou pequeno empreendedor. Mostre seu produto em vídeo, negocie direto com o cliente e receba pagamentos de forma segura.
                   </div>
                 </div>
                 
-                {/* Accordion 3 - Loja física (colapsado) */}
-                <div style={{ background: '#F5F5F5', borderRadius: 16, marginBottom: 16, border: '1px solid rgba(0,0,0,0.1)' }}>
-                  <div style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                {/* Accordion 3 - Loja física */}
+                <div style={{ background: '#F5F5F5', borderRadius: 16, marginBottom: 16, border: '1px solid rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+                  <div
+                    style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                    onClick={() => setAccordion([false, false, !accordion[2]])}
+                  >
                     <span style={{ color: '#5901B0', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 16 }}>Loja física</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 5V19M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
+                    {accordion[2] ? (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5V19M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    )}
+                  </div>
+                  <div
+                    style={{
+                      padding: accordion[2] ? '0 20px 20px 20px' : '0 20px',
+                      color: '#333',
+                      fontFamily: 'Inter',
+                      fontWeight: 400,
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      maxHeight: accordion[2] ? 500 : 0,
+                      overflow: 'hidden',
+                      transition: 'max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s',
+                      opacity: accordion[2] ? 1 : 0,
+                      transitionProperty: 'max-height, opacity, padding',
+                      transitionDuration: '0.4s, 0.3s, 0.3s',
+                    }}
+                  >
+                    Traga sua loja física para o digital! Alcance novos públicos, mostre seus produtos em vídeo e aumente suas vendas com a credibilidade do Lompa.
                   </div>
                 </div>
               </div>
