@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
@@ -114,9 +114,9 @@ function HomePageContent() {
         {!isMobile && <FeaturesSection features={featuresData} />}
           
           {/* Pricing Section - Placeholder */}
-          <section id="pricing" className="py-6">
+          <section id="cards_central" className={`py-6${isMobile ? ' pb-16 pt-40' : ''}`}>
              {isMobile ? (
-               <div style={{ width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, minHeight: 950 }}>
+               <div style={{ width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32, minHeight: 950 }}>
                  {/* Novo card (acima) */}
                  <div style={{
                    width: 249,
@@ -218,7 +218,7 @@ function HomePageContent() {
           {/* Seção "Quem pode usar o Lompa" - Apenas Mobile */}
           {isMobile && (
             <section className="pt-4 pb-16">
-              <div style={{ padding: '40px 20px', textAlign: 'center' }}>
+              <div style={{ padding: '60px 20px 40px 20px', textAlign: 'center' }}>
                 <div style={{ color: '#E321FF', fontFamily: 'Outfit, sans-serif', fontWeight: 500, fontSize: 14, marginBottom: 8 }}>
                   Quem pode usar o Lompa
                 </div>
@@ -265,18 +265,119 @@ function HomePageContent() {
             </section>
           )}
           
-          {/* About Section - Placeholder */}
-          <section id="about" className="py-20 bg-white/5">
+          {/* About Section - Comparativo Marketplace com Carousel Automático */}
+          <section id="about" className="py-20">
             <div className="main-container text-center">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-                Sobre a Lompa
-              </h2>
-              <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-                Somos uma empresa inovadora focada em criar soluções digitais que transformam negócios.
-              </p>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 max-w-md mx-auto">
-                <p className="text-white/80 text-base">Componente Sobre em desenvolvimento...</p>
+              <div style={{ color: '#E321FF', fontFamily: 'Outfit, sans-serif', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
+                Por que o Lompa é diferente?
               </div>
+              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 36, color: '#fff', marginBottom: 8, lineHeight: 1.1 }}>
+                Não é só mais um marketplace
+              </h2>
+              <div style={{ color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 16, opacity: 0.8, marginBottom: 40 }}>
+                É a vitrine digital do Brasil real, com vídeo, voz e confiança.
+              </div>
+              {/* Carousel automático */}
+              {(() => {
+                const carouselRef = useRef<HTMLDivElement>(null);
+                const cardRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+                useEffect(() => {
+                  let index = 0;
+                  const interval = setInterval(() => {
+                    index = (index + 1) % 2;
+                    const card = cardRefs[index].current;
+                    if (card && carouselRef.current) {
+                      card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    }
+                  }, 4000);
+                  return () => clearInterval(interval);
+                }, []);
+                return (
+                  <div
+                    ref={carouselRef}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      gap: 24,
+                      justifyContent: 'flex-start',
+                      alignItems: 'stretch',
+                      overflowX: 'auto',
+                      padding: '0 16px',
+                      scrollSnapType: 'x mandatory',
+                      WebkitOverflowScrolling: 'touch',
+                      margin: '0 -16px',
+                      width: '100vw',
+                      maxWidth: '100vw',
+                      boxSizing: 'border-box',
+                      scrollBehavior: 'smooth',
+                      touchAction: 'pan-x',
+                    }}
+                  >
+                    {/* Card Lompa */}
+                    <div
+                      ref={cardRefs[1]}
+                      style={{
+                        background: 'linear-gradient(135deg, #7B2FF2 0%, #F357A8 100%)',
+                        borderRadius: 32,
+                        minWidth: 320,
+                        maxWidth: 360,
+                        width: '80vw',
+                        boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+                        padding: '40px 32px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        scrollSnapAlign: 'center',
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: 32 }}>
+                        <img src="/logo.svg" alt="Lompa Logo" style={{ height: 32 }} />
+                      </div>
+                      <ul style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, color: '#fff', listStyle: 'none', padding: 0, margin: 0 }}>
+                        <li>✓ Feed de vídeos curtos</li>
+                        <li>✓ Cadastro sem CNPJ</li>
+                        <li>✓ Pagamento direto no app</li>
+                        <li>✓ Taxas acessíveis</li>
+                        <li>✓ Foco em pequenos vendedores</li>
+                        <li>✓ Suporte via WhatsApp</li>
+                        <li>✓ App leve e 100% mobile</li>
+                        <li>✓ Inclusão digital real</li>
+                      </ul>
+                    </div>
+                    {/* Card Outros Marketplaces */}
+                    <div
+                      ref={cardRefs[0]}
+                      style={{
+                        background: '#fff',
+                        borderRadius: 32,
+                        minWidth: 320,
+                        maxWidth: 360,
+                        width: '80vw',
+                        boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+                        padding: '40px 32px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        scrollSnapAlign: 'center',
+                      }}
+                    >
+                      <div style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, color: '#1A1447', marginBottom: 16, textAlign: 'center', width: '100%' }}>
+                        Outros<br />Marketplaces
+                      </div>
+                      <ul style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, color: '#1A1447', listStyle: 'none', padding: 0, margin: 0 }}>
+                        <li>✗ Feed de vídeos curtos</li>
+                        <li>✗ Cadastro sem CNPJ</li>
+                        <li>✗ Pagamento direto no app</li>
+                        <li>✗ Taxas acessíveis</li>
+                        <li>✗ Foco em pequenos vendedores</li>
+                        <li>✗ Suporte via WhatsApp</li>
+                        <li>✗ App leve e 100% mobile</li>
+                        <li>✗ Inclusão digital real</li>
+                      </ul>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </section>
           
