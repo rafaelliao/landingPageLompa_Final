@@ -14,29 +14,29 @@ interface FooterProps {
 export default function Footer({ sections, className }: FooterProps) {
   return (
     <footer className={cn('bg-black/20 backdrop-blur-sm border-t border-white/20 text-white', className)}>
-      <div className="container-custom py-16">
+      <div className="container-custom py-16 px-4 md:px-8">
         <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
           {/* Brand Section */}
-          <div className="lg:col-span-1">
-            <div className="mb-6">
+          <div className="lg:col-span-1 text-center">
+            <div className="mb-6 flex justify-center">
               <Logo size="md" />
             </div>
-                        <p className="text-white/70 mb-6 leading-relaxed">
-              Transformando ideias em experiências digitais incríveis. 
-              Criamos soluções inovadoras que impulsionam seu negócio.
+            <p className="text-white/70 mb-6 leading-relaxed text-center">
+              Lompa Marketplace é o primeiro marketplace social de vídeos curtos do Brasil. 
+              Feito para conectar quem vende com quem compra, de forma simples, visual e acessível.
             </p>
             
             {/* Contact Info */}
             <div className="space-y-3">
-              <div className="flex items-center space-x-3 text-white/70">
+              <div className="flex items-center justify-center space-x-3 text-white/70">
                 <Mail className="w-4 h-4" />
                 <span>contato@lompa.com</span>
               </div>
-              <div className="flex items-center space-x-3 text-white/70">
+              <div className="flex items-center justify-center space-x-3 text-white/70">
                 <Phone className="w-4 h-4" />
                 <span>+55 (11) 99999-9999</span>
               </div>
-              <div className="flex items-center space-x-3 text-white/70">
+              <div className="flex items-center justify-center space-x-3 text-white/70">
                 <MapPin className="w-4 h-4" />
                 <span>São Paulo, SP - Brasil</span>
               </div>

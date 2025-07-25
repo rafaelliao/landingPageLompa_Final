@@ -143,7 +143,7 @@ function AboutCarousel() {
         ref={cardRefs[1]}
         style={{
           background: 'linear-gradient(135deg, #7B2FF2 0%, #F357A8 100%)',
-          borderRadius: 32,
+          borderRadius: '32px 0px 32px 0px', // Removido arredondamento superior direito e inferior esquerdo
           minWidth: 320,
           maxWidth: 360,
           width: '80vw',
@@ -174,7 +174,7 @@ function AboutCarousel() {
         ref={cardRefs[0]}
         style={{
           background: '#fff',
-          borderRadius: 32,
+          borderRadius: '32px 0px 32px 0px', // Removido arredondamento superior direito e inferior esquerdo
           minWidth: 320,
           maxWidth: 360,
           width: '80vw',
@@ -255,10 +255,37 @@ function HomePageContent() {
                       pointerEvents: 'none',
                     }}
                   />
+                  {/* Ícones sobrepostos para o segundo card central */}
+                  <img
+                    src="/blusa_icon.png"
+                    alt="Blusa Icon"
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(120px + 495px)', // movido um pouco para baixo
+                      left: 'calc(50vw - 135px)', // movido um pouco para a esquerda
+                      width: 70,
+                      zIndex: 9999,
+                      filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.18))',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                  <img
+                    src="/lego_icon.png"
+                    alt="Lego Icon"
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(120px + 750px)', // movido 250px para baixo
+                      right: 'calc(50vw - 155px)', // movido mais 15px para a direita
+                      width: 60,
+                      zIndex: 9999,
+                      filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.18))',
+                      pointerEvents: 'none',
+                    }}
+                  />
                 </>
               )}
              {isMobile ? (
-               <div style={{ width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32, minHeight: 950 }}>
+               <div style={{ width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32, minHeight: 950, position: 'relative' }}>
                  {/* Novo card (acima) */}
                  <div style={{
                    width: 249,
@@ -322,7 +349,10 @@ function HomePageContent() {
                    flexDirection: 'column',
                    alignItems: 'center',
                    backdropFilter: 'blur(10px)',
+                   position: 'relative',
                  }}>
+                   {/* Div superior para os ícones blusa_icon e lego_icon */}
+                   {/* Espaço reservado removido, não há div para ícones, apenas na section */}
                    {/* Imagem de topo */}
                    <div style={{ width: '100%', height: 149, position: 'relative', overflow: 'hidden' }}>
                      <img src="/user_card_central.png" alt="Usuário Card Central" style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: 32, borderTopRightRadius: 32 }} />
@@ -513,16 +543,18 @@ function HomePageContent() {
             {isMobile ? (
               <>
                 <div 
-                  className="w-full h-full bg-cover bg-center"
-                  style={{ 
-                    backgroundImage: 'url(/mockup_multi.png)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    opacity: 0.8,
-                    height: '100%',
-                    width: '100%'
-                  }}
+                   className="w-full h-full bg-cover bg-center"
+                    style={{ 
+                      backgroundImage: 'url(/mockup_multi.png)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                      opacity: 0.8,
+                      height: '100%',
+                      width: '100%',
+                      position: 'relative',
+                      left: -40
+                    }}
                 />
                                  {/* Conteúdo sobreposto à imagem - Apenas Mobile */}
                  <div style={{position: 'absolute', top: 0, left: 0, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10, paddingTop: 24}}>
