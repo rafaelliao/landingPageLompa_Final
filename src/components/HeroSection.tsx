@@ -987,6 +987,21 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     };
   }, [ctaVisible, isMobile]);
 
+  // Função para detectar plataforma mobile
+  const detectMobilePlatform = () => {
+    if (typeof window === 'undefined') return 'unknown';
+    
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    
+    if (/android/.test(userAgent)) {
+      return 'android';
+    } else if (/iphone|ipad|ipod/.test(userAgent)) {
+      return 'ios';
+    }
+    
+    return 'unknown';
+  };
+
   // Componente do botão CTA usando portal
   const DownloadCTAButton = ({ visible }: { visible: boolean }) => {
     if (typeof window === 'undefined') return null;
@@ -997,6 +1012,25 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         return '8vh'; // Posição mais alta para celulares grandes
       }
       return '12vh'; // Posição padrão para outros tamanhos
+    };
+
+    // Função para obter o link de download correto
+    const getDownloadLink = () => {
+      const platform = detectMobilePlatform();
+      
+      if (platform === 'android') {
+        return 'https://play.google.com/store/apps/details?id=com.app.lompamarketplace'; // Link do Google Play
+      } else if (platform === 'ios') {
+        return 'https://apps.apple.com/in/app/lompa/id6742741600'; // Link da App Store
+      }
+      
+      // Fallback para desktop ou plataforma desconhecida
+      return 'https://lompa.com.br/download'; // Link genérico
+    };
+
+    const handleDownloadClick = () => {
+      const downloadLink = getDownloadLink();
+      window.open(downloadLink, '_blank');
     };
     
     return ReactDOM.createPortal(
@@ -1016,24 +1050,25 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           alignItems: 'center',
         }}
       >
-        <button
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '18px 24px',
-            gap: '7px',
-            position: 'relative',
-            width: '148px',
-            height: '50px',
-            background: '#E321FF',
-            borderRadius: '18px 0px',
-            border: 'none',
-            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-            cursor: 'pointer',
-          }}
-        >
+                 <button
+           onClick={handleDownloadClick}
+           style={{
+             display: 'flex',
+             flexDirection: 'row',
+             justifyContent: 'center',
+             alignItems: 'center',
+             padding: '18px 24px',
+             gap: '7px',
+             position: 'relative',
+             width: '148px',
+             height: '50px',
+             background: '#E321FF',
+             borderRadius: '18px 0px',
+             border: 'none',
+             boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+             cursor: 'pointer',
+           }}
+         >
           <span
             style={{
               fontFamily: 'Inter',
