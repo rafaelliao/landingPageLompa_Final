@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom';
 
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
@@ -223,7 +224,39 @@ function HomePageContent() {
         {!isMobile && <FeaturesSection features={featuresData} />}
           
           {/* Pricing Section - Placeholder */}
-          <section id="cards_central" className={`py-6${isMobile ? ' pb-16 pt-40' : ''}`}>
+          <section id="cards_central" className={`py-6${isMobile ? ' pb-16 pt-40' : ''}`} style={{ position: isMobile ? 'relative' : undefined }}>
+              {isMobile && (
+                <>
+                  {/* Ícones sobrepostos - dentro da section cards_central */}
+                  <img
+                    src="/bolsa_icon.png"
+                    alt="Bolsa Icon"
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(120px + 15px)', // movido mais 15px para cima
+                      right: 'calc(50vw - 125px)',
+                      width: '70px',
+                      zIndex: 9999,
+                      borderRadius: '22px',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                  <img
+                    src="/coracao_icon.png"
+                    alt="Coração Icon"
+                    style={{
+                      position: 'absolute',
+                      left: 'calc(50vw - 155px)', // movido 15px para a esquerda
+                      top: 'calc(120px + 340px)',
+                      width: '64px', // tamanho aumentado
+                      height: '64px', // tamanho aumentado
+                      zIndex: 9998,
+                      filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.10))',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                </>
+              )}
              {isMobile ? (
                <div style={{ width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32, minHeight: 950 }}>
                  {/* Novo card (acima) */}
@@ -235,23 +268,30 @@ function HomePageContent() {
                    borderRadius: 32,
                    border: '1px solid rgba(255,255,255,0.2)',
                    boxShadow: '0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8)',
-                   overflow: 'hidden',
                    margin: '0 auto',
                    display: 'flex',
                    flexDirection: 'column',
                    alignItems: 'center',
                    backdropFilter: 'blur(10px)',
+                   position: 'relative',
                  }}>
-                   {/* Imagem de topo (placeholder) */}
-                   <div style={{ width: '100%', height: 149, position: 'relative', overflow: 'hidden' }}>
-                     <img src="/bolsa_card_central.png" alt="Bolsa Card Central" style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: 32, borderTopRightRadius: 32 }} />
-                     <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.5) 80%)' }} />
-                     <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 19 }}>
-                       <span style={{ color: '#E321FF', fontFamily: 'Outfit, sans-serif', fontWeight: 500, fontSize: 13, marginBottom: 6, background: 'rgba(255,255,255,0.7)', padding: '4px 8px', borderRadius: '6px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>Descubra como comprar</span>
-                       <span style={{ color: '#fff', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 15, textAlign: 'center', lineHeight: 1.2 }}>Veja vídeos de produtos<br />reais e compre com mais<br />confiança</span>
-                     </div>
+                   {/* Div superior para a imagem bolsa_card_central */}
+                   <div style={{ width: '100%', height: 160, position: 'relative', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', overflow: 'hidden', borderTopLeftRadius: 32, borderTopRightRadius: 32 }}>
+                     <img
+                       src="/bolsa_card_central.png"
+                       alt="Bolsa Card Central"
+                       style={{
+                         width: '100%',
+                         height: '100%',
+                         objectFit: 'cover',
+                         borderTopLeftRadius: 32,
+                         borderTopRightRadius: 32,
+                         filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.18))',
+                         pointerEvents: 'none',
+                       }}
+                     />
                    </div>
-                   {/* Card branco */}
+                   {/* Conteúdo do card */}
                    <div style={{ width: '100%', padding: '19.2px 19.2px 12.8px 19.2px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                      {/* Ícone check */}
                      <div style={{ width: 18, height: 18, borderRadius: 9, background: '#E321FF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12.8 }}>
