@@ -103,9 +103,15 @@ function AboutCarousel() {
     let index = 0;
     const interval = setInterval(() => {
       index = (index + 1) % 2;
-      const card = cardRefs[index].current;
-      if (card && carouselRef.current) {
-        card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      if (carouselRef.current && cardRefs[index].current) {
+        const container = carouselRef.current;
+        const card = cardRefs[index].current;
+        if (card) {
+          container.scrollTo({
+            left: card.offsetLeft - container.offsetLeft,
+            behavior: 'smooth',
+          });
+        }
       }
     }, 4000);
     return () => clearInterval(interval);
