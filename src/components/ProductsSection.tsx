@@ -173,7 +173,7 @@ const ProductsSection = ({
     } else {
       return allProducts.filter(product => product.name !== 'Creme Icon')
     }
-  }, [isMobile, allProducts])
+  }, [isMobile, allProducts]);
 
 
 

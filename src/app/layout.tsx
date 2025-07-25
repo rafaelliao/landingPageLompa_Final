@@ -12,8 +12,12 @@ export const metadata: Metadata = {
   description: 'Uma landing page moderna e responsiva com animações avançadas usando Next.js, TypeScript e Framer Motion.',
   keywords: ['landing page', 'next.js', 'typescript', 'framer motion', 'tailwind css'],
   authors: [{ name: 'CursorAgent-FrontEnd' }],
-  viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({

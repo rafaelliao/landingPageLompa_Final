@@ -6,30 +6,17 @@ export const useResponsive = () => {
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    console.log('📱 useResponsive - useEffect executado');
     const checkScreenSize = () => {
       if (typeof window === 'undefined') {
-        console.log('📱 useResponsive - Window não está disponível (SSR)');
         return;
       }
       
       const width = window.innerWidth;
-      console.log('📱 useResponsive - Window width:', width);
-      console.log('📱 useResponsive - Window existe:', typeof window !== 'undefined');
-      console.log('📱 useResponsive - Window.innerWidth existe:', typeof window.innerWidth !== 'undefined');
-      console.log('📱 useResponsive - Breakpoint mobile (<=768):', width <= 768);
-      console.log('📱 useResponsive - Breakpoint tablet (768-1024):', width > 768 && width <= 1024);
-      console.log('📱 useResponsive - Breakpoint desktop (>1024):', width > 1024);
       
       setIsMobile(width <= 768);
       setIsTablet(width > 768 && width <= 1024);
       setIsDesktop(width > 1024);
       
-      console.log('📱 useResponsive - Estados definidos:', { 
-        isMobile: width <= 768, 
-        isTablet: width > 768 && width <= 1024, 
-        isDesktop: width > 1024 
-      });
     };
 
     checkScreenSize();
@@ -63,8 +50,6 @@ export const useResponsive = () => {
     isDesktop,
     getHeroContainerClasses
   };
-  
-  console.log('📱 useResponsive - Retornando estados:', result);
   
   return result;
 }; 

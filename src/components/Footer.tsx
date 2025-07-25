@@ -21,7 +21,7 @@ export default function Footer({ sections, className }: FooterProps) {
             <div className="mb-6">
               <Logo size="md" />
             </div>
-            <p className="text-white/70 mb-6 leading-relaxed">
+                        <p className="text-white/70 mb-6 leading-relaxed">
               Transformando ideias em experiências digitais incríveis. 
               Criamos soluções inovadoras que impulsionam seu negócio.
             </p>

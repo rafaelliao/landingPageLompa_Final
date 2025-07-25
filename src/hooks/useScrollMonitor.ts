@@ -14,41 +14,18 @@ export const useScrollMonitor = () => {
       const timelineRange = window.innerWidth <= 768 ? 80 : 800;
       const timelineProgress = Math.round((scrollVH / timelineRange) * 100);
       
-      // Log otimizado - apenas a cada 50vh para reduzir spam
-      if (scrollVH % 50 === 0 && scrollVH > 0) {
-        console.log(`🔄 Scroll: ${scrollVH}vh | Timeline Progress: ${timelineProgress}%`);
-      }
-      
-      // Logs especiais para marcar pontos importantes
-      if (scrollVH === 100) {
-        console.log(`🎯 PONTO 100vh | Timeline Progress: ${timelineProgress}%`);
-      }
-      if (scrollVH === 200) {
-        console.log(`🎯 PONTO 200vh | Timeline Progress: ${timelineProgress}%`);
-      }
-      if (scrollVH === 300) {
-        console.log(`🎯 PONTO 300vh | Timeline Progress: ${timelineProgress}%`);
-      }
-      if (scrollVH === 80) {
-        console.log(`🎯 PONTO 80vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE MOBILE!`);
-      }
-      if (scrollVH === 400 && window.innerWidth > 768) {
-        console.log(`🎯 PONTO 400vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE DO TÍTULO DESKTOP!`);
-      }
-      if (scrollVH === 800) {
-        console.log(`🎯 PONTO 800vh | Timeline Progress: ${timelineProgress}% - FIM DA TIMELINE DESKTOP!`);
-      }
+      // Remover todos os console.log
     };
 
     // Adicionar listener
     window.addEventListener('scroll', handleScroll, { passive: true });
     
     // Log inicial
-    console.log('🎯 Scroll Monitor ativado! Role a página para ver os dados...');
+    // Remover todos os console.log
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      console.log('🔚 Scroll Monitor desativado');
+      // Remover todos os console.log
     };
   }, []);
 }; 

@@ -30,32 +30,22 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
 
   // Debug logs
-  console.log('🏗️ HeroSection renderizando:', {
-    isMobile,
-    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'N/A'
-  })
+  
 
   // Animação GSAP com ScrollTrigger
   useEffect(() => {
-    console.log('🎬 useEffect iniciado')
+    
     if (typeof window === 'undefined') {
-      console.log('❌ Window não disponível')
       return
     }
 
-    console.log('✅ Window disponível, registrando ScrollTrigger')
+    
     gsap.registerPlugin(ScrollTrigger)
 
     // Aguardar um frame para garantir que todos os elementos estejam renderizados
     const initAnimation = () => {
-      console.log('🔍 initAnimation chamada')
-      console.log('📱 Estado do dispositivo - isMobile:', isMobile)
-      console.log('📱 Window width:', window.innerWidth, 'Breakpoint mobile (<=768):', window.innerWidth <= 768)
-      console.log('📱 Window height:', window.innerHeight)
       
-      // Usar diretamente o window.innerWidth para evitar problemas de timing
       const actualIsMobile = window.innerWidth <= 768;
-      console.log('📱 Estado real vs hook - actualIsMobile:', actualIsMobile, 'hookIsMobile:', isMobile);
       
       // Usar o estado real em vez do hook para evitar inconsistências
       const shouldUseMobile = actualIsMobile;
@@ -66,32 +56,22 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       const mockupMobile = mockupMobileRef.current
       const desktopCards = desktopCardsRef.current
 
-      console.log('🔍 Elementos encontrados:', {
-        title: !!title,
-        centralIcon: !!centralIcon,
-        mockup: !!mockup,
-        mockupMobile: !!mockupMobile,
-        desktopCards: !!desktopCards
-      })
-
+      
       if (!title || !centralIcon || !mockup || !mockupMobile || !desktopCards) {
-        console.warn('⚠️ Elementos não encontrados para animação - tentando novamente...')
         setTimeout(initAnimation, 2000) // Delay ainda maior para garantir renderização completa
         return
       }
       
                 // Verificar se os elementos de referência estão disponíveis
-          if (isMobile) {
+          if (shouldUseMobile) {
             const mobileReference = document.getElementById('mockup-center-reference-mobile')
             if (!mobileReference) {
-              console.warn('⚠️ Elemento de referência mobile não encontrado - tentando novamente...')
               setTimeout(initAnimation, 3000) // Delay ainda maior
               return
             }
           } else {
             const desktopReference = document.getElementById('mockup-center-reference-desktop')
             if (!desktopReference) {
-              console.warn('⚠️ Elemento de referência desktop não encontrado - tentando novamente...')
               setTimeout(initAnimation, 3000) // Delay ainda maior
               return
             }
@@ -109,59 +89,30 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         const mobileReference = document.getElementById('mockup-center-reference-mobile')
         if (mobileReference) {
           targetReference = mobileReference
-          console.log('🎯 Usando elemento de referência mobile específico')
         } else {
-          console.warn('⚠️ Elemento de referência mobile não encontrado, usando mockup principal')
         }
       } else {
         const desktopReference = document.getElementById('mockup-center-reference-desktop')
         if (desktopReference) {
           targetReference = desktopReference
-          console.log('🎯 Usando elemento de referência desktop específico')
         }
       }
       
-      console.log('🎯 Usando mockup:', shouldUseMobile ? 'MOBILE' : 'DESKTOP')
-      console.log('🎯 Usando cards:', shouldUseMobile ? 'NENHUM (MOBILE)' : 'DESKTOP CONTAINER')
       
-      // Debug: verificar se os elementos estão sendo encontrados
-      console.log('🔍 Debug elementos:', {
-        targetMockup: !!targetMockup,
-        targetReference: !!targetReference,
-        targetCards: !!targetCards,
-        mockupRect: targetMockup?.getBoundingClientRect(),
-        referenceRect: targetReference?.getBoundingClientRect(),
-        cardsRect: targetCards?.getBoundingClientRect(),
-        isMobile,
-        mobileReference: document.getElementById('mockup-center-reference-mobile'),
-        desktopReference: document.getElementById('mockup-center-reference-desktop')
-      })
-
       // Se for mobile, configurar apenas os ScrollTriggers do PIN mobile
       if (shouldUseMobile) {
-        console.log('📱 Mobile: Configurando apenas ScrollTriggers do PIN mobile')
+        
         
         // Limpar ScrollTriggers existentes
-        console.log('🧹 Limpando ScrollTriggers existentes...')
         const existingTriggers = ScrollTrigger.getAll()
-        console.log('🔍 ScrollTriggers existentes:', existingTriggers.length)
         existingTriggers.forEach(trigger => {
-          console.log('🗑️ Removendo trigger:', trigger.vars.trigger || 'unknown')
           trigger.kill()
         })
         
         // Configurar ScrollTriggers apenas para mobile
-        console.log('📱 Configurando ScrollTriggers para mobile...')
         
                   // PIN do mockup mobile (usando o container correto)
-          console.log('🔍 Verificando condições para PIN mobile...')
-          console.log('🔍 shouldUseMobile:', shouldUseMobile)
-          console.log('🔍 mockupMobileRef.current:', !!mockupMobileRef.current)
-          console.log('🔍 mockupMobileRef.current.parentElement:', !!mockupMobileRef.current?.parentElement)
-          
           if (shouldUseMobile && mockupMobileRef.current) {
-            console.log('📱 Configurando PIN do mockup mobile')
-            console.log('📱 isMobile:', isMobile, 'mockupMobileRef.current:', !!mockupMobileRef.current)
             
             // PIN do mockup mobile (mantido em 300-800vh)
             ScrollTrigger.create({
@@ -172,41 +123,33 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               pinSpacing: true, // Habilitar pinSpacing para criar espaço e evitar sobreposição
               anticipatePin: 1, // Antecipar o pin para suavizar a transição
               onEnter: () => {
-                console.log('📱 MOCKUP MOBILE PIN - INICIADO em 300vh')
-                console.log('📱 ScrollTrigger ativado - mockup deve estar fixado agora')
               },
               onLeave: () => {
-                console.log('📱 MOCKUP MOBILE PIN - FINALIZADO em 800vh')
-                console.log('📱 ScrollTrigger finalizado - mockup deve estar livre agora')
               },
               onEnterBack: () => {
-                console.log('📱 MOCKUP MOBILE PIN - REVERTENDO')
-                console.log('📱 ScrollTrigger revertendo - mockup será fixado novamente')
               },
               onLeaveBack: () => {
-                console.log('📱 MOCKUP MOBILE PIN - RESETANDO')
-                console.log('📱 ScrollTrigger resetando - mockup liberado')
               },
               onUpdate: (self) => {
-                console.log('📱 MOCKUP MOBILE PIN - UPDATE - Progress:', self.progress.toFixed(2), 'Scroll:', window.scrollY)
               }
             })
           
           // Efeito de saída do título e ícone central - MOBILE
-          console.log('📱 Configurando animação de saída do título e ícone mobile')
+          
+          // Animar título e ícone (exit) - mobile
+          
           const tlTitleMobile = gsap.timeline({
             scrollTrigger: {
               trigger: 'body',
               start: 'top top',
               end: '+=200vh', // Range menor para mobile
               scrub: 1,
-              onEnter: () => console.log('📱 ANIMAÇÃO DO TÍTULO MOBILE INICIADA'),
-              onLeave: () => console.log('📱 ANIMAÇÃO DO TÍTULO MOBILE FINALIZADA')
+              onEnter: () => {},
+              onLeave: () => {}
             }
           })
           
           // Animar título e ícone (exit) - mobile
-          console.log('📱 Configurando animação do título mobile:', { title: !!title, centralIcon: !!centralIcon })
           
           tlTitleMobile.fromTo([title, centralIcon], 
             { y: 0, opacity: 1 },
@@ -214,10 +157,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             0 // Começa imediatamente
           )
           
-          console.log('✅ Animação de saída do título e ícone mobile configurada')
           
           // ===== ANIMAÇÃO DOS CARDS MOBILE =====
-          console.log('📱 Configurando animação dos cards mobile')
           
           // Configurações para mobile (ajustadas para terminar antes do pin)
           const mobileAnimationConfig = {
@@ -227,7 +168,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             finalScale: { main: 1.5, others: 0.6 }
           }
           
-          console.log('🎯 Configuração de animação MOBILE:', mobileAnimationConfig)
           
           // Timeline para animação dos cards mobile
           const tlCardsMobile = gsap.timeline({
@@ -245,40 +185,30 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 
                 // Log apenas a cada 20vh para não sobrecarregar o console
                 if (Math.floor(scrollVh) % 20 === 0 && scrollVh > 0) {
-                  console.log('📱 Scroll:', Math.round(scrollVh) + 'vh | Progresso:', Math.round(progress) + '%')
                 }
               },
               onEnter: () => {
-                console.log('📱 ANIMAÇÃO DOS CARDS MOBILE INICIADA')
               },
               onLeave: () => {
-                console.log('📱 ANIMAÇÃO DOS CARDS MOBILE FINALIZADA')
               },
-              onEnterBack: () => console.log('🔄 ANIMAÇÃO DOS CARDS MOBILE REVERTENDO'),
+              onEnterBack: () => {},
               onLeaveBack: () => {
-                console.log('🔄 ANIMAÇÃO DOS CARDS MOBILE RESETANDO')
               }
             }
           })
           
           // Encontrar cards mobile para animação
           const mobileCardElements = document.querySelectorAll('.mobile-product-item')
-          console.log('📱 Cards mobile encontrados:', mobileCardElements.length)
           
           if (mobileCardElements.length > 0) {
             // Obter elemento de referência dentro do mockup mobile (igual ao desktop)
             const mobileReference = document.getElementById('mockup-center-reference-mobile')
             if (!mobileReference) {
-              console.error('❌ Elemento de referência mobile não encontrado')
               return
             }
             
             // Animar cada card mobile
             mobileCardElements.forEach((productItem, index) => {
-              console.log(`📱 Card mobile ${index}:`, {
-                className: productItem.className,
-                tagName: productItem.tagName
-              })
               
               // Obter posições usando o elemento de referência (igual ao desktop)
               const cardRect = productItem.getBoundingClientRect()
@@ -315,24 +245,10 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 
                 // Debug para primeiro card
                 if (index === 0) {
-                  console.log('📱 Debug primeiro card mobile:', {
-                    productName,
-                    cardRect,
-                    referenceRect,
-                    targetCenterX,
-                    targetCenterY,
-                    cardCenterX,
-                    cardCenterY,
-                    deltaX,
-                    deltaY,
-                    rotation,
-                    finalScale
-                  })
                 }
                 
                 // Adicionar à timeline (exceto garrafa - ela terá timeline própria)
                 if (!productName.includes('Garrafa')) {
-                  console.log(`📱 Adicionando card mobile ${index} (${productName}) à timeline`)
                   
                   tlCardsMobile.fromTo(productItem, 
                     { 
@@ -361,7 +277,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               start: '200vh top',
               end: '10000vh top',
               onEnter: () => {
-                console.log('📱 Cards mobile desaparecendo em >= 200vh')
                 mobileCardElements.forEach((card) => {
                   const cardElement = card as HTMLElement
                   const productName = cardElement.querySelector('img')?.alt || ''
@@ -376,7 +291,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 })
               },
               onEnterBack: () => {
-                console.log('📱 Cards mobile desaparecendo em >= 200vh (scroll down)')
                 mobileCardElements.forEach((card) => {
                   const cardElement = card as HTMLElement
                   const productName = cardElement.querySelector('img')?.alt || ''
@@ -391,7 +305,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 })
               },
               onLeaveBack: () => {
-                console.log('📱 Cards mobile voltando a aparecer (< 200vh)')
                 mobileCardElements.forEach((card) => {
                   const cardElement = card as HTMLElement
                   const productName = cardElement.querySelector('img')?.alt || ''
@@ -428,18 +341,14 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                     
                     // Log apenas a cada 20vh para não sobrecarregar o console
                     if (Math.floor(scrollVh) % 20 === 0 && scrollVh > 0) {
-                      console.log('📱 Garrafa Scroll:', Math.round(scrollVh) + 'vh | Progresso:', Math.round(progress) + '%')
                     }
                   },
                   onEnter: () => {
-                    console.log('📱 TIMELINE GARRAFA MOBILE - Movimentação iniciada')
                   },
                   onLeave: () => {
-                    console.log('📱 TIMELINE GARRAFA MOBILE - Movimentação finalizada')
                   },
-                  onEnterBack: () => console.log('🔄 TIMELINE GARRAFA MOBILE - REVERTENDO'),
+                  onEnterBack: () => {},
                   onLeaveBack: () => {
-                    console.log('🔄 TIMELINE GARRAFA MOBILE - RESETANDO')
                   }
                 }
               })
@@ -456,14 +365,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 const deltaX = targetCenterX - garrafaCenterX
                 const deltaY = targetCenterY - garrafaCenterY
                 
-                console.log('📱 Configuração da garrafa mobile:', {
-                  deltaX,
-                  deltaY,
-                  targetCenterX,
-                  targetCenterY,
-                  garrafaCenterX,
-                  garrafaCenterY
-                })
                 
                 // Animação da garrafa com vh estendido
                 tlGarrafaMobile.fromTo(garrafaMobileElement, 
@@ -488,14 +389,13 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             
             // Efeito de saída da garrafa mobile - 200-230vh
             if (garrafaMobileElement) {
-              console.log('📱 Configurando efeito de saída da garrafa mobile')
+              
               ScrollTrigger.create({
                 trigger: 'body',
                 start: '200vh top', // Inicia o efeito de saída em 200vh
                 end: '230vh top',   // Termina em 230vh
                 scrub: 0.5,
                 onEnter: () => {
-                  console.log('📱 Ativando efeito de saída da garrafa mobile')
                   gsap.to(garrafaMobileElement, {
                     scale: 0.4,
                     y: -40,
@@ -504,12 +404,10 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                     duration: 1.2,
                     ease: 'back.in(1.7)',
                     onComplete: () => {
-                      console.log('📱 GARRAFA MOBILE - Saída concluída')
                     }
                   })
                 },
                 onEnterBack: () => {
-                  console.log('📱 Revertendo efeito de saída da garrafa mobile')
                   gsap.to(garrafaMobileElement, {
                     scale: 1,
                     y: 0,
@@ -518,7 +416,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                     duration: 1.0,
                     ease: 'back.out(1.7)',
                     onComplete: () => {
-                      console.log('📱 GARRAFA MOBILE - Saída revertida')
                     }
                   })
                 }
@@ -531,7 +428,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 start: 'top top',
                 end: '230vh top',
                 onEnter: () => {
-                  console.log('🍶 Reset visual da garrafa mobile (scroll curto/topo)')
                   gsap.set(garrafaMobileElement, {
                     opacity: 1,
                     scale: 1,
@@ -540,7 +436,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                   })
                 },
                 onEnterBack: () => {
-                  console.log('🍶 Reset visual da garrafa mobile (scroll curto/topo - enterBack)')
                   gsap.set(garrafaMobileElement, {
                     opacity: 1,
                     scale: 1,
@@ -552,23 +447,12 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             }
           }
           
-          console.log('✅ Animação dos cards mobile configurada')
-          console.log('✅ PIN do mockup mobile configurado com sucesso')
+          
         } else {
-          console.log('❌ Mockup mobile NÃO encontrado - shouldUseMobile:', shouldUseMobile, 'mockupMobileRef.current:', !!mockupMobileRef.current)
         }
         
         // Verificar se os ScrollTriggers foram criados
         const allTriggers = ScrollTrigger.getAll()
-        console.log('🔍 Total de ScrollTriggers criados:', allTriggers.length)
-        allTriggers.forEach((trigger, index) => {
-          console.log(`🔍 ScrollTrigger ${index}:`, {
-            trigger: trigger.vars.trigger,
-            start: trigger.vars.start,
-            end: trigger.vars.end,
-            pin: trigger.vars.pin ? 'PIN ATIVO' : 'SEM PIN'
-          })
-        })
         
         ScrollTrigger.refresh()
         return
@@ -576,18 +460,13 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
       // Verificar se targetCards existe (só desktop)
       if (!shouldUseMobile && !targetCards) {
-        console.error('❌ Container de cards desktop não encontrado')
         return
       }
 
-      console.log('✅ Todos os elementos encontrados, iniciando animações...')
       
       // Limpar ScrollTriggers existentes
-      console.log('🧹 Limpando ScrollTriggers existentes...')
       const existingTriggers = ScrollTrigger.getAll()
-      console.log('🔍 ScrollTriggers existentes:', existingTriggers.length)
       existingTriggers.forEach(trigger => {
-        console.log('🗑️ Removendo trigger:', trigger.vars.trigger || 'unknown')
         trigger.kill()
       })
 
@@ -601,15 +480,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         finalScale: { main: 1.5, others: 0.7 }
       }
       
-      console.log('🎯 Configuração de animação DESKTOP:', {
-        range: animationConfig.range,
-        scrub: animationConfig.scrub,
-        initialScale: animationConfig.initialScale,
-        finalScale: animationConfig.finalScale
-      })
       
       // Timeline para animação dos cards
-      console.log('🎬 Criando timeline para animação dos cards DESKTOP...')
+      
       const tlCards = gsap.timeline({
         scrollTrigger: {
           trigger: 'body',
@@ -624,35 +497,26 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             
             // Log apenas a cada 20vh para não sobrecarregar o console
             if (Math.floor(scrollVh) % 20 === 0 && scrollVh > 0) {
-              console.log('📊 Scroll:', Math.round(scrollVh) + 'vh | Progresso:', Math.round(progress) + '%')
             }
           },
           onEnter: () => {
-            console.log('🎬 ANIMAÇÃO DOS CARDS DESKTOP INICIADA')
-            console.log('🎯 Range:', animationConfig.range)
-            console.log('🎯 Timeline criada:', !!tlCards)
           },
           onLeave: () => {
-            console.log('🏁 ANIMAÇÃO DOS CARDS DESKTOP FINALIZADA')
           },
-          onEnterBack: () => console.log('🔄 ANIMAÇÃO DOS CARDS DESKTOP REVERTENDO'),
+          onEnterBack: () => {},
           onLeaveBack: () => {
-            console.log('🔄 ANIMAÇÃO DOS CARDS DESKTOP RESETANDO')
           }
         }
       })
 
-      console.log('✅ Timeline criada:', !!tlCards)
+      
 
       // Encontrar cards para animação (apenas desktop)
-      console.log('🔍 Procurando cards desktop em:', targetCards)
-      console.log('🔍 Classes do container:', targetCards?.className)
+      const cardElements = targetCards?.querySelectorAll('.product-item') || [];
       
-              const cardElements = targetCards?.querySelectorAll('.product-item') || []
-      console.log('🔍 Cards desktop encontrados:', cardElements.length)
+      
       
       if (cardElements.length === 0) {
-        console.error('❌ NENHUM CARD DESKTOP ENCONTRADO!')
         return
       }
       
@@ -660,10 +524,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       
       // Animar cada card (apenas desktop)
       cardElements.forEach((productItem, index) => {
-        console.log(`🔍 Card desktop ${index}:`, {
-          className: productItem.className,
-          tagName: productItem.tagName
-        })
         
         // Obter posições
         const cardRect = productItem.getBoundingClientRect()
@@ -699,23 +559,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         
         // Debug para primeiro card
         if (index === 0) {
-          console.log('🔍 Debug primeiro card desktop:', {
-            productName,
-            cardRect,
-            referenceRect,
-            targetCenterX,
-            targetCenterY,
-            cardCenterX,
-            cardCenterY,
-            deltaX,
-            deltaY,
-            rotation,
-            finalScale
-          })
         }
         
         // Adicionar à timeline
-        console.log(`🎯 Adicionando card desktop ${index} (${productName}) à timeline`)
         
           tlCards.fromTo(productItem, 
             { 
@@ -738,7 +584,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
       // Timeline independente para animação do título
       const titleAnimationRange = window.innerWidth <= 768 ? '60vh' : '400vh' // Desktop muito mais longo
-      console.log('🎯 Range da animação do título:', titleAnimationRange)
       
       const tlTitle = gsap.timeline({
         scrollTrigger: {
@@ -746,13 +591,12 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           start: 'top top',
           end: `+=${titleAnimationRange}`,
           scrub: 1,
-          onEnter: () => console.log('🎬 ANIMAÇÃO DO TÍTULO INICIADA'),
-          onLeave: () => console.log('🏁 ANIMAÇÃO DO TÍTULO FINALIZADA')
+          onEnter: () => {},
+          onLeave: () => {}
         }
       })
 
       // Animar título e ícone (exit) - timeline independente
-      console.log('🎬 Configurando animação do título:', { title: !!title, centralIcon: !!centralIcon })
       
       // Animação do título - duração ainda mais aumentada
       const titleDuration = window.innerWidth <= 768 ? 2.0 : 4.0 // Desktop mais lento
@@ -764,8 +608,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         0 // Começa imediatamente
       )
       
-      console.log('✅ Animação do título configurada com timeline independente - teste agressivo')
-
+      
       // Desaparecimento permanente dos cards (exceto garrafa) em 750vh (desktop)
       if (!shouldUseMobile && desktopCardsRef.current && mockupRef.current) {
         const cardElements = Array.from(desktopCardsRef.current.querySelectorAll('.product-card-transparent'));
@@ -781,7 +624,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           end: '+=760vh', // Duração curta para o efeito
           scrub: 0.5,
           onEnter: () => {
-            console.log('🖥️ CARDS/ÍCONES - DESAPARECIMENTO PERMANENTE INICIADO (750vh)')
             cardElements.forEach((card, index) => {
               if (index !== garrafaIndex) {
                 gsap.to(card, {
@@ -808,13 +650,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 }
               });
             });
-            console.log('🖥️ Cards e ícones desapareceram (garrafa permanece)');
           },
           onEnterBack: () => {
-            console.log('🖥️ CARDS/ÍCONES - SCROLL REVERSO DENTRO DO RANGE (sem reversão)');
-          },
-          onLeaveBack: () => {
-            console.log('🖥️ CARDS/ÍCONES - DESAPARECIMENTO PERMANENTE REVERTENDO (antes do start)');
             cardElements.forEach((card, index) => {
               if (index !== garrafaIndex) {
                 gsap.to(card, {
@@ -841,7 +678,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 }
               });
             });
-            console.log('🖥️ Cards e ícones restaurados');
           }
         });
       }
@@ -852,7 +688,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       if (!shouldUseMobile && desktopCardsRef.current && mockupRef.current) {
         const garrafaCard = Array.from(desktopCardsRef.current.querySelectorAll('.product-card-transparent'))
           .find(card => card.querySelector('img')?.alt === 'Garrafa Stanley');
-        console.log('🖥️ Elemento garrafaCard encontrado para saída:', garrafaCard);
         ScrollTrigger.create({
           trigger: 'body',
           start: '+=80vh', // Inicia o efeito de saída em 80vh
@@ -860,7 +695,6 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           scrub: 0.5,
           onEnter: () => {
             if (garrafaCard) {
-              console.log('🖥️ Ativando efeito de saída da garrafa (desktop)', garrafaCard);
               gsap.to(garrafaCard, {
                 scale: 0.3,
                 y: -50,
@@ -869,16 +703,13 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 duration: 1.5,
                 ease: 'back.in(1.7)',
                 onComplete: () => {
-                  console.log('🖥️ GARRAFA - Saída concluída (desktop)')
                 }
               });
             } else {
-              console.log('🖥️ Nenhum elemento garrafaCard encontrado para saída (desktop)');
             }
           },
           onEnterBack: () => {
             if (garrafaCard) {
-              console.log('🖥️ Revertendo efeito de saída da garrafa (desktop)', garrafaCard);
               gsap.to(garrafaCard, {
                 scale: 1,
                 y: 0,
@@ -887,11 +718,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 duration: 1.0,
                 ease: 'back.out(1.7)',
                 onComplete: () => {
-                  console.log('🖥️ GARRAFA - Saída revertida (desktop)')
                 }
               });
             } else {
-              console.log('🖥️ Nenhum elemento garrafaCard encontrado para reversão (desktop)');
             }
           }
         });
@@ -901,8 +730,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
       // Pin do mockup desktop (regra separada)
       if (!shouldUseMobile && mockupRef.current) {
-        console.log('🖥️ Configurando PIN do mockup desktop')
-        console.log('🖥️ isMobile:', isMobile, 'mockupRef.current:', !!mockupRef.current)
+        
         ScrollTrigger.create({
           trigger: 'body',
           start: '+=800vh', // Inicia em 800vh
@@ -910,21 +738,15 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           pin: mockupRef.current.parentElement, // Pin no parente do mockup desktop
           pinSpacing: true,
           onEnter: () => {
-            console.log('🖥️ MOCKUP DESKTOP PIN - INICIADO (800vh) - Mockup fixado na tela')
           },
           onLeave: () => {
-            console.log('🖥️ MOCKUP DESKTOP PIN - FINALIZADO (1400vh) - Mockup liberado')
           },
           onEnterBack: () => {
-            console.log('🖥️ MOCKUP DESKTOP PIN - REVERTENDO - Mockup será fixado novamente')
           },
           onLeaveBack: () => {
-            console.log('🖥️ MOCKUP DESKTOP PIN - RESETANDO - Mockup liberado')
           }
         })
-        console.log('✅ PIN do mockup desktop configurado')
       } else {
-        console.log('❌ PIN do mockup desktop NÃO configurado - isMobile:', isMobile, 'mockupRef.current:', !!mockupRef.current)
       }
 
 
@@ -937,25 +759,14 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       
       // Verificar se os ScrollTriggers foram criados
       const allTriggers = ScrollTrigger.getAll()
-      console.log('🔍 Total de ScrollTriggers criados:', allTriggers.length)
-      allTriggers.forEach((trigger, index) => {
-        console.log(`🔍 ScrollTrigger ${index}:`, {
-          trigger: trigger.vars.trigger,
-          start: trigger.vars.start,
-          end: trigger.vars.end,
-          pin: trigger.vars.pin ? 'PIN ATIVO' : 'SEM PIN'
-        })
-      })
       
       return undefined // Garante que todas as rotas retornem algo
     }
 
-    console.log('⏰ Configurando setTimeout para initAnimation')
-    console.log('⏰ Estado atual do isMobile no useEffect:', isMobile)
     
     // Aguardar um pouco mais para garantir que o useResponsive tenha atualizado
     setTimeout(() => {
-      console.log('⏰ Executando initAnimation após delay - isMobile:', isMobile)
+      
       initAnimation()
     }, 500)
   }, [isMobile]) // Adicionar isMobile como dependência
@@ -1007,7 +818,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         intervalRef.current = null;
       }
     };
-  }, [showCarousel, isMobile]);
+  }, [showCarousel, isMobile, videoList.length]);
 
   // Resetar carouselIndex para 0 sempre que showCarousel for ativado (desktop)
   useEffect(() => {
@@ -1061,7 +872,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         mobileIntervalRef.current = null;
       }
     };
-  }, [showMobileCarousel, isMobile]);
+  }, [showMobileCarousel, isMobile, mobileVideoList.length]);
 
   // Resetar mobileCarouselIndex para 0 sempre que showMobileCarousel for ativado (mobile)
   useEffect(() => {

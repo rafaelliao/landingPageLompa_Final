@@ -468,19 +468,50 @@ function HomePageContent() {
             </div>
           </section>
           
-          {/* Contact Section - Placeholder */}
-          <section id="contact" className="py-20">
-            <div className="main-container text-center">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-                Entre em Contato
-              </h2>
-              <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-                Estamos aqui para ajudar você a alcançar seus objetivos digitais.
-              </p>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg max-w-md mx-auto">
-                <p className="text-white/80 text-base">Componente de Contato em desenvolvimento...</p>
+                     {/* Contact Section - Placeholder */}
+           <section id="contact" className={`${isMobile ? 'relative h-[80vh]' : 'py-20'}`}>
+            {isMobile ? (
+              <>
+                <div 
+                  className="w-full h-full bg-cover bg-center"
+                  style={{ 
+                    backgroundImage: 'url(/mockup_multi.png)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    opacity: 0.8,
+                    height: '100%',
+                    width: '100%'
+                  }}
+                />
+                                 {/* Conteúdo sobreposto à imagem - Apenas Mobile */}
+                 <div style={{position: 'absolute', top: 0, left: 0, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10, paddingTop: 24}}>
+                   <div style={{background: 'rgba(44, 0, 80, 0.85)', borderRadius: 20, padding: '28px 20px', maxWidth: 320, width: '90%', boxShadow: '0 8px 32px rgba(0,0,0,0.3)'}}>
+                     <h2 style={{fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, color: '#fff', marginBottom: 10, lineHeight: 1.1, textAlign: 'left'}}>
+                       Venda em vídeo,<br />do seu jeito
+                     </h2>
+                     <p style={{color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, opacity: 0.9, marginBottom: 20, lineHeight: 1.5, textAlign: 'left'}}>
+                       Com o Lompa, você grava ou transmite ao vivo, se conecta com clientes em tempo real e transforma cada venda em uma experiência. Tudo isso com pagamento seguro, envio rastreável e gestão simplificada.
+                     </p>
+                     <button style={{background: '#E321FF', color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, border: 'none', borderRadius: 10, padding: '12px 20px', cursor: 'pointer', boxShadow: '0 4px 16px rgba(227, 33, 255, 0.3)', width: '100%'}}>
+                       Quero saber mais
+                     </button>
+                   </div>
+                 </div>
+              </>
+            ) : (
+              <div className="main-container text-center">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                  Entre em Contato
+                </h2>
+                <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
+                  Estamos aqui para ajudar você a alcançar seus objetivos digitais.
+                </p>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg max-w-md mx-auto">
+                  <p className="text-white/80 text-base">Componente de Contato em desenvolvimento...</p>
+                </div>
               </div>
-            </div>
+            )}
           </section>
           
           {/* Footer */}

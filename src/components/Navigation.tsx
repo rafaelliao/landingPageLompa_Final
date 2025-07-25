@@ -130,7 +130,6 @@ export default function Navigation({ items, className }: NavigationProps) {
             <button
               className="group support-button flex items-center justify-center w-12 h-12 rounded-full border-2 border-white/30 text-white transition-all duration-300 hover:border-white/60 hover:bg-white/10 relative overflow-hidden"
               onClick={() => {
-                console.log('Abrindo suporte...')
               }}
             >
               <div
@@ -154,7 +153,6 @@ export default function Navigation({ items, className }: NavigationProps) {
                 boxShadow: '0 4px 15px rgba(72, 7, 173, 0.3)'
               }}
               onClick={() => {
-                console.log('Abrindo acesso vendedor...')
               }}
             >
               Acesso Vendedor
@@ -232,7 +230,6 @@ export default function Navigation({ items, className }: NavigationProps) {
                     }}
                     onClick={() => {
                       setIsOpen(false)
-                      console.log('Abrindo acesso vendedor...')
                     }}
                   >
                     Acesso Vendedor
@@ -242,7 +239,6 @@ export default function Navigation({ items, className }: NavigationProps) {
                       className="flex items-center justify-center w-full py-3 button-custom-rounded border-2 border-white/30 text-white hover:border-white/60 hover:bg-white/10 transition-all duration-200 font-semibold"
                     onClick={() => {
                       setIsOpen(false)
-                      console.log('Abrindo suporte...')
                     }}
                   >
                     <HeadphonesIcon className="w-4 h-4 mr-2" />
