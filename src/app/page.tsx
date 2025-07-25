@@ -95,6 +95,108 @@ const footerSections: FooterSection[] = [
   }
 ]
 
+// Componente funcional para o carousel automático
+function AboutCarousel() {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const cardRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      index = (index + 1) % 2;
+      const card = cardRefs[index].current;
+      if (card && carouselRef.current) {
+        card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <div
+      ref={carouselRef}
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 24,
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        overflowX: 'auto',
+        padding: '0 16px',
+        scrollSnapType: 'x mandatory',
+        WebkitOverflowScrolling: 'touch',
+        margin: '0 -16px',
+        width: '100vw',
+        maxWidth: '100vw',
+        boxSizing: 'border-box',
+        scrollBehavior: 'smooth',
+        touchAction: 'pan-x',
+      }}
+    >
+      {/* Card Lompa */}
+      <div
+        ref={cardRefs[1]}
+        style={{
+          background: 'linear-gradient(135deg, #7B2FF2 0%, #F357A8 100%)',
+          borderRadius: 32,
+          minWidth: 320,
+          maxWidth: 360,
+          width: '80vw',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+          padding: '40px 32px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          scrollSnapAlign: 'center',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: 32 }}>
+          <img src="/logo.svg" alt="Lompa Logo" style={{ height: 32 }} />
+        </div>
+        <ul style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, color: '#fff', listStyle: 'none', padding: 0, margin: 0 }}>
+          <li>✓ Feed de vídeos curtos</li>
+          <li>✓ Cadastro sem CNPJ</li>
+          <li>✓ Pagamento direto no app</li>
+          <li>✓ Taxas acessíveis</li>
+          <li>✓ Foco em pequenos vendedores</li>
+          <li>✓ Suporte via WhatsApp</li>
+          <li>✓ App leve e 100% mobile</li>
+          <li>✓ Inclusão digital real</li>
+        </ul>
+      </div>
+      {/* Card Outros Marketplaces */}
+      <div
+        ref={cardRefs[0]}
+        style={{
+          background: '#fff',
+          borderRadius: 32,
+          minWidth: 320,
+          maxWidth: 360,
+          width: '80vw',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+          padding: '40px 32px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          scrollSnapAlign: 'center',
+        }}
+      >
+        <div style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, color: '#1A1447', marginBottom: 16, textAlign: 'center', width: '100%' }}>
+          Outros<br />Marketplaces
+        </div>
+        <ul style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, color: '#1A1447', listStyle: 'none', padding: 0, margin: 0 }}>
+          <li>✗ Feed de vídeos curtos</li>
+          <li>✗ Cadastro sem CNPJ</li>
+          <li>✗ Pagamento direto no app</li>
+          <li>✗ Taxas acessíveis</li>
+          <li>✗ Foco em pequenos vendedores</li>
+          <li>✗ Suporte via WhatsApp</li>
+          <li>✗ App leve e 100% mobile</li>
+          <li>✗ Inclusão digital real</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 function HomePageContent() {
   const { isMobile } = useResponsive()
   
@@ -277,107 +379,7 @@ function HomePageContent() {
               <div style={{ color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 16, opacity: 0.8, marginBottom: 40 }}>
                 É a vitrine digital do Brasil real, com vídeo, voz e confiança.
               </div>
-              {/* Carousel automático */}
-              {(() => {
-                const carouselRef = useRef<HTMLDivElement>(null);
-                const cardRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
-                useEffect(() => {
-                  let index = 0;
-                  const interval = setInterval(() => {
-                    index = (index + 1) % 2;
-                    const card = cardRefs[index].current;
-                    if (card && carouselRef.current) {
-                      card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                    }
-                  }, 4000);
-                  return () => clearInterval(interval);
-                }, []);
-                return (
-                  <div
-                    ref={carouselRef}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      gap: 24,
-                      justifyContent: 'flex-start',
-                      alignItems: 'stretch',
-                      overflowX: 'auto',
-                      padding: '0 16px',
-                      scrollSnapType: 'x mandatory',
-                      WebkitOverflowScrolling: 'touch',
-                      margin: '0 -16px',
-                      width: '100vw',
-                      maxWidth: '100vw',
-                      boxSizing: 'border-box',
-                      scrollBehavior: 'smooth',
-                      touchAction: 'pan-x',
-                    }}
-                  >
-                    {/* Card Lompa */}
-                    <div
-                      ref={cardRefs[1]}
-                      style={{
-                        background: 'linear-gradient(135deg, #7B2FF2 0%, #F357A8 100%)',
-                        borderRadius: 32,
-                        minWidth: 320,
-                        maxWidth: 360,
-                        width: '80vw',
-                        boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
-                        padding: '40px 32px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        scrollSnapAlign: 'center',
-                      }}
-                    >
-                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: 32 }}>
-                        <img src="/logo.svg" alt="Lompa Logo" style={{ height: 32 }} />
-                      </div>
-                      <ul style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, color: '#fff', listStyle: 'none', padding: 0, margin: 0 }}>
-                        <li>✓ Feed de vídeos curtos</li>
-                        <li>✓ Cadastro sem CNPJ</li>
-                        <li>✓ Pagamento direto no app</li>
-                        <li>✓ Taxas acessíveis</li>
-                        <li>✓ Foco em pequenos vendedores</li>
-                        <li>✓ Suporte via WhatsApp</li>
-                        <li>✓ App leve e 100% mobile</li>
-                        <li>✓ Inclusão digital real</li>
-                      </ul>
-                    </div>
-                    {/* Card Outros Marketplaces */}
-                    <div
-                      ref={cardRefs[0]}
-                      style={{
-                        background: '#fff',
-                        borderRadius: 32,
-                        minWidth: 320,
-                        maxWidth: 360,
-                        width: '80vw',
-                        boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
-                        padding: '40px 32px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        scrollSnapAlign: 'center',
-                      }}
-                    >
-                      <div style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, color: '#1A1447', marginBottom: 16, textAlign: 'center', width: '100%' }}>
-                        Outros<br />Marketplaces
-                      </div>
-                      <ul style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, color: '#1A1447', listStyle: 'none', padding: 0, margin: 0 }}>
-                        <li>✗ Feed de vídeos curtos</li>
-                        <li>✗ Cadastro sem CNPJ</li>
-                        <li>✗ Pagamento direto no app</li>
-                        <li>✗ Taxas acessíveis</li>
-                        <li>✗ Foco em pequenos vendedores</li>
-                        <li>✗ Suporte via WhatsApp</li>
-                        <li>✗ App leve e 100% mobile</li>
-                        <li>✗ Inclusão digital real</li>
-                      </ul>
-                    </div>
-                  </div>
-                );
-              })()}
+              <AboutCarousel />
             </div>
           </section>
           
