@@ -207,6 +207,40 @@ function AboutCarousel() {
 function HomePageContent() {
   const { isMobile } = useResponsive()
   const [accordion, setAccordion] = useState([true, false, false]);
+
+  // Função para detectar plataforma mobile
+  const detectMobilePlatform = () => {
+    if (typeof window === 'undefined') return 'unknown';
+    
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    
+    if (/android/.test(userAgent)) {
+      return 'android';
+    } else if (/iphone|ipad|ipod/.test(userAgent)) {
+      return 'ios';
+    }
+    
+    return 'unknown';
+  };
+
+  // Função para obter o link de download correto
+  const getDownloadLink = () => {
+    const platform = detectMobilePlatform();
+    
+    if (platform === 'android') {
+      return 'https://play.google.com/store/apps/details?id=com.app.lompamarketplace';
+    } else if (platform === 'ios') {
+      return 'https://apps.apple.com/in/app/lompa/id6742741600';
+    }
+    
+    // Fallback para desktop ou plataforma desconhecida
+    return 'https://lompa.com.br/download';
+  };
+
+  const handleDownloadClick = () => {
+    const downloadLink = getDownloadLink();
+    window.open(downloadLink, '_blank');
+  };
   
   return (
     <MobileProvider>
@@ -329,7 +363,10 @@ function HomePageContent() {
                        <span style={{ fontWeight: 700, color: '#6C1EB1' }}>É FÁCIL, VISUAL E DIRETO!</span><br />
                        Toque para comprar, pague com<br />segurança e receba em casa.
                      </div>
-                     <button style={{ background: '#442085', color: '#FBF7FF', fontFamily: 'Inter', fontWeight: 600, fontSize: 12.8, border: 'none', borderRadius: 12.8, padding: '14.4px 0', width: '100%', marginTop: 3.2, boxShadow: '0 2px 8px rgba(68,32,133,0.08)', cursor: 'pointer' }}>
+                     <button 
+                       onClick={handleDownloadClick}
+                       style={{ background: '#442085', color: '#FBF7FF', fontFamily: 'Inter', fontWeight: 600, fontSize: 12.8, border: 'none', borderRadius: 12.8, padding: '14.4px 0', width: '100%', marginTop: 3.2, boxShadow: '0 2px 8px rgba(68,32,133,0.08)', cursor: 'pointer' }}
+                     >
                        Quero comprar com segurança
                      </button>
                    </div>
@@ -373,7 +410,10 @@ function HomePageContent() {
                        Grave um vídeo mostrando seu<br />produto, publique no app e comece a vender com pagamento seguro e envio pelos Correios.<br /><br />
                        <span style={{ fontWeight: 700 }}>SEM COMPLICAÇÃO.<br />100% MOBILE. SEM ENROLAÇÃO.</span>
                      </div>
-                     <button style={{ background: '#442085', color: '#FBF7FF', fontFamily: 'Inter', fontWeight: 600, fontSize: 12.8, border: 'none', borderRadius: 12.8, padding: '14.4px 0', width: '100%', marginTop: 3.2, boxShadow: '0 2px 8px rgba(68,32,133,0.08)', cursor: 'pointer' }}>
+                     <button 
+                       onClick={handleDownloadClick}
+                       style={{ background: '#442085', color: '#FBF7FF', fontFamily: 'Inter', fontWeight: 600, fontSize: 12.8, border: 'none', borderRadius: 12.8, padding: '14.4px 0', width: '100%', marginTop: 3.2, boxShadow: '0 2px 8px rgba(68,32,133,0.08)', cursor: 'pointer' }}
+                     >
                        Quero começar a vender agora
                      </button>
                    </div>
@@ -563,7 +603,10 @@ function HomePageContent() {
                      <p style={{color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, opacity: 0.9, marginBottom: 20, lineHeight: 1.5, textAlign: 'justify'}}>
                        Com o Lompa, você grava ou transmite ao vivo,<br />se conecta com clientes em tempo real e transforma cada venda em uma experiência. Tudo isso com<br />pagamento seguro, envio rastreável e gestão simplificada.
                      </p>
-                     <button style={{background: '#E321FF', color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, border: 'none', borderRadius: 10, padding: '12px 20px', cursor: 'pointer', boxShadow: '0 4px 16px rgba(227, 33, 255, 0.3)', width: '100%'}}>
+                     <button 
+                       onClick={handleDownloadClick}
+                       style={{background: '#E321FF', color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, border: 'none', borderRadius: 10, padding: '12px 20px', cursor: 'pointer', boxShadow: '0 4px 16px rgba(227, 33, 255, 0.3)', width: '100%'}}
+                     >
                        Quero saber mais
                      </button>
                    </div>
