@@ -370,7 +370,7 @@ function HomePageContent() {
                      </div>
                      <div style={{ color: '#5901B0', fontFamily: 'Inter', fontWeight: 600, fontSize: 14, textAlign: 'center', marginBottom: 6.4 }}>Você só precisa do seu celular</div>
                      <div style={{ color: '#5901B0', fontFamily: 'Inter', fontWeight: 400, fontSize: 11, textAlign: 'center', marginBottom: 12.8, lineHeight: '16px' }}>
-                       Grave um vídeo mostrando seu produto, publique no app e comece a vender com pagamento seguro e envio pelos Correios.<br /><br />
+                       Grave um vídeo mostrando seu<br />produto, publique no app e comece a vender com pagamento seguro e envio pelos Correios.<br /><br />
                        <span style={{ fontWeight: 700 }}>SEM COMPLICAÇÃO.<br />100% MOBILE. SEM ENROLAÇÃO.</span>
                      </div>
                      <button style={{ background: '#442085', color: '#FBF7FF', fontFamily: 'Inter', fontWeight: 600, fontSize: 12.8, border: 'none', borderRadius: 12.8, padding: '14.4px 0', width: '100%', marginTop: 3.2, boxShadow: '0 2px 8px rgba(68,32,133,0.08)', cursor: 'pointer' }}>
@@ -560,8 +560,8 @@ function HomePageContent() {
                      <h2 style={{fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, color: '#fff', marginBottom: 10, lineHeight: 1.1, textAlign: 'left'}}>
                        Venda em vídeo,<br />do seu jeito
                      </h2>
-                     <p style={{color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, opacity: 0.9, marginBottom: 20, lineHeight: 1.5, textAlign: 'left'}}>
-                       Com o Lompa, você grava ou transmite ao vivo, se conecta com clientes em tempo real e transforma cada venda em uma experiência. Tudo isso com pagamento seguro, envio rastreável e gestão simplificada.
+                     <p style={{color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, opacity: 0.9, marginBottom: 20, lineHeight: 1.5, textAlign: 'justify'}}>
+                       Com o Lompa, você grava ou transmite ao vivo,<br />se conecta com clientes em tempo real e transforma cada venda em uma experiência. Tudo isso com<br />pagamento seguro, envio rastreável e gestão simplificada.
                      </p>
                      <button style={{background: '#E321FF', color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, border: 'none', borderRadius: 10, padding: '12px 20px', cursor: 'pointer', boxShadow: '0 4px 16px rgba(227, 33, 255, 0.3)', width: '100%'}}>
                        Quero saber mais

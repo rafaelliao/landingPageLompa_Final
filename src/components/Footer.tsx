@@ -15,13 +15,13 @@ export default function Footer({ sections, className }: FooterProps) {
   return (
     <footer className={cn('bg-black/20 backdrop-blur-sm border-t border-white/20 text-white', className)}>
       <div className="container-custom py-16 px-4 md:px-8">
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
+        <div className="flex justify-center">
           {/* Brand Section */}
-          <div className="lg:col-span-1 text-center">
+          <div className="text-center max-w-md">
             <div className="mb-6 flex justify-center">
               <Logo size="md" />
             </div>
-            <p className="text-white/70 mb-6 leading-relaxed text-center">
+            <p className="text-white/70 mb-6 leading-relaxed text-center text-justify">
               Lompa Marketplace é o primeiro marketplace social de vídeos curtos do Brasil. 
               Feito para conectar quem vende com quem compra, de forma simples, visual e acessível.
             </p>
@@ -42,32 +42,6 @@ export default function Footer({ sections, className }: FooterProps) {
               </div>
             </div>
           </div>
-
-          {/* Footer Sections */}
-          {sections.map((section, index) => (
-            <div key={section.title}>
-              <h3 className="text-lg font-semibold mb-6 text-white">
-                {section.title}
-              </h3>
-              <ul className="space-y-3">
-                {section.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-white/70 hover:text-white transition-colors duration-200 flex items-center space-x-1 group"
-                      target={link.external ? '_blank' : undefined}
-                      rel={link.external ? 'noopener noreferrer' : undefined}
-                    >
-                      <span>{link.label}</span>
-                      {link.external && (
-                        <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      )}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
         </div>
 
         {/* Bottom Bar */}
