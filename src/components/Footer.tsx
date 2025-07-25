@@ -30,11 +30,11 @@ export default function Footer({ sections, className }: FooterProps) {
             <div className="space-y-3">
               <div className="flex items-center justify-center space-x-3 text-white/70">
                 <Mail className="w-4 h-4" />
-                <span>contato@lompa.com</span>
+                <span>contato@lompa.com.br</span>
               </div>
               <div className="flex items-center justify-center space-x-3 text-white/70">
                 <Phone className="w-4 h-4" />
-                <span>+55 (11) 99999-9999</span>
+                <span>(11) 93438-0061</span>
               </div>
               <div className="flex items-center justify-center space-x-3 text-white/70">
                 <MapPin className="w-4 h-4" />

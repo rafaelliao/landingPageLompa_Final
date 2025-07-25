@@ -539,21 +539,19 @@ function HomePageContent() {
           </section>
           
                      {/* Contact Section - Placeholder */}
-           <section id="contact" className={`${isMobile ? 'relative h-[80vh]' : 'py-20'}`}>
+           <section id="contact" className={`${isMobile ? 'relative h-[80vh] overflow-hidden' : 'py-20'}`}>
             {isMobile ? (
               <>
                 <div 
-                   className="w-full h-full bg-cover bg-center"
+                   className="w-full h-full bg-cover"
                     style={{ 
                       backgroundImage: 'url(/mockup_multi.png)',
                       backgroundSize: 'cover',
-                      backgroundPosition: 'center',
+                      backgroundPosition: '55% center',
                       backgroundRepeat: 'no-repeat',
                       opacity: 0.8,
                       height: '100%',
-                      width: '100%',
-                      position: 'relative',
-                      left: -40
+                      width: '100%'
                     }}
                 />
                                  {/* Conteúdo sobreposto à imagem - Apenas Mobile */}
