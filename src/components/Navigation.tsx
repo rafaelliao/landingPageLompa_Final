@@ -146,17 +146,18 @@ export default function Navigation({ items, className }: NavigationProps) {
               <HeadphonesIcon className="w-4 h-4" />
               </div>
             </button>
-            <button
+            <a
+              href="https://stage.seller-admin.lompa.com.br/login"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center justify-center px-6 py-3 button-custom-rounded text-white transition-all duration-200 font-semibold"
               style={{ 
                 background: 'linear-gradient(135deg, #4807AD 0%, #E321FF 100%)',
                 boxShadow: '0 4px 15px rgba(72, 7, 173, 0.3)'
               }}
-              onClick={() => {
-              }}
             >
               Acesso Vendedor
-            </button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -222,7 +223,10 @@ export default function Navigation({ items, className }: NavigationProps) {
 
                 {/* Botões de Ação */}
                 <div className="flex flex-col space-y-3 mt-8">
-                  <button
+                  <a
+                    href="https://stage.seller-admin.lompa.com.br/login"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center justify-center w-full py-3 button-custom-rounded text-white transition-all duration-200 font-semibold"
                     style={{ 
                       background: 'linear-gradient(135deg, #4807AD 0%, #E321FF 100%)',
@@ -233,7 +237,7 @@ export default function Navigation({ items, className }: NavigationProps) {
                     }}
                   >
                     Acesso Vendedor
-                    </button>
+                    </a>
                   
                     <button
                       className="flex items-center justify-center w-full py-3 button-custom-rounded border-2 border-white/30 text-white hover:border-white/60 hover:bg-white/10 transition-all duration-200 font-semibold"
@@ -244,6 +248,19 @@ export default function Navigation({ items, className }: NavigationProps) {
                     <HeadphonesIcon className="w-4 h-4 mr-2" />
                     Suporte
                     </button>
+                    
+                    <a
+                      href="https://wa.me/5511934380061"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-full py-3 button-custom-rounded border-2 border-white/30 text-white hover:border-white/60 hover:bg-white/10 transition-all duration-200 font-semibold"
+                      onClick={() => {
+                        setIsOpen(false)
+                      }}
+                    >
+                      <Phone className="w-4 h-4 mr-2" />
+                      Fale conosco
+                    </a>
                   </div>
                 </div>
               </div>
