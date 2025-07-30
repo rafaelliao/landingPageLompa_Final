@@ -1088,7 +1088,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
   // Novo carousel desktop tipo TikTok
   const videoList = [
-    '/garrafa_reels.mp4',
+    '/Garrafa_Reels.mp4',
     '/bolsa2_reels.mp4',
     '/parafusadeira_reels.mp4',
   ];
@@ -1101,6 +1101,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     if (isMobile) {
       setShowCarousel(false);
     }
+    console.log('isMobile mudou:', isMobile);
   }, [isMobile]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -1112,6 +1113,11 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         const scrollVh = (scrollY / viewportHeight) * 100;
         const shouldShow = scrollVh >= 80 && scrollVh <= 199;
         setShowCarousel(shouldShow); // Ajustado para terminar em 199vh para evitar sobreposição
+        
+        // Debug para verificar se o carousel está sendo ativado
+        if (scrollVh >= 80 && scrollVh <= 199) {
+          console.log('Carousel desktop ativado:', { scrollVh, shouldShow });
+        }
       };
       window.addEventListener('scroll', handleScroll);
       handleScroll();
@@ -1146,6 +1152,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
   // Resetar carouselIndex para 0 sempre que showCarousel for ativado (desktop)
   useEffect(() => {
     if (showCarousel) setCarouselIndex(0);
+    console.log('showCarousel mudou:', showCarousel);
   }, [showCarousel]);
 
   // Novo carousel mobile tipo TikTok
@@ -1989,7 +1996,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                               animate={{ opacity: 1, y: 0, zIndex: 2 }}
                               exit={{ opacity: 0, y: -100, zIndex: 1 }}
                               transition={{ duration: 0.6, ease: 'easeInOut' }}
-                              poster={src === '/garrafa_reels.mp4' ? '/frame_video1.png' : undefined}
+                              poster={src === '/Garrafa_Reels.mp4' ? '/frame_video1.png' : undefined}
                             />
                           )}
                         </motion.div>
