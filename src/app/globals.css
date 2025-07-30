@@ -1898,13 +1898,23 @@
   }
 }
 
-/* Remove o fundo do desktop de forma absoluta */
+/* Fundo especial para desktop */
 @media (min-width: 769px) {
-  .hero-container::before,
-  .hero-container-mobile::before {
-    background-image: none !important;
-    content: none !important;
-    display: none !important;
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/lompa_fundo_icon2.png');
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    background-size: 25vw;
+    opacity: 0.32 !important;
+    pointer-events: none;
+    z-index: 0;
+    display: block;
   }
 }
 
