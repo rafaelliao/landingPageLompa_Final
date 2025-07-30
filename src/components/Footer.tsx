@@ -158,9 +158,14 @@ export default function Footer({ sections, className }: FooterProps) {
         {/* Bottom Bar */}
         <div className="border-t border-white/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-white/60 text-sm">
-              © 2024 Lompa. Todos os direitos reservados.
-            </p>
+            <div className="text-center">
+              <p className="text-white/60 text-sm">
+                © 2024 Lompa. Todos os direitos reservados.
+              </p>
+              <p className="text-white/60 text-sm mt-1">
+                CNPJ: 57.632.888/0001-00
+              </p>
+            </div>
             <div className="flex items-center space-x-6 text-sm">
               <a href="/privacidade" className="text-white/60 hover:text-white transition-colors">
                 Política de Privacidade
