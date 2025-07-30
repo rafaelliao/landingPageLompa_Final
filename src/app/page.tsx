@@ -640,23 +640,25 @@ function HomePageContent() {
                   </h2>
                 </div>
                 
-                {/* Carousel Container */}
-                <div style={{ 
-                  overflowX: 'auto', 
-                  overflowY: 'hidden',
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
-                  WebkitOverflowScrolling: 'touch',
-                  width: '100%',
-                  cursor: 'grab',
-                  userSelect: 'none',
-                  touchAction: 'pan-x'
-                }}>
+                {/* Container com scroll horizontal */}
+                <div 
+                  className="carousel-container"
+                  style={{ 
+                    width: '100%',
+                    maxWidth: '320px',
+                    margin: '0 auto',
+                    paddingLeft: '16px',
+                    paddingRight: '16px',
+                    position: 'relative',
+                    zIndex: 10
+                  }}
+                >
                   <div style={{ 
                     display: 'flex', 
-                    gap: 8, 
-                    paddingLeft: '16px',
-                    paddingRight: '32px'
+                    gap: 8,
+                    paddingLeft: '20px',
+                    paddingRight: '100px',
+                    width: '800px'
                   }}>
                     {/* Card 1 - Poste com vídeo */}
                     <div style={{
@@ -899,23 +901,39 @@ function HomePageContent() {
                       </div>
                     </div>
                     
-                    {/* Indicador visual de scroll */}
-                    <div style={{
-                      minWidth: '20px',
-                      height: '320px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      opacity: 0.3
-                    }}>
-                      <div style={{
-                        width: '4px',
-                        height: '40px',
-                        background: '#E321FF',
-                        borderRadius: '2px'
-                      }}></div>
-                    </div>
+
                   </div>
+                </div>
+                
+                {/* Indicadores de progresso */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 8,
+                  marginTop: 24
+                }}>
+                  <div style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    background: '#E321FF',
+                    opacity: 1
+                  }}></div>
+                  <div style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    background: '#E321FF',
+                    opacity: 0.3
+                  }}></div>
+                  <div style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    background: '#E321FF',
+                    opacity: 0.3
+                  }}></div>
                 </div>
               </div>
             </section>

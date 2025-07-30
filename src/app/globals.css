@@ -1894,3 +1894,19 @@
     display: none !important;
   }
 }
+
+/* Carousel container - sobrescrever overflow global */
+.carousel-container {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-x !important;
+  cursor: grab !important;
+  user-select: none !important;
+}
+
+.carousel-container::-webkit-scrollbar {
+  display: none !important;
+}
