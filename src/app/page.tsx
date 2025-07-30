@@ -662,7 +662,7 @@ function HomePageContent() {
                     <div style={{
                       minWidth: 240,
                       maxWidth: 240,
-                      height: 400,
+                      height: 320,
                       background: '#fff',
                       borderRadius: '20px 0 20px 0',
                       overflow: 'hidden',
@@ -743,7 +743,7 @@ function HomePageContent() {
                     <div style={{
                       minWidth: 240,
                       maxWidth: 240,
-                      height: 400,
+                      height: 320,
                       background: '#fff',
                       borderRadius: '20px 0 20px 0',
                       overflow: 'hidden',
@@ -823,7 +823,7 @@ function HomePageContent() {
                     <div style={{
                       minWidth: 240,
                       maxWidth: 240,
-                      height: 400,
+                      height: 320,
                       background: '#fff',
                       borderRadius: '20px 0 20px 0',
                       overflow: 'hidden',
@@ -897,6 +897,23 @@ function HomePageContent() {
                           Compre o que curtir. Direto, visual e confiável.
                         </p>
                       </div>
+                    </div>
+                    
+                    {/* Indicador visual de scroll */}
+                    <div style={{
+                      minWidth: '20px',
+                      height: '320px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      opacity: 0.3
+                    }}>
+                      <div style={{
+                        width: '4px',
+                        height: '40px',
+                        background: '#E321FF',
+                        borderRadius: '2px'
+                      }}></div>
                     </div>
                   </div>
                 </div>
