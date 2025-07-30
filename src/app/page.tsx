@@ -1013,7 +1013,7 @@ function HomePageContent() {
                     width: '100%',
                     height: 400,
                     background: '#fff',
-                    borderRadius: '16px 0 16px 0',
+                    borderRadius: '40px 0 40px 0',
                     overflow: 'hidden',
                     boxShadow: '0 12px 48px rgba(0,0,0,0.15)',
                     position: 'relative',
@@ -1041,7 +1041,8 @@ function HomePageContent() {
                       position: 'relative',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      borderRadius: '40px 0 0 0'
                     }}>
                     </div>
                     
@@ -1104,7 +1105,7 @@ function HomePageContent() {
                     width: '100%',
                     height: 400,
                     background: '#fff',
-                    borderRadius: '16px 0 16px 0',
+                    borderRadius: '40px 0 40px 0',
                     overflow: 'hidden',
                     boxShadow: '0 12px 48px rgba(0,0,0,0.15)',
                     position: 'relative',
@@ -1132,7 +1133,8 @@ function HomePageContent() {
                       position: 'relative',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      borderRadius: '40px 0 0 0'
                     }}>
                     </div>
                     
@@ -1195,7 +1197,7 @@ function HomePageContent() {
                     width: '100%',
                     height: 400,
                     background: '#fff',
-                    borderRadius: '16px 0 16px 0',
+                    borderRadius: '40px 0 40px 0',
                     overflow: 'hidden',
                     boxShadow: '0 12px 48px rgba(0,0,0,0.15)',
                     position: 'relative',
@@ -1223,7 +1225,8 @@ function HomePageContent() {
                       position: 'relative',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      borderRadius: '40px 0 0 0'
                     }}>
                     </div>
                     
@@ -1291,11 +1294,11 @@ function HomePageContent() {
               <div className="main-container">
                 <div style={{
                   background: '#5C2D91',
-                  borderRadius: '24px 24px 24px 0',
+                  borderRadius: '24px 0 24px 0',
                   padding: '48px 40px',
                   boxShadow: '0 12px 48px rgba(0,0,0,0.2)',
                   position: 'relative',
-                  maxWidth: '800px',
+                  maxWidth: '1000px',
                   margin: '0 auto'
                 }}>
                   {/* Texto da newsletter */}
@@ -1327,7 +1330,7 @@ function HomePageContent() {
                     display: 'flex',
                     flexDirection: 'row',
                     gap: 16,
-                    maxWidth: '500px',
+                    maxWidth: '600px',
                     margin: '0 auto'
                   }}>
                     <input
