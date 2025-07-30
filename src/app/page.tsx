@@ -650,26 +650,32 @@ function HomePageContent() {
                     paddingLeft: '16px',
                     paddingRight: '16px',
                     position: 'relative',
-                    zIndex: 10
+                    zIndex: 10,
+                    overflowX: 'auto',
+                    scrollSnapType: 'x mandatory',
+                    WebkitOverflowScrolling: 'touch',
+                    scrollBehavior: 'smooth',
+                    touchAction: 'pan-x'
                   }}
                 >
                   <div style={{ 
                     display: 'flex', 
                     gap: 8,
                     paddingLeft: '20px',
-                    paddingRight: '100px',
-                    width: '800px'
+                    paddingRight: '200px',
+                    width: 'calc(240px * 3 + 16px)', // 3 cards de 240px + gap de 8px entre eles
+                    minWidth: 'max-content'
                   }}>
                     {/* Card 1 - Poste com vídeo */}
                     <div style={{
-                      minWidth: 240,
-                      maxWidth: 240,
+                      width: 240,
                       height: 320,
                       background: '#fff',
                       borderRadius: '20px 0 20px 0',
                       overflow: 'hidden',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                      position: 'relative'
+                      position: 'relative',
+                      flexShrink: 0
                     }}>
                       {/* Seção superior - 60% da altura */}
                       <div style={{
@@ -743,14 +749,14 @@ function HomePageContent() {
                     
                     {/* Card 2 - Venda com segurança */}
                     <div style={{
-                      minWidth: 240,
-                      maxWidth: 240,
+                      width: 240,
                       height: 320,
                       background: '#fff',
                       borderRadius: '20px 0 20px 0',
                       overflow: 'hidden',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                      position: 'relative'
+                      position: 'relative',
+                      flexShrink: 0
                     }}>
                       {/* Seção superior - 60% da altura */}
                       <div style={{
@@ -823,14 +829,14 @@ function HomePageContent() {
                     
                     {/* Card 3 - Veja, curta, compre */}
                     <div style={{
-                      minWidth: 240,
-                      maxWidth: 240,
+                      width: 240,
                       height: 320,
                       background: '#fff',
                       borderRadius: '20px 0 20px 0',
                       overflow: 'hidden',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                      position: 'relative'
+                      position: 'relative',
+                      flexShrink: 0
                     }}>
                       {/* Seção superior - 60% da altura */}
                       <div style={{
@@ -905,36 +911,7 @@ function HomePageContent() {
                   </div>
                 </div>
                 
-                {/* Indicadores de progresso */}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: 8,
-                  marginTop: 24
-                }}>
-                  <div style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: '50%',
-                    background: '#E321FF',
-                    opacity: 1
-                  }}></div>
-                  <div style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: '50%',
-                    background: '#E321FF',
-                    opacity: 0.3
-                  }}></div>
-                  <div style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: '50%',
-                    background: '#E321FF',
-                    opacity: 0.3
-                  }}></div>
-                </div>
+
               </div>
             </section>
           )}
