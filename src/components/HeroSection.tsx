@@ -146,7 +146,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               scrub: 0.5, // Reduzido para melhor resposta a scroll pequeno
               anticipatePin: 1, // Antecipar o pin para suavizar a transição
               onEnter: () => {},
-              onLeave: () => {}
+              onLeave: () => {},
+              onEnterBack: () => {},
+              onLeaveBack: () => {}
             }
           })
           
@@ -298,8 +300,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                   const productName = cardElement.querySelector('img')?.alt || ''
                   if (!productName.includes('Garrafa')) {
                     gsap.to(cardElement, {
-                      opacity: 0,
-                      scale: 0.8,
+                      opacity: 1,
+                      scale: 1,
                       duration: 0.5,
                       ease: 'power2.out'
                     })
@@ -614,7 +616,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           scrub: 0.5, // Reduzido para melhor resposta a scroll pequeno
           anticipatePin: 1, // Antecipar o pin para suavizar a transição
           onEnter: () => {},
-          onLeave: () => {}
+          onLeave: () => {},
+          onEnterBack: () => {},
+          onLeaveBack: () => {}
         }
       })
 
@@ -643,7 +647,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         ScrollTrigger.create({
           trigger: 'body',
           start: '+=750vh',
-          end: '+=760vh', // Duração curta para o efeito
+          end: '+=800vh', // Aumentado de 760vh para 800vh para melhor resposta a scroll pequeno
           scrub: 0.5,
           onEnter: () => {
             cardElements.forEach((card, index) => {
@@ -674,8 +678,10 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             });
           },
           onEnterBack: () => {
+            // Forçar reativação dos cards e ícones
             cardElements.forEach((card, index) => {
               if (index !== garrafaIndex) {
+                gsap.set(card, { pointerEvents: 'auto' }) // Reativar imediatamente
                 gsap.to(card, {
                   opacity: 1,
                   scale: 1,
@@ -689,6 +695,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               }
             });
             allIcons.forEach(icon => {
+              gsap.set(icon, { pointerEvents: 'auto' }) // Reativar imediatamente
               gsap.to(icon, {
                 opacity: 1,
                 scale: 1,
@@ -698,6 +705,72 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                 onComplete: () => {
                   gsap.set(icon, { pointerEvents: 'auto' })
                 }
+              });
+            });
+          },
+          onLeaveBack: () => {
+            // Garantir que os cards reapareçam mesmo se o callback onEnterBack não for chamado
+            cardElements.forEach((card, index) => {
+              if (index !== garrafaIndex) {
+                gsap.set(card, { pointerEvents: 'auto' })
+                gsap.to(card, {
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  duration: 0.3,
+                  ease: 'power2.out'
+                });
+              }
+            });
+            allIcons.forEach(icon => {
+              gsap.set(icon, { pointerEvents: 'auto' })
+              gsap.to(icon, {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.3,
+                ease: 'power2.out'
+              });
+            });
+          }
+        });
+      }
+
+      // ScrollTrigger adicional para garantir reaparecimento dos cards em scroll reverso
+      if (!shouldUseMobile && desktopCardsRef.current) {
+        const cardElements = Array.from(desktopCardsRef.current.querySelectorAll('.product-card-transparent'));
+        const garrafaIndex = cardElements.findIndex(card => card.querySelector('img')?.alt === 'Garrafa Stanley');
+        const starIcons = Array.from(desktopCardsRef.current.querySelectorAll('.star-icon'));
+        const likeIcons = Array.from(desktopCardsRef.current.querySelectorAll('.like-icon'));
+        const bagIcons = Array.from(desktopCardsRef.current.querySelectorAll('.bag-icon'));
+        const allIcons = [...starIcons, ...likeIcons, ...bagIcons];
+
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: '+=750vh',
+          onEnterBack: () => {
+            // Garantir que os cards reapareçam quando rolar de volta para cima
+            cardElements.forEach((card, index) => {
+              if (index !== garrafaIndex) {
+                gsap.set(card, { pointerEvents: 'auto' })
+                gsap.to(card, {
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  duration: 0.3,
+                  ease: 'power2.out'
+                });
+              }
+            });
+            allIcons.forEach(icon => {
+              gsap.set(icon, { pointerEvents: 'auto' })
+              gsap.to(icon, {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.3,
+                ease: 'power2.out'
               });
             });
           }
