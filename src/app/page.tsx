@@ -442,7 +442,7 @@ function HomePageContent() {
                   Quem pode usar o Lompa
                 </div>
                 <h2 style={{ color: '#fff', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, marginBottom: 12, lineHeight: 1.3 }}>
-                  Ideal para quem quer vender online do seu jeito
+                  Venda do seu jeito!
                 </h2>
                 <p style={{ color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, marginBottom: 32, lineHeight: 1.5, opacity: 0.9 }}>
                   Com o Lompa, você vende online, alcança novos clientes e gerencia tudo em um só lugar.
@@ -585,7 +585,7 @@ function HomePageContent() {
                 <div 
                    className="w-full h-full bg-cover"
                     style={{ 
-                      backgroundImage: 'url(/mockup_multi.png)',
+                      backgroundImage: 'url(/mockup_multi2.png)',
                       backgroundSize: 'cover',
                       backgroundPosition: '55% center',
                       backgroundRepeat: 'no-repeat',
@@ -626,6 +626,283 @@ function HomePageContent() {
               </div>
             )}
           </section>
+          
+          {/* Curta e Compartilhe Section - Carousel Lateral */}
+          {isMobile && (
+            <section className="py-16">
+              <div style={{ padding: '0 2px' }}>
+                <div style={{ textAlign: 'center', marginBottom: 32 }}>
+                  <div style={{ color: '#E321FF', fontFamily: 'Outfit, sans-serif', fontWeight: 500, fontSize: 14, marginBottom: 8 }}>
+                    Aplicativo
+                  </div>
+                  <h2 style={{ color: '#fff', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, lineHeight: 1.2 }}>
+                    Sua jornada no Lompa começa aqui
+                  </h2>
+                </div>
+                
+                {/* Carousel Container */}
+                <div style={{ 
+                  overflowX: 'auto', 
+                  overflowY: 'hidden',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                  WebkitOverflowScrolling: 'touch',
+                  width: '100%',
+                  cursor: 'grab',
+                  userSelect: 'none',
+                  touchAction: 'pan-x'
+                }}>
+                  <div style={{ 
+                    display: 'flex', 
+                    gap: 8, 
+                    paddingLeft: '16px',
+                    paddingRight: '32px'
+                  }}>
+                    {/* Card 1 - Poste com vídeo */}
+                    <div style={{
+                      minWidth: 240,
+                      maxWidth: 240,
+                      height: 400,
+                      background: '#fff',
+                      borderRadius: '20px 0 20px 0',
+                      overflow: 'hidden',
+                      boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                      position: 'relative'
+                    }}>
+                      {/* Seção superior - 60% da altura */}
+                      <div style={{
+                        height: '60%',
+                        width: '100%',
+                        backgroundImage: 'url(/card1_final.png)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+
+                      </div>
+                      
+                      {/* Ícone central na divisão */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '60%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 50,
+                        height: 50,
+                        background: '#E321FF',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+                        zIndex: 10
+                      }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 2L15.09 8.26L22 9L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9L8.91 8.26L12 2Z" fill="white"/>
+                        </svg>
+                      </div>
+                      
+                      {/* Seção inferior - 40% da altura */}
+                      <div style={{ 
+                        height: '40%',
+                        width: '100%',
+                        background: '#fff',
+                        padding: '30px 10px 20px 10px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center'
+                      }}>
+                        <h3 style={{
+                          color: '#333',
+                          fontFamily: 'Outfit, sans-serif',
+                          fontWeight: 700,
+                          fontSize: 12,
+                          marginBottom: 6,
+                          textAlign: 'center'
+                        }}>
+                          Poste com vídeo
+                        </h3>
+                        <p style={{
+                          color: '#666',
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 400,
+                          fontSize: 10,
+                          lineHeight: 1.3,
+                          textAlign: 'center'
+                        }}>
+                          Grave com seu celular, publique no feed e deixe o vídeo vender por você.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Card 2 - Venda com segurança */}
+                    <div style={{
+                      minWidth: 240,
+                      maxWidth: 240,
+                      height: 400,
+                      background: '#fff',
+                      borderRadius: '20px 0 20px 0',
+                      overflow: 'hidden',
+                      boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                      position: 'relative'
+                    }}>
+                      {/* Seção superior - 60% da altura */}
+                      <div style={{
+                        height: '60%',
+                        width: '100%',
+                        backgroundImage: 'url(/card2_final.png)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                      </div>
+                      
+                      {/* Ícone central na divisão */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '60%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 50,
+                        height: 50,
+                        background: '#E321FF',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+                        zIndex: 10
+                      }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M7 13V17C7 18.1 7.9 19 9 19H17C18.1 19 19 18.1 19 17V13H7Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      
+                      {/* Seção inferior - 40% da altura */}
+                      <div style={{ 
+                        height: '40%',
+                        width: '100%',
+                        background: '#fff',
+                        padding: '30px 15px 20px 15px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center'
+                      }}>
+                        <h3 style={{
+                          color: '#333',
+                          fontFamily: 'Outfit, sans-serif',
+                          fontWeight: 700,
+                          fontSize: 14,
+                          marginBottom: 6,
+                          textAlign: 'center'
+                        }}>
+                          Venda com segurança
+                        </h3>
+                        <p style={{
+                          color: '#666',
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 400,
+                          fontSize: 11,
+                          lineHeight: 1.3,
+                          textAlign: 'center'
+                        }}>
+                          Receba os pagamentos no app e envie pelos Correios com etiqueta automática.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Card 3 - Veja, curta, compre */}
+                    <div style={{
+                      minWidth: 240,
+                      maxWidth: 240,
+                      height: 400,
+                      background: '#fff',
+                      borderRadius: '20px 0 20px 0',
+                      overflow: 'hidden',
+                      boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                      position: 'relative'
+                    }}>
+                      {/* Seção superior - 60% da altura */}
+                      <div style={{
+                        height: '60%',
+                        width: '100%',
+                        backgroundImage: 'url(/card3_final.png)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                      </div>
+                      
+                      {/* Ícone central na divisão */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '60%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 50,
+                        height: 50,
+                        background: '#E321FF',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+                        zIndex: 10
+                      }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M17 8L21 12L17 16M7 8L3 12L7 16M14 4L10 20" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      
+                      {/* Seção inferior - 40% da altura */}
+                      <div style={{ 
+                        height: '40%',
+                        width: '100%',
+                        background: '#fff',
+                        padding: '30px 15px 20px 15px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center'
+                      }}>
+                        <h3 style={{
+                          color: '#333',
+                          fontFamily: 'Outfit, sans-serif',
+                          fontWeight: 700,
+                          fontSize: 14,
+                          marginBottom: 6,
+                          textAlign: 'center'
+                        }}>
+                          Veja, curta, compre
+                        </h3>
+                        <p style={{
+                          color: '#666',
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 400,
+                          fontSize: 11,
+                          lineHeight: 1.3,
+                          textAlign: 'center'
+                        }}>
+                          Compre o que curtir. Direto, visual e confiável.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
           
           {/* Footer */}
           <Footer sections={footerSections} />
