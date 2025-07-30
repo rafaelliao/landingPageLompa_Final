@@ -1909,8 +1909,8 @@
     bottom: 0;
     background-image: url('/lompa_fundo_icon2.png');
     background-repeat: no-repeat;
-    background-position: 0 center;
-    background-size: 25vw;
+    background-position: -100px center;
+    background-size: 35vw;
     opacity: 0.32 !important;
     pointer-events: none;
     z-index: 0;

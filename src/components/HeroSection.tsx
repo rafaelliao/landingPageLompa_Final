@@ -20,6 +20,8 @@ interface HeroSectionProps {
 const HeroSection = ({ className = '' }: HeroSectionProps) => {
   const { isMobile, getHeroContainerClasses } = useResponsive()
   
+
+  
   // Refs para animação
   const titleRef = useRef<HTMLHeadingElement>(null)
   const centralIconRef = useRef<HTMLDivElement>(null)
@@ -875,6 +877,13 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [showCarousel, setShowCarousel] = useState(false);
+  
+  // Garantir que o carousel seja inicializado corretamente
+  useEffect(() => {
+    if (isMobile) {
+      setShowCarousel(false);
+    }
+  }, [isMobile]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -883,7 +892,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         const scrollY = window.scrollY;
         const viewportHeight = window.innerHeight;
         const scrollVh = (scrollY / viewportHeight) * 100;
-        setShowCarousel(scrollVh >= 80 && scrollVh <= 250);
+        const shouldShow = scrollVh >= 80 && scrollVh <= 199;
+        setShowCarousel(shouldShow); // Ajustado para terminar em 199vh para evitar sobreposição
       };
       window.addEventListener('scroll', handleScroll);
       handleScroll();
@@ -991,8 +1001,9 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
   ];
 
   const [ctaVisible, setCtaVisible] = useState(false);
+  const [ctaDesktopVisible, setCtaDesktopVisible] = useState(false);
 
-  // Regra de visibilidade do botão CTA
+  // Regra de visibilidade do botão CTA - Mobile
   useEffect(() => {
     if (isMobile) {
       // Controlar visibilidade do botão CTA via ScrollTrigger
@@ -1011,7 +1022,26 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     }
   }, [isMobile]);
 
-  // Efeito de entrada e pulsante do botão CTA
+  // Regra de visibilidade do botão CTA - Desktop
+  useEffect(() => {
+    if (!isMobile) {
+      // Controlar visibilidade do botão CTA desktop via ScrollTrigger
+      const updateCTADesktop = () => {
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const scrollVh = (scrollY / viewportHeight) * 100;
+        setCtaDesktopVisible(scrollVh >= 80 && scrollVh <= 300); // Ajustado para terminar em 300vh para cobrir todo o range do mockup
+      };
+      window.addEventListener('scroll', updateCTADesktop);
+      updateCTADesktop();
+      return () => window.removeEventListener('scroll', updateCTADesktop);
+    } else {
+      setCtaDesktopVisible(false);
+      return undefined;
+    }
+  }, [isMobile]);
+
+  // Efeito de entrada e pulsante do botão CTA - Mobile
   useEffect(() => {
     let pulseTween: gsap.core.Tween | null = null;
     if (ctaVisible && isMobile) {
@@ -1045,7 +1075,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         );
       }
     }
-    // Efeito de mover o botão para baixo entre 80vh e 120vh
+    // Efeito de mover o botão para baixo entre 80vh e 120vh - Mobile
     let moveTween: gsap.core.Tween | null = null;
     const handleScroll = () => {
       if (!ctaVisible || !isMobile) return;
@@ -1082,6 +1112,77 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     };
   }, [ctaVisible, isMobile]);
 
+  // Efeito de entrada e pulsante do botão CTA - Desktop
+  useEffect(() => {
+    let pulseTween: gsap.core.Tween | null = null;
+    if (ctaDesktopVisible && !isMobile) {
+      const ctaBtn = document.getElementById('cta-download-desktop');
+      if (ctaBtn) {
+        gsap.fromTo(
+          ctaBtn,
+          { opacity: 0, y: 36, scale: 0.85, boxShadow: '0 2px 12px rgba(0,0,0,0.08)' },
+          { 
+            opacity: 1, 
+            y: 0, 
+            scale: 1.04, 
+            duration: 0.8, 
+            ease: 'back.out(1.7)',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+            onComplete: () => {
+              gsap.to(ctaBtn, { scale: 1, duration: 0.4, ease: 'power1.out', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', onComplete: () => {
+                // Efeito pulsante CTA sem brilho rosa
+                pulseTween = gsap.to(ctaBtn, {
+                  scale: 1.08,
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                  duration: 0.38,
+                  ease: 'power1.inOut',
+                  yoyo: true,
+                  repeat: -1,
+                  repeatDelay: 1.1
+                });
+              }});
+            }
+          }
+        );
+      }
+    }
+             // Efeito de mover o botão para baixo entre 200vh e 250vh - Desktop
+         let moveTween: gsap.core.Tween | null = null;
+         const handleScroll = () => {
+           if (!ctaDesktopVisible || isMobile) return;
+           const ctaBtn = document.getElementById('cta-download-desktop');
+           const mockupDesktop = document.getElementById('smartphone-mockup-desktop');
+           if (!ctaBtn || !mockupDesktop) return;
+           const scrollY = window.scrollY;
+           const viewportHeight = window.innerHeight;
+           const scrollVh = (scrollY / viewportHeight) * 100;
+           if (scrollVh >= 200 && scrollVh <= 300) { // Corrigido para cobrir todo o período do mockup desktop
+             // Calcular o centro Y do mockup desktop na tela
+             const mockupRect = mockupDesktop.getBoundingClientRect();
+             const centerY = mockupRect.top + mockupRect.height / 2;
+             // Ajustar o botão para o centro do mockup
+             gsap.to(ctaBtn, { top: centerY, duration: 0.4, ease: 'power2.out' });
+           }
+         };
+    window.addEventListener('scroll', handleScroll);
+    // Cleanup
+    return () => {
+      if (pulseTween) {
+        pulseTween.kill();
+        pulseTween = null;
+      }
+      if (moveTween) {
+        moveTween.kill();
+        moveTween = null;
+      }
+      window.removeEventListener('scroll', handleScroll);
+      const ctaBtn = document.getElementById('cta-download-desktop');
+      if (ctaBtn) {
+        gsap.set(ctaBtn, { scale: 1, opacity: 1, y: 0 });
+      }
+    };
+  }, [ctaDesktopVisible, isMobile]);
+
   // Função para detectar plataforma mobile
   const detectMobilePlatform = () => {
     if (typeof window === 'undefined') return 'unknown';
@@ -1097,7 +1198,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     return 'unknown';
   };
 
-  // Componente do botão CTA usando portal
+  // Componente do botão CTA usando portal - Mobile
   const DownloadCTAButton = ({ visible }: { visible: boolean }) => {
     if (typeof window === 'undefined') return null;
     
@@ -1192,7 +1293,109 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     );
   };
 
+  // Componente do botão CTA usando portal - Desktop
+  const DownloadCTADesktopButton = ({ visible }: { visible: boolean }) => {
+    if (typeof window === 'undefined') return null;
+    
+    // Determinar posição inicial para desktop
+    const getInitialTop = () => {
+      return '15vh'; // Posição inicial para desktop
+    };
+
+    // Função para obter o link de download correto
+    const getDownloadLink = () => {
+      const platform = detectMobilePlatform();
+      
+      if (platform === 'android') {
+        return 'https://play.google.com/store/apps/details?id=com.app.lompamarketplace'; // Link do Google Play
+      } else if (platform === 'ios') {
+        return 'https://apps.apple.com/in/app/lompa/id6742741600'; // Link da App Store
+      }
+      
+      // Fallback para desktop ou plataforma desconhecida
+      return 'https://lompa.com.br/download'; // Link genérico
+    };
+
+    const handleDownloadClick = () => {
+      const downloadLink = getDownloadLink();
+      window.open(downloadLink, '_blank');
+    };
+    
+    return ReactDOM.createPortal(
+      <div
+        id="cta-download-desktop"
+        style={{
+          position: 'fixed',
+          left: '50%',
+          top: getInitialTop(),
+          transform: 'translateX(-50%)',
+          zIndex: 9999,
+          pointerEvents: visible ? 'auto' : 'none',
+          opacity: visible ? 1 : 0,
+          transition: 'opacity 0.3s',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+                 <button
+           onClick={handleDownloadClick}
+           style={{
+             display: 'flex',
+             flexDirection: 'row',
+             justifyContent: 'center',
+             alignItems: 'center',
+             padding: '20px 32px',
+             gap: '8px',
+             position: 'relative',
+             width: '180px',
+             height: '56px',
+             background: '#E321FF',
+             borderRadius: '20px 0px',
+             border: 'none',
+             boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+             cursor: 'pointer',
+           }}
+         >
+          <span
+            style={{
+              fontFamily: 'Inter',
+              fontStyle: 'normal',
+              fontWeight: 600,
+              fontSize: '14px',
+              lineHeight: '14px',
+              color: '#FBF7FF',
+              // Propriedades experimentais:
+              // @ts-ignore
+              leadingTrim: 'both',
+              // @ts-ignore
+              textEdge: 'cap',
+              flex: 'none',
+              order: 0,
+              flexGrow: 0,
+              display: 'block',
+              textAlign: 'center',
+            }}
+          >
+            Descubra agora!
+          </span>
+        </button>
+      </div>,
+      document.body
+    );
+  };
+
   const [showMockupContent, setShowMockupContent] = useState(false);
+  const [showMockupContentDesktop, setShowMockupContentDesktop] = useState(false);
+  
+  // Garantir que os estados sejam inicializados corretamente
+  useEffect(() => {
+    if (isMobile) {
+      setShowMockupContentDesktop(false);
+    }
+  }, [isMobile]);
+  
+  // Controle do conteúdo do mockup mobile
   useEffect(() => {
     if (isMobile) {
       const handleScroll = () => {
@@ -1206,6 +1409,25 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       return () => window.removeEventListener('scroll', handleScroll);
     } else {
       setShowMockupContent(false);
+      return undefined;
+    }
+  }, [isMobile]);
+
+  // Controle do conteúdo do mockup desktop
+  useEffect(() => {
+    if (!isMobile) {
+      const handleScroll = () => {
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const scrollVh = (scrollY / viewportHeight) * 100;
+        const shouldShow = scrollVh >= 200 && scrollVh <= 300;
+        setShowMockupContentDesktop(shouldShow);
+      };
+      window.addEventListener('scroll', handleScroll);
+      handleScroll();
+      return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      setShowMockupContentDesktop(false);
       return undefined;
     }
   }, [isMobile]);
@@ -1244,6 +1466,48 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           transform: 'translate(-50%, 0)',
           width: 120,
           height: 120,
+          zIndex: 20000,
+          pointerEvents: 'none',
+        }}
+      />,
+      document.body
+    );
+  };
+
+  // Ícone de download via portal, posicionado na base do mockup desktop
+  const DownloadIconPortalDesktop = () => {
+    const [coords, setCoords] = useState<{left: number, top: number}>({ left: 0, top: 0 });
+    useEffect(() => {
+      if (typeof window === 'undefined') return;
+      const updatePosition = () => {
+        const mockupDesktop = document.getElementById('smartphone-mockup-desktop');
+        if (!mockupDesktop || isMobile || !showMockupContentDesktop) return;
+        const rect = mockupDesktop.getBoundingClientRect();
+        setCoords({
+          left: rect.left + rect.width / 2,
+          top: rect.bottom - 200 // ajustado para desktop
+        });
+      };
+      updatePosition();
+      window.addEventListener('scroll', updatePosition);
+      window.addEventListener('resize', updatePosition);
+      return () => {
+        window.removeEventListener('scroll', updatePosition);
+        window.removeEventListener('resize', updatePosition);
+      };
+    }, [isMobile, showMockupContentDesktop]);
+    if (isMobile || !showMockupContentDesktop) return null;
+    return ReactDOM.createPortal(
+      <img
+        src="/download_icon.svg"
+        alt="Download Icon Desktop"
+        style={{
+          position: 'fixed',
+          left: coords.left,
+          top: coords.top,
+          transform: 'translate(-50%, 0)',
+          width: 150, // maior para desktop
+          height: 150, // maior para desktop
           zIndex: 20000,
           pointerEvents: 'none',
         }}
@@ -1358,6 +1622,57 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                       ) : null
                     )}
                   </AnimatePresence>
+                </div>
+              ) : !isMobile && showMockupContentDesktop ? (
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  zIndex: 1001,
+                  pointerEvents: 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  padding: '40px 20px 20px 20px',
+                }}>
+                  <span style={{
+                    display: 'block',
+                    marginBottom: 16,
+                    fontFamily: 'Outfit',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    fontSize: 16,
+                    lineHeight: '16px',
+                    color: '#E321FF',
+                    textAlign: 'center',
+                    letterSpacing: 0.4,
+                    // @ts-ignore
+                    leadingTrim: 'both',
+                    // @ts-ignore
+                    textEdge: 'cap',
+                  }}>
+                    Bem vindo ao Lompa!
+                  </span>
+                  <span style={{
+                    display: 'block',
+                    fontFamily: 'Outfit',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    fontSize: 24,
+                    lineHeight: '28px',
+                    color: '#FFFFFF',
+                    textAlign: 'center',
+                    letterSpacing: 0.4,
+                    // @ts-ignore
+                    leadingTrim: 'both',
+                    // @ts-ignore
+                    textEdge: 'cap',
+                  }}>
+                    O marketplace<br />brasileiro feito para transformar como<br />as pessoas compram e vendem no digital.
+                  </span>
                 </div>
               ) : (
                 <img 
@@ -1551,6 +1866,10 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       {/* Botão CTA Baixar - Mobile via Portal */}
       {isMobile && ctaVisible && <DownloadCTAButton visible={ctaVisible} />}
       {isMobile && showMockupContent && <DownloadIconPortal />}
+      {/* Botão CTA Baixar - Desktop via Portal */}
+      {!isMobile && ctaDesktopVisible && <DownloadCTADesktopButton visible={ctaDesktopVisible} />}
+      {/* Ícone de download - Desktop via Portal */}
+      {!isMobile && showMockupContentDesktop && <DownloadIconPortalDesktop />}
       {/* Ícone de fundo especial mobile em 100vh */}
     </>
   )

@@ -100,6 +100,8 @@ const footerSections: FooterSection[] = [
 function AboutCarousel() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const cardRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  const { isMobile } = useResponsive();
+  
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
@@ -117,26 +119,42 @@ function AboutCarousel() {
     }, 4000);
     return () => clearInterval(interval);
   }, []);
+  
+  // Estilos diferentes para mobile e desktop
+  const containerStyle: React.CSSProperties = isMobile ? {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 24,
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    overflowX: 'auto',
+    padding: '0 16px',
+    scrollSnapType: 'x mandatory',
+    WebkitOverflowScrolling: 'touch',
+    margin: '0 -16px',
+    width: '100vw',
+    maxWidth: '100vw',
+    boxSizing: 'border-box',
+    scrollBehavior: 'smooth',
+    touchAction: 'pan-x',
+  } : {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 40,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    overflowX: 'visible',
+    padding: '0',
+    margin: '0',
+    width: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
+  };
+  
   return (
     <div
       ref={carouselRef}
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 24,
-        justifyContent: 'flex-start',
-        alignItems: 'stretch',
-        overflowX: 'auto',
-        padding: '0 16px',
-        scrollSnapType: 'x mandatory',
-        WebkitOverflowScrolling: 'touch',
-        margin: '0 -16px',
-        width: '100vw',
-        maxWidth: '100vw',
-        boxSizing: 'border-box',
-        scrollBehavior: 'smooth',
-        touchAction: 'pan-x',
-      }}
+      style={containerStyle}
     >
       {/* Card Lompa */}
       <div
@@ -254,8 +272,120 @@ function HomePageContent() {
         {/* Hero Section */}
         <HeroSection />
         
-        {/* Features Section - Apenas Desktop */}
-        {!isMobile && <FeaturesSection features={featuresData} />}
+        {/* Cards Central Desktop - Substituindo Features Section */}
+        {!isMobile && (
+          <section id="cards_central_desktop" className="py-12" style={{ marginTop: '80px' }}>
+            <div style={{ 
+              maxWidth: '1200px', 
+              margin: '0 auto', 
+              padding: '0 20px',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              gap: '40px'
+            }}>
+              {/* Card 1 - Bolsa */}
+              <div style={{
+                width: 350,
+                height: 500,
+                background: '#fff',
+                borderRadius: 32,
+                border: '1px solid rgba(255,255,255,0.2)',
+                boxShadow: '0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                backdropFilter: 'blur(10px)',
+                position: 'relative',
+              }}>
+                {/* Div superior para a imagem bolsa_card_central */}
+                <div style={{ width: '100%', height: 200, position: 'relative', overflow: 'hidden', borderTopLeftRadius: 32, borderTopRightRadius: 32 }}>
+                  <img
+                    src="/bolsa_card_central.png"
+                    alt="Bolsa Card Central"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      borderTopLeftRadius: 32,
+                      borderTopRightRadius: 32,
+                      filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.18))',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                  <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.5) 80%)' }} />
+                  <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+                    <span style={{ color: '#E321FF', fontFamily: 'Outfit', fontWeight: 500, fontSize: 14, marginBottom: 8, background: 'rgba(255,255,255,0.7)', padding: '6px 12px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>Para quem compra</span>
+                    <span style={{ color: '#fff', fontFamily: 'Outfit', fontWeight: 700, fontSize: 18, textAlign: 'center', lineHeight: 1.2 }}>Veja vídeos de produtos reais<br />e compre com mais confiança</span>
+                  </div>
+                </div>
+                {/* Conteúdo do card */}
+                <div style={{ width: '100%', padding: '24px 24px 16px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  {/* Ícone check */}
+                  <div style={{ width: 20, height: 20, borderRadius: 10, background: '#E321FF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E321FF"/><path d="M7 12.5l3 3 7-7" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <div style={{ color: '#6C1EB1', fontFamily: 'Inter', fontWeight: 600, fontSize: 16, textAlign: 'center', marginBottom: 8 }}>Você vê o produto de<br />verdade, na mão de quem está vendendo.<br /></div>
+                  <div style={{ color: '#6C1EB1', fontFamily: 'Inter', fontWeight: 400, fontSize: 13, textAlign: 'center', marginBottom: 16, lineHeight: '18px' }}>
+                    <span style={{ fontWeight: 700, color: '#6C1EB1' }}>É FÁCIL, VISUAL E DIRETO!</span><br />
+                    Toque para comprar, pague com<br />segurança e receba em casa.
+                  </div>
+                  <button 
+                    onClick={handleDownloadClick}
+                    style={{ background: '#442085', color: '#FBF7FF', fontFamily: 'Inter', fontWeight: 600, fontSize: 14, border: 'none', borderRadius: 16, padding: '16px 0', width: '100%', marginTop: 8, boxShadow: '0 2px 8px rgba(68,32,133,0.08)', cursor: 'pointer' }}
+                  >
+                    Quero comprar com segurança
+                  </button>
+                </div>
+              </div>
+
+              {/* Card 2 - Usuário */}
+              <div style={{
+                width: 350,
+                height: 500,
+                background: '#fff',
+                borderRadius: 32,
+                border: '1px solid rgba(255,255,255,0.2)',
+                boxShadow: '0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8)',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                backdropFilter: 'blur(10px)',
+                position: 'relative',
+              }}>
+                {/* Imagem de topo */}
+                <div style={{ width: '100%', height: 200, position: 'relative', overflow: 'hidden' }}>
+                  <img src="/user_card_central.png" alt="Usuário Card Central" style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: 32, borderTopRightRadius: 32 }} />
+                  <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.5) 80%)' }} />
+                  <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+                    <span style={{ color: '#E321FF', fontFamily: 'Outfit', fontWeight: 500, fontSize: 14, marginBottom: 8, background: 'rgba(255,255,255,0.7)', padding: '6px 12px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>Para quem vende</span>
+                    <span style={{ color: '#fff', fontFamily: 'Outfit', fontWeight: 700, fontSize: 18, textAlign: 'center', lineHeight: 1.2 }}>Crie sua loja, grave um vídeo<br />e comece a vender</span>
+                  </div>
+                </div>
+                {/* Card branco */}
+                <div style={{ width: '100%', padding: '24px 24px 16px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  {/* Ícone check */}
+                  <div style={{ width: 20, height: 20, borderRadius: 10, background: '#E321FF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E321FF"/><path d="M7 12.5l3 3 7-7" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <div style={{ color: '#5901B0', fontFamily: 'Inter', fontWeight: 600, fontSize: 16, textAlign: 'center', marginBottom: 8 }}>Você só precisa do seu celular</div>
+                  <div style={{ color: '#5901B0', fontFamily: 'Inter', fontWeight: 400, fontSize: 13, textAlign: 'center', marginBottom: 16, lineHeight: '18px' }}>
+                    Grave um vídeo mostrando seu<br />produto, publique no app e comece a vender com pagamento seguro e envio pelos Correios.<br /><br />
+                    <span style={{ fontWeight: 700 }}>SEM COMPLICAÇÃO.<br />100% MOBILE. SEM ENROLAÇÃO.</span>
+                  </div>
+                  <button 
+                    onClick={handleDownloadClick}
+                    style={{ background: '#442085', color: '#FBF7FF', fontFamily: 'Inter', fontWeight: 600, fontSize: 14, border: 'none', borderRadius: 16, padding: '16px 0', width: '100%', marginTop: 8, boxShadow: '0 2px 8px rgba(68,32,133,0.08)', cursor: 'pointer' }}
+                  >
+                    Quero começar a vender agora
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
           
           {/* Pricing Section - Placeholder */}
           <section id="cards_central" className={`py-6${isMobile ? ' pb-16 pt-40' : ''}`} style={{ position: isMobile ? 'relative' : undefined }}>
@@ -337,7 +467,7 @@ function HomePageContent() {
                    position: 'relative',
                  }}>
                    {/* Div superior para a imagem bolsa_card_central */}
-                   <div style={{ width: '100%', height: 160, position: 'relative', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', overflow: 'hidden', borderTopLeftRadius: 32, borderTopRightRadius: 32 }}>
+                   <div style={{ width: '100%', height: 160, position: 'relative', overflow: 'hidden', borderTopLeftRadius: 32, borderTopRightRadius: 32 }}>
                      <img
                        src="/bolsa_card_central.png"
                        alt="Bolsa Card Central"
@@ -351,6 +481,11 @@ function HomePageContent() {
                          pointerEvents: 'none',
                        }}
                      />
+                     <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.5) 80%)' }} />
+                     <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 19 }}>
+                       <span style={{ color: '#E321FF', fontFamily: 'Outfit', fontWeight: 500, fontSize: 13, marginBottom: 6, background: 'rgba(255,255,255,0.7)', padding: '4px 8px', borderRadius: '6px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>Para quem compra</span>
+                       <span style={{ color: '#fff', fontFamily: 'Outfit', fontWeight: 700, fontSize: 15, textAlign: 'center', lineHeight: 1.2 }}>Veja vídeos de produtos reais<br />e compre com mais confiança</span>
+                     </div>
                    </div>
                    {/* Conteúdo do card */}
                    <div style={{ width: '100%', padding: '19.2px 19.2px 12.8px 19.2px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -420,15 +555,129 @@ function HomePageContent() {
                  </div>
                </div>
              ) : (
-              <div className="main-container text-center">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-                  Planos Flexíveis
+              <div className="main-container text-center" style={{ padding: '80px 20px 60px 20px' }}>
+                <div style={{ color: '#E321FF', fontFamily: 'Outfit, sans-serif', fontWeight: 500, fontSize: 18, marginBottom: 12 }}>
+                  Quem pode usar o Lompa
+                </div>
+                <h2 style={{ color: '#fff', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 36, marginBottom: 16, lineHeight: 1.3 }}>
+                  Venda do seu jeito!
                 </h2>
-                <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-                  Escolha o plano ideal para suas necessidades e comece a crescer hoje mesmo.
+                <p style={{ color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 16, marginBottom: 48, lineHeight: 1.5, opacity: 0.9, maxWidth: '600px', margin: '0 auto 48px auto' }}>
+                  Com o Lompa, você vende online, alcança novos clientes e gerencia tudo em um só lugar.
                 </p>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg max-w-md mx-auto">
-                  <p className="text-white/80 text-base">Componente de Preços em desenvolvimento...</p>
+                
+                {/* Accordion Container - Desktop */}
+                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                  {/* Accordion 1 - Comprador digital */}
+                  <div style={{ background: '#F5F5F5', borderRadius: 20, marginBottom: 20, overflow: 'hidden', border: '1px solid rgba(0,0,0,0.1)' }}>
+                    <div
+                      style={{ padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                      onClick={() => setAccordion([!accordion[0], false, false])}
+                    >
+                      <span style={{ color: '#5901B0', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 18 }}>Comprador digital</span>
+                      {accordion[0] ? (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                          <path d="M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      ) : (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 5V19M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      )}
+                    </div>
+                    <div
+                      style={{
+                        padding: accordion[0] ? '0 32px 32px 32px' : '0 32px',
+                        color: '#333',
+                        fontFamily: 'Inter',
+                        fontWeight: 400,
+                        fontSize: 16,
+                        lineHeight: 1.6,
+                        maxHeight: accordion[0] ? 500 : 0,
+                        overflow: 'hidden',
+                        transition: 'max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s',
+                        opacity: accordion[0] ? 1 : 0,
+                        transitionProperty: 'max-height, opacity, padding',
+                        transitionDuration: '0.4s, 0.3s, 0.3s',
+                      }}
+                    >
+                      Compre vendo o produto em vídeo — ao vivo ou gravado. Pagamento seguro via gateway próprio e envio pelos Correios com rastreio. E o melhor: se algo der errado, estamos aqui para mediar e garantir sua satisfação.
+                    </div>
+                  </div>
+                  
+                  {/* Accordion 2 - Criador independente ou revendedor */}
+                  <div style={{ background: '#F5F5F5', borderRadius: 20, marginBottom: 20, border: '1px solid rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+                    <div
+                      style={{ padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                      onClick={() => setAccordion([false, !accordion[1], false])}
+                    >
+                      <span style={{ color: '#5901B0', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 18 }}>Criador independente ou revendedor</span>
+                      {accordion[1] ? (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                          <path d="M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      ) : (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 5V19M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      )}
+                    </div>
+                    <div
+                      style={{
+                        padding: accordion[1] ? '0 32px 32px 32px' : '0 32px',
+                        color: '#333',
+                        fontFamily: 'Inter',
+                        fontWeight: 400,
+                        fontSize: 16,
+                        lineHeight: 1.6,
+                        maxHeight: accordion[1] ? 500 : 0,
+                        overflow: 'hidden',
+                        transition: 'max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s',
+                        opacity: accordion[1] ? 1 : 0,
+                        transitionProperty: 'max-height, opacity, padding',
+                        transitionDuration: '0.4s, 0.3s, 0.3s',
+                      }}
+                    >
+                      Venda como criador de conteúdo, influenciador, revendedor ou pequeno empreendedor. Mostre seu produto em vídeo, negocie direto com o cliente e receba pagamentos de forma segura.
+                    </div>
+                  </div>
+                  
+                  {/* Accordion 3 - Loja física */}
+                  <div style={{ background: '#F5F5F5', borderRadius: 20, marginBottom: 20, border: '1px solid rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+                    <div
+                      style={{ padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                      onClick={() => setAccordion([false, false, !accordion[2]])}
+                    >
+                      <span style={{ color: '#5901B0', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 18 }}>Loja física</span>
+                      {accordion[2] ? (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                          <path d="M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      ) : (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 5V19M5 12H19" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      )}
+                    </div>
+                    <div
+                      style={{
+                        padding: accordion[2] ? '0 32px 32px 32px' : '0 32px',
+                        color: '#333',
+                        fontFamily: 'Inter',
+                        fontWeight: 400,
+                        fontSize: 16,
+                        lineHeight: 1.6,
+                        maxHeight: accordion[2] ? 500 : 0,
+                        overflow: 'hidden',
+                        transition: 'max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s',
+                        opacity: accordion[2] ? 1 : 0,
+                        transitionProperty: 'max-height, opacity, padding',
+                        transitionDuration: '0.4s, 0.3s, 0.3s',
+                      }}
+                    >
+                      Traga sua loja física para o digital! Alcance novos públicos, mostre seus produtos em vídeo e aumente suas vendas com a credibilidade do Lompa.
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -562,70 +811,180 @@ function HomePageContent() {
             </section>
           )}
           
-          {/* About Section - Comparativo Marketplace com Carousel Automático */}
-          <section id="about" className="py-20">
-            <div className="main-container text-center">
-              <div style={{ color: '#E321FF', fontFamily: 'Outfit, sans-serif', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
-                Por que o Lompa é diferente?
+          {/* About Section - Mobile */}
+          {isMobile && (
+            <section id="about" className="py-20">
+              <div className="main-container text-center">
+                <div style={{ color: '#E321FF', fontFamily: 'Outfit, sans-serif', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
+                  Por que o Lompa é diferente?
+                </div>
+                <h2 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 36, color: '#fff', marginBottom: 8, lineHeight: 1.1 }}>
+                  Não é só mais um marketplace
+                </h2>
+                <div style={{ color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 16, opacity: 0.8, marginBottom: 40 }}>
+                  É a vitrine digital do Brasil real, com vídeo, voz e confiança.
+                </div>
+                <AboutCarousel />
               </div>
-              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 36, color: '#fff', marginBottom: 8, lineHeight: 1.1 }}>
-                Não é só mais um marketplace
-              </h2>
-              <div style={{ color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 16, opacity: 0.8, marginBottom: 40 }}>
-                É a vitrine digital do Brasil real, com vídeo, voz e confiança.
+            </section>
+          )}
+
+          {/* About Section - Desktop */}
+          {!isMobile && (
+            <section id="about-desktop" className="py-20">
+              <div className="main-container text-center">
+                <div style={{ color: '#E321FF', fontFamily: 'Outfit, sans-serif', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
+                  Por que o Lompa é diferente?
+                </div>
+                <h2 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 36, color: '#fff', marginBottom: 8, lineHeight: 1.1 }}>
+                  Não é só mais um marketplace
+                </h2>
+                <div style={{ color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 16, opacity: 0.8, marginBottom: 40 }}>
+                  É a vitrine digital do Brasil real, com vídeo, voz e confiança.
+                </div>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  alignItems: 'center',
+                  width: '100%',
+                  maxWidth: '1200px',
+                  margin: '0 auto'
+                }}>
+                  <AboutCarousel />
+                </div>
               </div>
-              <AboutCarousel />
-            </div>
-          </section>
+            </section>
+          )}
           
-                     {/* Contact Section - Placeholder */}
-           <section id="contact" className={`${isMobile ? 'relative h-[80vh] overflow-hidden' : 'py-20'}`}>
-            {isMobile ? (
-              <>
-                <div 
-                   className="w-full h-full bg-cover"
-                    style={{ 
-                      backgroundImage: 'url(/mockup_multi2.png)',
+          {/* Contact Section - Mobile */}
+          {isMobile && (
+            <section id="contact" className="relative h-[80vh] overflow-hidden">
+              <div 
+                 className="w-full h-full bg-cover"
+                  style={{ 
+                    backgroundImage: 'url(/mockup_multi2.png)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: '55% center',
+                    backgroundRepeat: 'no-repeat',
+                    opacity: 0.8,
+                    height: '100%',
+                    width: '100%'
+                  }}
+              />
+              {/* Conteúdo sobreposto à imagem - Apenas Mobile */}
+              <div style={{position: 'absolute', top: 0, left: 0, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10, paddingTop: 24}}>
+                <div style={{background: 'rgba(44, 0, 80, 0.85)', borderRadius: 20, padding: '28px 20px', maxWidth: 320, width: '90%', boxShadow: '0 8px 32px rgba(0,0,0,0.3)'}}>
+                  <h2 style={{fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, color: '#fff', marginBottom: 10, lineHeight: 1.1, textAlign: 'left'}}>
+                    Venda em vídeo,<br />do seu jeito
+                  </h2>
+                  <p style={{color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, opacity: 0.9, marginBottom: 20, lineHeight: 1.5, textAlign: 'justify'}}>
+                    Com o Lompa, você grava ou transmite ao vivo,<br />se conecta com clientes em tempo real e transforma cada venda em uma experiência. Tudo isso com<br />pagamento seguro, envio rastreável e gestão simplificada.
+                  </p>
+                  <button 
+                    onClick={handleDownloadClick}
+                    style={{background: '#E321FF', color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, border: 'none', borderRadius: 10, padding: '12px 20px', cursor: 'pointer', boxShadow: '0 4px 16px rgba(227, 33, 255, 0.3)', width: '100%'}}
+                  >
+                    Quero saber mais
+                  </button>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Contact Section - Desktop */}
+          {!isMobile && (
+            <section id="contact-desktop" className="py-32">
+              <div className="main-container text-center">
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  alignItems: 'center',
+                  width: '100%',
+                  margin: '0 auto'
+                }}>
+                  <div 
+                    style={{
+                      width: '70%',
+                      height: '500px',
+                      backgroundImage: 'url(/mockup_multi3.png)',
                       backgroundSize: 'cover',
-                      backgroundPosition: '55% center',
+                      backgroundPosition: 'center',
                       backgroundRepeat: 'no-repeat',
                       opacity: 0.8,
-                      height: '100%',
-                      width: '100%'
+                      borderRadius: '24px'
                     }}
-                />
-                                 {/* Conteúdo sobreposto à imagem - Apenas Mobile */}
-                 <div style={{position: 'absolute', top: 0, left: 0, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10, paddingTop: 24}}>
-                   <div style={{background: 'rgba(44, 0, 80, 0.85)', borderRadius: 20, padding: '28px 20px', maxWidth: 320, width: '90%', boxShadow: '0 8px 32px rgba(0,0,0,0.3)'}}>
-                     <h2 style={{fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, color: '#fff', marginBottom: 10, lineHeight: 1.1, textAlign: 'left'}}>
+                  />
+                </div>
+                                 {/* Conteúdo sobreposto à imagem - Desktop */}
+                 <div style={{
+                   position: 'absolute', 
+                   top: '50%', 
+                   left: '50%', 
+                   transform: 'translate(-50%, -50%)',
+                   width: '100%',
+                   maxWidth: '400px',
+                   display: 'flex',
+                   flexDirection: 'column',
+                   alignItems: 'center',
+                   zIndex: 10,
+                   padding: '0 20px'
+                 }}>
+                   <div style={{
+                     background: 'rgba(44, 0, 80, 0.9)', 
+                     borderRadius: 16, 
+                     padding: '32px 24px', 
+                     maxWidth: 350, 
+                     width: '100%', 
+                     boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                     textAlign: 'center'
+                   }}>
+                     <h2 style={{
+                       fontFamily: 'Outfit, sans-serif', 
+                       fontWeight: 700, 
+                       fontSize: 28, 
+                       color: '#fff', 
+                       marginBottom: 12, 
+                       lineHeight: 1.2, 
+                       textAlign: 'center'
+                     }}>
                        Venda em vídeo,<br />do seu jeito
                      </h2>
-                     <p style={{color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, opacity: 0.9, marginBottom: 20, lineHeight: 1.5, textAlign: 'justify'}}>
-                       Com o Lompa, você grava ou transmite ao vivo,<br />se conecta com clientes em tempo real e transforma cada venda em uma experiência. Tudo isso com<br />pagamento seguro, envio rastreável e gestão simplificada.
+                     <p style={{
+                       color: '#fff', 
+                       fontFamily: 'Inter, sans-serif', 
+                       fontWeight: 400, 
+                       fontSize: 14, 
+                       opacity: 0.9, 
+                       marginBottom: 24, 
+                       lineHeight: 1.6, 
+                       textAlign: 'center'
+                     }}>
+                       Com o Lompa, você grava ou transmite ao vivo, se conecta com clientes em tempo real e transforma cada venda em uma experiência. Tudo isso com pagamento seguro, envio rastreável e gestão simplificada.
                      </p>
                      <button 
                        onClick={handleDownloadClick}
-                       style={{background: '#E321FF', color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, border: 'none', borderRadius: 10, padding: '12px 20px', cursor: 'pointer', boxShadow: '0 4px 16px rgba(227, 33, 255, 0.3)', width: '100%'}}
+                       style={{
+                         background: '#E321FF', 
+                         color: '#fff', 
+                         fontFamily: 'Inter, sans-serif', 
+                         fontWeight: 600, 
+                         fontSize: 14, 
+                         border: 'none', 
+                         borderRadius: 10, 
+                         padding: '12px 24px', 
+                         cursor: 'pointer', 
+                         boxShadow: '0 4px 16px rgba(227, 33, 255, 0.4)',
+                         width: 'auto',
+                         minWidth: '160px'
+                       }}
                      >
                        Quero saber mais
                      </button>
                    </div>
                  </div>
-              </>
-            ) : (
-              <div className="main-container text-center">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-                  Entre em Contato
-                </h2>
-                <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-                  Estamos aqui para ajudar você a alcançar seus objetivos digitais.
-                </p>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg max-w-md mx-auto">
-                  <p className="text-white/80 text-base">Componente de Contato em desenvolvimento...</p>
-                </div>
               </div>
-            )}
-          </section>
+            </section>
+          )}
           
           {/* Curta e Compartilhe Section - Carousel Lateral */}
           {isMobile && (
