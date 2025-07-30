@@ -662,7 +662,7 @@ function HomePageContent() {
                     display: 'flex', 
                     gap: 8,
                     paddingLeft: '20px',
-                    paddingRight: '200px',
+                    paddingRight: '40px',
                     width: 'calc(240px * 3 + 16px)', // 3 cards de 240px + gap de 8px entre eles
                     minWidth: 'max-content'
                   }}>
