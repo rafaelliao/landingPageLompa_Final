@@ -146,6 +146,27 @@ export default function Navigation({ items, className }: NavigationProps) {
               <HeadphonesIcon className="w-4 h-4" />
               </div>
             </button>
+            
+            <button
+              className="group contact-button flex items-center justify-center w-12 h-12 rounded-full border-2 border-white/30 text-white transition-all duration-300 hover:border-white/60 hover:bg-white/10 relative overflow-hidden"
+              onClick={() => {
+                window.open('https://wa.me/5511934380061', '_blank')
+              }}
+            >
+              <div
+                className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 button-custom-rounded"
+              />
+              <div
+                className="absolute inset-0 flex items-center justify-center px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <span className="text-white font-semibold text-sm">Fale conosco</span>
+              </div>
+              <div
+                className="relative z-10 transition-transform duration-300 group-hover:opacity-0"
+            >
+              <Phone className="w-4 h-4" />
+              </div>
+            </button>
             <a
               href="https://stage.seller-admin.lompa.com.br/login"
               target="_blank"

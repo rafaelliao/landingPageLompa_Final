@@ -1485,6 +1485,19 @@
     border-bottom-right-radius: 1rem !important;
   }
   
+  /* Botão fale conosco com efeito hover */
+  .contact-button {
+    transition: all 0.3s ease;
+  }
+
+  .contact-button:hover {
+    width: 180px !important;
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 1rem !important;
+  }
+  
   /* Melhorar espaçamento em dispositivos móveis */
   @media (max-width: 640px) {
     /* Garantir que texto não seja cortado */

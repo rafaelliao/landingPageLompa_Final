@@ -143,7 +143,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               trigger: 'body',
               start: 'top top',
               end: '+=200vh', // Range menor para mobile
-              scrub: 1,
+              scrub: 0.5, // Reduzido para melhor resposta a scroll pequeno
+              anticipatePin: 1, // Antecipar o pin para suavizar a transição
               onEnter: () => {},
               onLeave: () => {}
             }
@@ -163,7 +164,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           // Configurações para mobile (ajustadas para terminar antes do pin)
           const mobileAnimationConfig = {
             range: '200vh', // Termina antes do pin começar em 300vh
-            scrub: 1,
+            scrub: 0.5, // Reduzido para melhor resposta a scroll pequeno
             initialScale: 1,
             finalScale: { main: 1.5, others: 0.6 }
           }
@@ -176,6 +177,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               start: 'top top',
               end: '+=200vh', // Cards mobile até 200vh
               scrub: mobileAnimationConfig.scrub,
+              anticipatePin: 1, // Antecipar o pin para suavizar a transição
               onUpdate: (self) => {
                 // Atualizar dinamicamente as posições dos cards durante o scroll
                 const scrollY = window.scrollY
@@ -331,7 +333,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
                   trigger: 'body',
                   start: 'top top',
                   end: '+=290vh', // Garrafa mobile até 290vh
-                  scrub: 1,
+                  scrub: 0.5, // Reduzido para melhor resposta a scroll pequeno
+                  anticipatePin: 1, // Antecipar o pin para suavizar a transição
                   onUpdate: (self) => {
                     // Atualizar dinamicamente as posições da garrafa durante o scroll
                     const scrollY = window.scrollY
@@ -454,8 +457,18 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         // Verificar se os ScrollTriggers foram criados
         const allTriggers = ScrollTrigger.getAll()
         
-        ScrollTrigger.refresh()
-        return
+              // Forçar atualização do ScrollTrigger após todas as configurações
+      ScrollTrigger.refresh(true)
+      
+      // Configuração adicional para melhor resposta a scroll pequeno
+      ScrollTrigger.addEventListener("refresh", () => {
+        // Recalcular posições quando necessário
+        if (window.scrollY > 0) {
+          ScrollTrigger.update()
+        }
+      })
+      
+      return
       }
 
       // Verificar se targetCards existe (só desktop)
@@ -475,10 +488,17 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       // Configurações para desktop
       const animationConfig = {
         range: '800vh',
-        scrub: 3.5,
+        scrub: 1, // Reduzido de 3.5 para 1 para melhor resposta a scroll pequeno
         initialScale: 1,
         finalScale: { main: 1.5, others: 0.7 }
       }
+      
+      // Configuração global para melhor performance de scroll
+      ScrollTrigger.config({
+        autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
+        ignoreMobileResize: true,
+        syncInterval: 60
+      })
       
       
       // Timeline para animação dos cards
@@ -489,6 +509,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           start: 'top top',
           end: `+=${animationConfig.range}`,
           scrub: animationConfig.scrub,
+          anticipatePin: 1, // Antecipar o pin para suavizar a transição
           onUpdate: (self) => {
             const scrollY = window.scrollY
             const viewportHeight = window.innerHeight
@@ -590,7 +611,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           trigger: 'body',
           start: 'top top',
           end: `+=${titleAnimationRange}`,
-          scrub: 1,
+          scrub: 0.5, // Reduzido para melhor resposta a scroll pequeno
+          anticipatePin: 1, // Antecipar o pin para suavizar a transição
           onEnter: () => {},
           onLeave: () => {}
         }
