@@ -916,6 +916,100 @@ function HomePageContent() {
             </section>
           )}
           
+          {/* Newsletter Section - Mobile */}
+          {isMobile && (
+            <section className="py-16">
+              <div style={{ padding: '0 20px' }}>
+                <div style={{
+                  background: '#5C2D91',
+                  borderRadius: '20px 20px 20px 0',
+                  padding: '32px 24px',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
+                  position: 'relative'
+                }}>
+                  {/* Texto da newsletter */}
+                  <div style={{ marginBottom: 24 }}>
+                    <h3 style={{
+                      color: '#fff',
+                      fontFamily: 'Outfit, sans-serif',
+                      fontWeight: 700,
+                      fontSize: 18,
+                      lineHeight: 1.3,
+                      marginBottom: 8
+                    }}>
+                      Conteúdos, lançamentos e convites
+                    </h3>
+                    <p style={{
+                      color: '#fff',
+                      fontFamily: 'Outfit, sans-serif',
+                      fontWeight: 600,
+                      fontSize: 16,
+                      lineHeight: 1.3,
+                      opacity: 0.9
+                    }}>
+                      exclusivos do Lompa Marketplace
+                    </p>
+                  </div>
+                  
+                  {/* Campo de email e botão */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 12
+                  }}>
+                    <input
+                      type="email"
+                      placeholder="Digite seu email"
+                      style={{
+                        width: '100%',
+                        padding: '16px 20px',
+                        borderRadius: 12,
+                        border: 'none',
+                        fontSize: 16,
+                        fontFamily: 'Inter, sans-serif',
+                        backgroundColor: '#fff',
+                        color: '#333',
+                        outline: 'none'
+                      }}
+                    />
+                    <button
+                      onClick={() => {
+                        // Função para inscrição na newsletter
+                        alert('Inscrição realizada com sucesso!');
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '16px 20px',
+                        borderRadius: '12px 0 12px 0',
+                        border: 'none',
+                        fontSize: 16,
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: 600,
+                        backgroundColor: '#E321FF',
+                        color: '#fff',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 16px rgba(227, 33, 255, 0.3)',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        const target = e.target as HTMLButtonElement;
+                        target.style.transform = 'translateY(-2px)';
+                        target.style.boxShadow = '0 6px 20px rgba(227, 33, 255, 0.4)';
+                      }}
+                      onMouseLeave={(e) => {
+                        const target = e.target as HTMLButtonElement;
+                        target.style.transform = 'translateY(0)';
+                        target.style.boxShadow = '0 4px 16px rgba(227, 33, 255, 0.3)';
+                      }}
+                    >
+                      Inscrever-se
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+          
           {/* Footer */}
           <Footer sections={footerSections} />
       </main>
