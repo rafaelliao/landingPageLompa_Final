@@ -637,7 +637,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       )
       
       
-      // Desaparecimento permanente dos cards (exceto garrafa) em 750vh (desktop)
+      // Desaparecimento permanente dos cards (exceto garrafa) em 80vh (desktop)
       if (!shouldUseMobile && desktopCardsRef.current && mockupRef.current) {
         const cardElements = Array.from(desktopCardsRef.current.querySelectorAll('.product-card-transparent'));
         const garrafaIndex = cardElements.findIndex(card => card.querySelector('img')?.alt === 'Garrafa Stanley');
@@ -648,8 +648,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         const allIcons = [...starIcons, ...likeIcons, ...bagIcons];
         ScrollTrigger.create({
           trigger: 'body',
-          start: '+=750vh',
-          end: '+=800vh', // Aumentado de 760vh para 800vh para melhor resposta a scroll pequeno
+          start: '+=80vh',
+          end: '+=130vh', // 50vh de duração para a animação
           scrub: 0.5,
           onEnter: () => {
             cardElements.forEach((card, index) => {
@@ -680,60 +680,82 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
             });
           },
           onEnterBack: () => {
-            // Forçar reativação dos cards e ícones
-            cardElements.forEach((card, index) => {
-              if (index !== garrafaIndex) {
-                gsap.set(card, { pointerEvents: 'auto' }) // Reativar imediatamente
-                gsap.to(card, {
+            // Simplificado: deixar a regra independente cuidar do comportamento após 80vh
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const scrollVh = (scrollY / viewportHeight) * 100;
+            
+            if (scrollVh < 80) {
+              // Permitir reaparecer apenas abaixo de 80vh
+              cardElements.forEach((card, index) => {
+                if (index !== garrafaIndex) {
+                  gsap.set(card, { pointerEvents: 'auto' });
+                  gsap.to(card, {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)',
+                    onComplete: () => {
+                      gsap.set(card, { pointerEvents: 'auto' });
+                    }
+                  });
+                }
+              });
+              allIcons.forEach(icon => {
+                gsap.set(icon, { pointerEvents: 'auto' });
+                gsap.to(icon, {
                   opacity: 1,
                   scale: 1,
                   y: 0,
                   duration: 0.5,
                   ease: 'back.out(1.7)',
                   onComplete: () => {
-                    gsap.set(card, { pointerEvents: 'auto' })
+                    gsap.set(icon, { pointerEvents: 'auto' });
                   }
                 });
-              }
-            });
-            allIcons.forEach(icon => {
-              gsap.set(icon, { pointerEvents: 'auto' }) // Reativar imediatamente
-              gsap.to(icon, {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 0.5,
-                ease: 'back.out(1.7)',
-                onComplete: () => {
-                  gsap.set(icon, { pointerEvents: 'auto' })
-                }
               });
-            });
+            }
+            // Se scrollVh >= 80, a regra independente cuidará de esconder os cards
           },
           onLeaveBack: () => {
-            // Garantir que os cards reapareçam mesmo se o callback onEnterBack não for chamado
-            cardElements.forEach((card, index) => {
-              if (index !== garrafaIndex) {
-                gsap.set(card, { pointerEvents: 'auto' })
-                gsap.to(card, {
+            // Simplificado: deixar a regra independente cuidar do comportamento após 80vh
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const scrollVh = (scrollY / viewportHeight) * 100;
+            
+            if (scrollVh < 80) {
+              // Permitir reaparecer apenas abaixo de 80vh
+              cardElements.forEach((card, index) => {
+                if (index !== garrafaIndex) {
+                  gsap.set(card, { pointerEvents: 'auto' });
+                  gsap.to(card, {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)',
+                    onComplete: () => {
+                      gsap.set(card, { pointerEvents: 'auto' });
+                    }
+                  });
+                }
+              });
+              allIcons.forEach(icon => {
+                gsap.set(icon, { pointerEvents: 'auto' });
+                gsap.to(icon, {
                   opacity: 1,
                   scale: 1,
                   y: 0,
-                  duration: 0.3,
-                  ease: 'power2.out'
+                  duration: 0.5,
+                  ease: 'back.out(1.7)',
+                  onComplete: () => {
+                    gsap.set(icon, { pointerEvents: 'auto' });
+                  }
                 });
-              }
-            });
-            allIcons.forEach(icon => {
-              gsap.set(icon, { pointerEvents: 'auto' })
-              gsap.to(icon, {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 0.3,
-                ease: 'power2.out'
               });
-            });
+            }
+            // Se scrollVh >= 80, a regra independente cuidará de esconder os cards
           }
         });
       }
@@ -750,36 +772,232 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
         ScrollTrigger.create({
           trigger: 'body',
           start: 'top top',
-          end: '+=750vh',
+          end: '+=80vh',
           onEnterBack: () => {
-            // Garantir que os cards reapareçam quando rolar de volta para cima
-            cardElements.forEach((card, index) => {
-              if (index !== garrafaIndex) {
-                gsap.set(card, { pointerEvents: 'auto' })
-                gsap.to(card, {
+            // Simplificado: deixar a regra independente cuidar do comportamento após 80vh
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const scrollVh = (scrollY / viewportHeight) * 100;
+            
+            if (scrollVh < 80) {
+              // Permitir reaparecer apenas abaixo de 80vh
+              cardElements.forEach((card, index) => {
+                if (index !== garrafaIndex) {
+                  gsap.set(card, { pointerEvents: 'auto' });
+                  gsap.to(card, {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)',
+                    onComplete: () => {
+                      gsap.set(card, { pointerEvents: 'auto' });
+                    }
+                  });
+                }
+              });
+              allIcons.forEach(icon => {
+                gsap.set(icon, { pointerEvents: 'auto' });
+                gsap.to(icon, {
                   opacity: 1,
                   scale: 1,
                   y: 0,
-                  duration: 0.3,
-                  ease: 'power2.out'
+                  duration: 0.5,
+                  ease: 'back.out(1.7)',
+                  onComplete: () => {
+                    gsap.set(icon, { pointerEvents: 'auto' });
+                  }
                 });
-              }
-            });
-            allIcons.forEach(icon => {
-              gsap.set(icon, { pointerEvents: 'auto' })
-              gsap.to(icon, {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 0.3,
-                ease: 'power2.out'
               });
-            });
+            }
+            // Se scrollVh >= 80, a regra independente cuidará de esconder os cards
+          },
+          onLeaveBack: () => {
+            // Simplificado: deixar a regra independente cuidar do comportamento após 80vh
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const scrollVh = (scrollY / viewportHeight) * 100;
+            
+            if (scrollVh < 80) {
+              // Permitir reaparecer apenas abaixo de 80vh
+              cardElements.forEach((card, index) => {
+                if (index !== garrafaIndex) {
+                  gsap.set(card, { pointerEvents: 'auto' });
+                  gsap.to(card, {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)',
+                    onComplete: () => {
+                      gsap.set(card, { pointerEvents: 'auto' });
+                    }
+                  });
+                }
+              });
+              allIcons.forEach(icon => {
+                gsap.set(icon, { pointerEvents: 'auto' });
+                gsap.to(icon, {
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  duration: 0.5,
+                  ease: 'back.out(1.7)',
+                  onComplete: () => {
+                    gsap.set(icon, { pointerEvents: 'auto' });
+                  }
+                });
+              });
+            }
+            // Se scrollVh >= 80, a regra independente cuidará de esconder os cards
           }
         });
       }
 
+      // REGRA INDEPENDENTE: Garantir que cards não apareçam de forma alguma após 80vh (desktop)
+      if (!shouldUseMobile && desktopCardsRef.current) {
+        const cardElements = Array.from(desktopCardsRef.current.querySelectorAll('.product-card-transparent'));
+        const garrafaIndex = cardElements.findIndex(card => card.querySelector('img')?.alt === 'Garrafa Stanley');
+        const starIcons = Array.from(desktopCardsRef.current.querySelectorAll('.star-icon'));
+        const likeIcons = Array.from(desktopCardsRef.current.querySelectorAll('.like-icon'));
+        const bagIcons = Array.from(desktopCardsRef.current.querySelectorAll('.bag-icon'));
+        const allIcons = [...starIcons, ...likeIcons, ...bagIcons];
 
+        ScrollTrigger.create({
+          trigger: 'body',
+          start: '+=80vh',
+          end: '+=250vh', // Cobertura mais ampla para incluir toda a região do carousel e além
+          scrub: false,
+          onEnter: () => {
+            // Forçar esconder todos os cards (exceto garrafa) quando passar de 80vh
+            cardElements.forEach((card, index) => {
+              if (index !== garrafaIndex) {
+                gsap.set(card, { 
+                  opacity: 0, 
+                  scale: 0.3, 
+                  y: -30, 
+                  pointerEvents: 'none' 
+                });
+              }
+            });
+            allIcons.forEach(icon => {
+              gsap.set(icon, { 
+                opacity: 0, 
+                scale: 0.3, 
+                y: -30, 
+                pointerEvents: 'none' 
+              });
+            });
+          },
+          onUpdate: (self) => {
+            // Verificar constantemente se está acima de 80vh e forçar esconder
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const scrollVh = (scrollY / viewportHeight) * 100;
+            
+            // Forçar esconder cards em toda a região do carousel (80vh-199vh) e além
+            if (scrollVh >= 80) {
+              cardElements.forEach((card, index) => {
+                if (index !== garrafaIndex) {
+                  gsap.set(card, { 
+                    opacity: 0, 
+                    scale: 0.3, 
+                    y: -30, 
+                    pointerEvents: 'none' 
+                  });
+                }
+              });
+              allIcons.forEach(icon => {
+                gsap.set(icon, { 
+                  opacity: 0, 
+                  scale: 0.3, 
+                  y: -30, 
+                  pointerEvents: 'none' 
+                });
+              });
+            }
+          },
+          onEnterBack: () => {
+            // Só permitir reaparecer se estiver abaixo de 80vh
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const scrollVh = (scrollY / viewportHeight) * 100;
+            
+            // Verificar se está na região do carousel (80vh-199vh) e forçar esconder
+            if (scrollVh >= 80 && scrollVh <= 199) {
+              // Forçar esconder durante toda a região do carousel
+              cardElements.forEach((card, index) => {
+                if (index !== garrafaIndex) {
+                  gsap.set(card, { 
+                    opacity: 0, 
+                    scale: 0.3, 
+                    y: -30, 
+                    pointerEvents: 'none' 
+                  });
+                }
+              });
+              allIcons.forEach(icon => {
+                gsap.set(icon, { 
+                  opacity: 0, 
+                  scale: 0.3, 
+                  y: -30, 
+                  pointerEvents: 'none' 
+                });
+              });
+            } else if (scrollVh < 80) {
+              // Permitir reaparecer apenas abaixo de 80vh
+              cardElements.forEach((card, index) => {
+                if (index !== garrafaIndex) {
+                  gsap.set(card, { pointerEvents: 'auto' });
+                  gsap.to(card, {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)',
+                    onComplete: () => {
+                      gsap.set(card, { pointerEvents: 'auto' });
+                    }
+                  });
+                }
+              });
+              allIcons.forEach(icon => {
+                gsap.set(icon, { pointerEvents: 'auto' });
+                gsap.to(icon, {
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  duration: 0.5,
+                  ease: 'back.out(1.7)',
+                  onComplete: () => {
+                    gsap.set(icon, { pointerEvents: 'auto' });
+                  }
+                });
+              });
+            } else {
+              // Forçar esconder se ainda estiver acima de 80vh
+              cardElements.forEach((card, index) => {
+                if (index !== garrafaIndex) {
+                  gsap.set(card, { 
+                    opacity: 0, 
+                    scale: 0.3, 
+                    y: -30, 
+                    pointerEvents: 'none' 
+                  });
+                }
+              });
+              allIcons.forEach(icon => {
+                gsap.set(icon, { 
+                  opacity: 0, 
+                  scale: 0.3, 
+                  y: -30, 
+                  pointerEvents: 'none' 
+                });
+              });
+            }
+          }
+        });
+      }
 
       // Efeito de saída da garrafa (desktop) - independente do mobile
       if (!shouldUseMobile && desktopCardsRef.current && mockupRef.current) {
