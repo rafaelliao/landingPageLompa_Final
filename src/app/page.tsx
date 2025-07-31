@@ -1395,7 +1395,7 @@ function HomePageContent() {
                     Aplicativo
                   </div>
                   <h2 style={{ color: '#fff', fontFamily: 'Outfit, sans-serif', fontWeight: 700, fontSize: 24, lineHeight: 1.2 }}>
-                    Sua jornada no Lompa começa aqui
+                    Sua jornada no Lompa<br />começa aqui
                   </h2>
                 </div>
                 
