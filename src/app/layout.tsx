@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   keywords: ['landing page', 'next.js', 'typescript', 'framer motion', 'tailwind css'],
   authors: [{ name: 'CursorAgent-FrontEnd' }],
   robots: 'index, follow',
+  icons: {
+    icon: '/favicon_lompa.svg',
+    shortcut: '/favicon_lompa.svg',
+    apple: '/favicon_lompa.svg',
+  },
 }
 
 export const viewport = {
