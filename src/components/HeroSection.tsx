@@ -1528,48 +1528,37 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       return '15vh'; // Posição inicial para desktop
     };
 
-    // Função para obter o link de download correto
-    const getDownloadLink = () => {
-      const platform = detectMobilePlatform();
-      
-      if (platform === 'android') {
-        return 'https://play.google.com/store/apps/details?id=com.app.lompamarketplace'; // Link do Google Play
-      } else if (platform === 'ios') {
-        return 'https://apps.apple.com/in/app/lompa/id6742741600'; // Link da App Store
-      }
-      
-      // Fallback para desktop ou plataforma desconhecida
-      return 'https://lompa.com.br/download'; // Link genérico
-    };
-
     const handleDownloadClick = () => {
-      // Gerar QR code dinâmico baseado na plataforma
-      const platform = detectMobilePlatform();
-      let downloadLink = '';
+      // Links específicos para iOS e Android
+      const iosLink = 'https://apps.apple.com/in/app/lompa/id6742741600';
+      const androidLink = 'https://play.google.com/store/apps/details?id=com.app.lompamarketplace';
       
-      if (platform === 'android') {
-        downloadLink = 'https://play.google.com/store/apps/details?id=com.app.lompamarketplace';
-      } else if (platform === 'ios') {
-        downloadLink = 'https://apps.apple.com/in/app/lompa/id6742741600';
-      } else {
-        downloadLink = 'https://lompa.com.br/download';
-      }
-      
-      // Gerar QR code
-      QRCode.toDataURL(downloadLink, {
-        width: 200,
-        margin: 2,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
-      }).then(url => {
-        setQrCodeDataURL(url);
+      // Gerar QR codes para iOS e Android
+      Promise.all([
+        QRCode.toDataURL(iosLink, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        }),
+        QRCode.toDataURL(androidLink, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        })
+      ]).then(([iosQR, androidQR]) => {
+        setIosQRCodeDataURL(iosQR);
+        setAndroidQRCodeDataURL(androidQR);
         setShowQRPopup(true);
       }).catch(err => {
-        console.error('Erro ao gerar QR code:', err);
-        // Fallback para abrir link diretamente
-        window.open(downloadLink, '_blank');
+        console.error('Erro ao gerar QR codes:', err);
+        // Fallback para abrir link genérico
+        window.open('https://lompa.com.br/download', '_blank');
       });
     };
     
@@ -1661,8 +1650,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
           style={{
             backgroundColor: '#FBF7FF',
             borderRadius: '20px',
-            padding: '32px',
-            maxWidth: '400px',
+            padding: '40px',
+            maxWidth: '600px',
             width: '90%',
             textAlign: 'center',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
@@ -1675,36 +1664,138 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               fontWeight: 600,
-              fontSize: '20px',
-              lineHeight: '24px',
-              color: '#1A1A1A',
-              marginBottom: '24px',
-              margin: '0 0 24px 0',
+              fontSize: '24px',
+              lineHeight: '28px',
+              color: '#4A148C',
+              marginBottom: '8px',
+              margin: '0 0 8px 0',
             }}
           >
-            Aponte seu celular para baixar
+            Aponte o celular em um dos QR Code abaixo.
           </h2>
           
-          {qrCodeDataURL && (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                marginBottom: '24px',
-              }}
-            >
-              <img
-                src={qrCodeDataURL}
-                alt="QR Code para download"
+          <p
+            style={{
+              fontFamily: 'Inter',
+              fontStyle: 'normal',
+              fontWeight: 500,
+              fontSize: '16px',
+              lineHeight: '20px',
+              color: '#666666',
+              marginBottom: '32px',
+              margin: '0 0 32px 0',
+            }}
+          >
+            Escolha sua plataforma.
+          </p>
+          
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '60px',
+              marginBottom: '32px',
+              flexWrap: 'wrap',
+            }}
+          >
+            {iosQRCodeDataURL && (
+              <div
                 style={{
-                  width: '200px',
-                  height: '200px',
-                  borderRadius: '12px',
-                  border: '2px solid #E321FF',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px',
                 }}
-              />
-            </div>
-          )}
+              >
+                <img
+                  src={iosQRCodeDataURL}
+                  alt="QR Code para iOS"
+                  style={{
+                    width: '180px',
+                    height: '180px',
+                    borderRadius: '12px',
+                    border: '2px solid #E321FF',
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: 'Inter',
+                    fontWeight: 500,
+                    fontSize: '14px',
+                    color: '#1A1A1A',
+                  }}
+                >
+                  iOS
+                </span>
+                {/* Apple Store Icon */}
+                <div
+                  style={{
+                    width: '134px',
+                    height: '45px',
+                    marginTop: '8px',
+                  }}
+                >
+                  <img
+                    src="/apple_icon.svg"
+                    alt="Apple Store"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+            
+            {androidQRCodeDataURL && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                <img
+                  src={androidQRCodeDataURL}
+                  alt="QR Code para Android"
+                  style={{
+                    width: '180px',
+                    height: '180px',
+                    borderRadius: '12px',
+                    border: '2px solid #E321FF',
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: 'Inter',
+                    fontWeight: 500,
+                    fontSize: '14px',
+                    color: '#1A1A1A',
+                  }}
+                >
+                  Android
+                </span>
+                {/* Play Store Icon */}
+                <div
+                  style={{
+                    width: '134px',
+                    height: '41px',
+                    marginTop: '8px',
+                  }}
+                >
+                  <img
+                    src="/android_icon.svg"
+                    alt="Play Store"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
           
           <button
             onClick={() => setShowQRPopup(false)}
@@ -1738,7 +1829,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
   const [showMockupContent, setShowMockupContent] = useState(false);
   const [showMockupContentDesktop, setShowMockupContentDesktop] = useState(false);
   const [showQRPopup, setShowQRPopup] = useState(false);
-  const [qrCodeDataURL, setQrCodeDataURL] = useState('');
+  const [iosQRCodeDataURL, setIosQRCodeDataURL] = useState('');
+  const [androidQRCodeDataURL, setAndroidQRCodeDataURL] = useState('');
   
   // Garantir que os estados sejam inicializados corretamente
   useEffect(() => {
