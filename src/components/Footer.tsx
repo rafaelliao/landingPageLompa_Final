@@ -166,14 +166,14 @@ export default function Footer({ sections, className }: FooterProps) {
                 CNPJ: 57.632.888/0001-00
               </p>
             </div>
-            <div className="flex items-center space-x-6 text-sm">
-              <a href="/politica-privacidade" className="text-white/60 hover:text-white transition-colors">
+            <div className="flex items-center space-x-3 md:space-x-6 text-sm">
+              <a href="/politica-privacidade" className="text-white/60 hover:text-white transition-colors text-xs md:text-sm">
                 Política de Privacidade
               </a>
-              <a href="/termos" className="text-white/60 hover:text-white transition-colors">
-                Termos de Uso
+              <a href="/termos-servico" className="text-white/60 hover:text-white transition-colors text-xs md:text-sm">
+                Termos de Serviço
               </a>
-              <a href="/cookies" className="text-white/60 hover:text-white transition-colors">
+              <a href="/cookies" className="text-white/60 hover:text-white transition-colors text-xs md:text-sm">
                 Cookies
               </a>
             </div>
