@@ -12,6 +12,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Carousel from 'framer-motion-carousel'
 import ReactDOM from 'react-dom'
+import QRCode from 'qrcode'
 
 interface HeroSectionProps {
   className?: string
@@ -1542,8 +1543,34 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     };
 
     const handleDownloadClick = () => {
-      const downloadLink = getDownloadLink();
-      window.open(downloadLink, '_blank');
+      // Gerar QR code dinâmico baseado na plataforma
+      const platform = detectMobilePlatform();
+      let downloadLink = '';
+      
+      if (platform === 'android') {
+        downloadLink = 'https://play.google.com/store/apps/details?id=com.app.lompamarketplace';
+      } else if (platform === 'ios') {
+        downloadLink = 'https://apps.apple.com/in/app/lompa/id6742741600';
+      } else {
+        downloadLink = 'https://lompa.com.br/download';
+      }
+      
+      // Gerar QR code
+      QRCode.toDataURL(downloadLink, {
+        width: 200,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        }
+      }).then(url => {
+        setQrCodeDataURL(url);
+        setShowQRPopup(true);
+      }).catch(err => {
+        console.error('Erro ao gerar QR code:', err);
+        // Fallback para abrir link diretamente
+        window.open(downloadLink, '_blank');
+      });
     };
     
     return ReactDOM.createPortal(
@@ -1610,8 +1637,108 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
     );
   };
 
+  // Componente do popup com QR code
+  const QRCodePopup = () => {
+    if (!showQRPopup) return null;
+
+    return ReactDOM.createPortal(
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 10000,
+        }}
+        onClick={() => setShowQRPopup(false)}
+      >
+        <div
+          style={{
+            backgroundColor: '#FBF7FF',
+            borderRadius: '20px',
+            padding: '32px',
+            maxWidth: '400px',
+            width: '90%',
+            textAlign: 'center',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h2
+            style={{
+              fontFamily: 'Inter',
+              fontStyle: 'normal',
+              fontWeight: 600,
+              fontSize: '20px',
+              lineHeight: '24px',
+              color: '#1A1A1A',
+              marginBottom: '24px',
+              margin: '0 0 24px 0',
+            }}
+          >
+            Aponte seu celular para baixar
+          </h2>
+          
+          {qrCodeDataURL && (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginBottom: '24px',
+              }}
+            >
+              <img
+                src={qrCodeDataURL}
+                alt="QR Code para download"
+                style={{
+                  width: '200px',
+                  height: '200px',
+                  borderRadius: '12px',
+                  border: '2px solid #E321FF',
+                }}
+              />
+            </div>
+          )}
+          
+          <button
+            onClick={() => setShowQRPopup(false)}
+            style={{
+              backgroundColor: '#E321FF',
+              color: '#FBF7FF',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '12px 24px',
+              fontFamily: 'Inter',
+              fontWeight: 600,
+              fontSize: '14px',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            Fechar
+          </button>
+        </div>
+      </div>,
+      document.body
+    );
+  };
+
   const [showMockupContent, setShowMockupContent] = useState(false);
   const [showMockupContentDesktop, setShowMockupContentDesktop] = useState(false);
+  const [showQRPopup, setShowQRPopup] = useState(false);
+  const [qrCodeDataURL, setQrCodeDataURL] = useState('');
   
   // Garantir que os estados sejam inicializados corretamente
   useEffect(() => {
@@ -2068,6 +2195,8 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
       {!isMobile && ctaDesktopVisible && <DownloadCTADesktopButton visible={ctaDesktopVisible} />}
       {/* Ícone de download - Desktop via Portal */}
       {!isMobile && showMockupContentDesktop && <DownloadIconPortalDesktop />}
+      {/* Popup QR Code */}
+      <QRCodePopup />
       {/* Ícone de fundo especial mobile em 100vh */}
     </>
   )
