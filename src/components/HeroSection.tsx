@@ -1088,7 +1088,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
   // Novo carousel desktop tipo TikTok
   const videoList = [
-    '/Garrafa_reels.mp4?v=' + Date.now(),
+    '/Garrafa_reels.mp4',
     '/bolsa2_reels.mp4',
     '/parafusadeira_reels.mp4',
   ];
@@ -1157,7 +1157,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
   // Novo carousel mobile tipo TikTok - usando os mesmos vídeos do desktop
   const mobileVideoList = [
-    '/Garrafa_reels.mp4?v=' + Date.now(),
+    '/Garrafa_reels.mp4',
     '/bolsa2_reels.mp4',
     '/parafusadeira_reels.mp4',
   ];
@@ -1220,7 +1220,7 @@ const HeroSection = ({ className = '' }: HeroSectionProps) => {
 
   // Pré-carregar vídeos do carousel (desktop e mobile)
   const allCarouselVideos = [
-    '/Garrafa_reels.mp4?v=' + Date.now(),
+    '/Garrafa_reels.mp4',
     '/bolsa2_reels.mp4',
     '/parafusadeira_reels.mp4',
   ];

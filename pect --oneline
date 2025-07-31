@@ -1,0 +1,20 @@
+[33m4da4d86[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mV3[m[33m, [m[1;31morigin/V3[m[33m)[m Remove transparência dos cards produtos mobile
+[33m5ce3b54[m fix: eliminar React do mobile - DOM puro completo para videos
+[33m7b73e64[m feat: migrar mobile para DOM puro - performance otimizada para videos
+[33m80cdd52[m fix: remover duplicidades - carregamento unico e cache limpo
+[33m13465f6[m feat: igualar mobile ao desktop - remover duplicidades e simplificar codigo
+[33me04b288[m fix: remover todas as regras CSS de frames - limpeza completa desktop e mobile
+[33mda7e8b8[m feat: otimizacoes mobile - carregamento inteligente e transicoes mais rapidas
+[33m77fb5dc[m feat: carregamento desde inicio da pagina - videos carregam imediatamente sem esperar carousel
+[33me577e23[m feat: overlay de videos - proximo video carrega em background para transicoes instantaneas
+[33m600edf7[m fix: remover preload problematico - manter apenas carregamento background
+[33m0977ec0[m fix: corrigir HTMLVideoElement constructor - usar document.createElement para SSR
+[33m693b2f4[m fix: corrigir preload video - usar as=fetch ao inves de as=video
+[33m993163b[m feat: transições instantâneas entre vídeos sem intervalos vazios - otimização de performance do carousel
+[33mf1f842d[m Otimização Avançada: Intersection Observer + Preload + Cache - Carregamento instantâneo dos vídeos
+[33m127e9bf[m Otimização: Frames de vídeo reduzidos - Melhor performance de carregamento
+[33m7ea405f[m Otimização: React.memo + useMemo + Transição suave entre vídeos - Performance melhorada
+[33mdb6bc6b[m Optimização: Preload metadata para vídeos - Carregamento inicial mais rápido
+[33m67056f3[m Fix: Aumentado tempo de transição do carousel para 4.5 segundos - Desktop e mobile
+[33mfbbcd93[m Fix: Corrigido frame da bolsa para /bolsa_frame.png - Desktop e mobile
+[33m72e226e[m Fix: Removido OptimizedVideo - Implementado container permanente com frame e vídeo - Zero espaços vazios nas transições

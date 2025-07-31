@@ -1,0 +1,36 @@
+[33m5ce3b54[m fix: eliminar React do mobile - DOM puro completo para videos
+[33m7b73e64[m feat: migrar mobile para DOM puro - performance otimizada para videos
+[33m77fb5dc[m feat: carregamento desde inicio da pagina - videos carregam imediatamente sem esperar carousel
+[33me577e23[m feat: overlay de videos - proximo video carrega em background para transicoes instantaneas
+[33m0977ec0[m fix: corrigir HTMLVideoElement constructor - usar document.createElement para SSR
+[33m693b2f4[m fix: corrigir preload video - usar as=fetch ao inves de as=video
+[33m72e226e[m Fix: Removido OptimizedVideo - Implementado container permanente com frame e vídeo - Zero espaços vazios nas transições
+[33m2217a9a[m Fix: Carousel sempre inicia com vídeo da garrafa - Frame placeholder evita espaços vazios nas transições
+[33m436481f[m Fix: Carousel de vídeos funcionando com 3 vídeos (garrafa, bolsa2, parafusadeira) - Removida faixa de debug - Corrigido z-index e posicionamento dos vídeos no mockup
+[33m39bc198[m Atualiza arquivos de vídeo Garrafa_reels.mp4 e adiciona parafusadeira_reels2.mp4
+[33m39000fb[m Corrige nome do arquivo Garrafa_reels.mp4 para funcionar no Vercel
+[33m9cf5f2e[m Atualiza vídeos Garrafa_Reels, bolsa2_reels e parafusadeira_reels
+[33mdd347db[m Corrigir nome do arquivo de vídeo garrafa_reels para minúsculo
+[33md16d461[m[33m ([m[1;32mcodex/remove-console-statements-in-production[m[33m)[m Ajuste: nome do GIF da garrafa no carousel mobile para minúsculo
+[33mdb312e1[m Ajustes finais: animação mobile cards e garrafa, otimização de scrub, ranges e upscale. Refino para scroll rápido.
+[33mfb6d928[m Ajustes no mobile: pin do mockup para 300vh, carousel até 750vh, timing da garrafa e remoção de duplicidade da setinha
+[33m6151e70[m fix(video): adiciona playsInline para autoplay no iOS
+[33m0ddbb78[m fix(mobile): ajustes nos callbacks de animação dos cards e atraso da saída da garrafa para melhor sincronização com o pin do mockup
+[33m661dd02[m fix: ajuste das timelines de animacao - cards 80vh e titulo 60vh no mobile, correcao dos logs VH e otimizacao de qualidade da garrafa
+[33m4f926ad[m feat: Timeline independente para Garrafa Stanley com movimento sincronizado - Criada timeline separada GARRAFA_TIMELINE (1400vh desktop, 700vh mobile) - Garrafa se move na mesma velocidade dos outros cards até timeline1 - Fica parada no destino até o final da sua timeline - Scale 80% maior, sem transparência, sempre na frente - Removida lógica da garrafa da timeline1 para evitar duplicidade
+[33me2a60db[m feat: Garrafa Stanley 80% maior e sem transparência - Aumenta scale da garrafa para 80% maior que outros cards - Remove transparência da garrafa (sempre opaca) - Aplica configurações em desktop e mobile automaticamente - Mantém efeitos visuais sem fade de transparência
+[33m7ddb2ea[m feat: melhorias na animação dos cards produtos - Aumentada duração da timeline1 (1000vh desktop, 500vh mobile) - Reduzida transparência dos cards (0.85 desktop, 0.7 mobile) - Garrafa Stanley agora sempre na frente (z-index 1500) - Melhor visibilidade e experiência visual
+[33meb2b73b[m feat: implementa terceiro vídeo (parafusadeira) com transição TikTok completa - Integra terceiro vídeo na lógica principal de transição TikTok - Remove ScrollTriggers duplicados e conflitantes - Implementa transição suave entre 3 vídeos (garrafa  bolsa  parafusadeira) - Adiciona proteção contra zona morta para todas as transições - Mantém compatibilidade com fallback para scroll inverso - Funciona perfeitamente em desktop e mobile
+[33mc83d15d[m fix: corrigir fallback dos cards mobile incluindo card garrafa - adicionar ScrollTrigger robusto para mobile com proteção dupla - garantir que card garrafa siga mesma regra dos outros cards - ajustar lógica de retorno para scroll < 300vh
+[33mc815b3c[m feat: implementa animação impactante da garrafa sobreposta com flip e bounce - Adiciona transição de entrada dramática para garrafa sobreposta - Implementa escala, rotação e opacidade simultâneas - Aplica efeito back.out(1.7) para animação mais impactante - Reduz duração para 0.4s e delay para 100ms - Funciona em desktop e mobile com consistência visual
+[33m68c1c45[m fix: remove conflitos de posicionamento da garrafa nos pins para evitar que volte sozinha
+[33m85a015c[m fix: corrige posicionamento da garrafa desktop no ScrollTrigger e unifica lógica de centralização
+[33mae9d56b[m feat: ajusta eixo Y da garrafa para centralizar no retângulo em ambas as versões
+[33mc16bd3e[m feat: usa centro da viewport como referência absoluta para centralização da garrafa
+[33mf355231[m fix: implementa centralização robusta da garrafa com ajustes específicos para Vercel
+[33m6455c26[m PONTO DE RESTAURACAO FINAL: Garrafa mobile centralizada e fixa no retângulo - Console limpo mostrando apenas scroll VH - Pin da garrafa mobile ajustado para 400vh-700vh - Centralização perfeita com arredondamento de coordenadas - Posição fixa garantida durante período do pin
+[33me3d6369[m feat: animação dos cards funcionando perfeitamente no desktop e mobile - cards se movem para o centro do retângulo com animações dinâmicas - retângulo fica fixo no centro durante a animação - card da garrafa fica fixo no centro da tela após a animação - valores responsivos para desktop e mobile
+[33mdf433cc[m Corrigido problema de resíduos visuais da garrafa na transição de conteúdo do retângulo - Garrafa agora fica completamente invisível quando conteúdo muda para 'final' (700vh) - Adicionada restauração automática da garrafa ao voltar para conteúdo splash - Melhorados fallbacks de estado da garrafa para evitar flash visual
+[33m27ab547[m feat: implementa efeito de desintegração ultra-rápido da garrafa e vídeo Garrafa_Reels
+[33m0bbd6a1[m PONTO DE RESTAURACAO: Cards movendo para centro do retângulo com rotações dinâmicas - Garrafa 80% maior sem rotação
+[33m08c2ff7[m Ajuste posição dos cards garrafa e blusa na versão mobile para evitar sobreposição com o título
