@@ -8,7 +8,7 @@ import { ScrollMonitor } from '../components/ScrollMonitor'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Lompa - Landing Page Moderna',
+  title: 'Lompa - Social, visual e acessível',
   description: 'Uma landing page moderna e responsiva com animações avançadas usando Next.js, TypeScript e Framer Motion.',
   keywords: ['landing page', 'next.js', 'typescript', 'framer motion', 'tailwind css'],
   authors: [{ name: 'CursorAgent-FrontEnd' }],
