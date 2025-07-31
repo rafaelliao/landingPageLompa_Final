@@ -100,7 +100,9 @@ export default function Navigation({ items, className }: NavigationProps) {
         >
           {/* Logo */}
           <div>
-            <Logo size="md" />
+            <a href="/" className="block">
+              <Logo size="md" />
+            </a>
           </div>
 
           {/* Desktop Navigation */}

@@ -167,7 +167,7 @@ export default function Footer({ sections, className }: FooterProps) {
               </p>
             </div>
             <div className="flex items-center space-x-6 text-sm">
-              <a href="/privacidade" className="text-white/60 hover:text-white transition-colors">
+              <a href="/politica-privacidade" className="text-white/60 hover:text-white transition-colors">
                 Política de Privacidade
               </a>
               <a href="/termos" className="text-white/60 hover:text-white transition-colors">
