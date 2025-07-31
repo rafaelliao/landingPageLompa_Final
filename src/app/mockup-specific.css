@@ -39,7 +39,7 @@
 
 /* ===== MOCKUP DESKTOP ===== */
 #smartphone-mockup-desktop {
-  width: 336px;
+  width: 378px;
   height: 672px;
   display: block; /* Desktop visível por padrão */
   border: 2px solid #E321FF;
@@ -53,7 +53,7 @@
 
 /* ===== MOCKUP MOBILE ===== */
 #smartphone-mockup-mobile {
-  width: 331.2px;
+  width: 372.6px;
   height: 662.4px;
   z-index: 1; /* Mobile: fica atrás dos cards (z-index: 300) e título (z-index: 200) */
   display: none; /* Mobile oculto por padrão */
@@ -101,7 +101,7 @@
 /* Desktop (1024px+) */
 @media (min-width: 1024px) {
   #smartphone-mockup-desktop {
-    width: 336px;
+    width: 378px;
     height: 672px;
     margin: 2rem auto 0;
     order: 3; /* Após o título (order: 2) */
@@ -132,7 +132,7 @@
   }
   
   #smartphone-mockup-mobile {
-    width: 322px;
+    width: 362.25px;
     height: 644px;
     margin: 0 auto !important;
     margin-top: 0 !important; /* Reset margin-top pois o container controla */
@@ -160,7 +160,7 @@
 /* Mobile Pequeno (480px-) */
 @media (max-width: 480px) {
   #smartphone-mockup-mobile {
-    width: 253px;
+    width: 284.625px;
     height: 506px;
     margin: 1.5rem auto 0;
     border-radius: 27px !important;
@@ -170,7 +170,7 @@
 /* Mobile Extra Pequeno (360px-) */
 @media (max-width: 360px) {
   #smartphone-mockup-mobile {
-    width: 230px;
+    width: 258.75px;
     height: 460px;
     margin: 1.5rem auto 0;
     border-radius: 27px !important;
