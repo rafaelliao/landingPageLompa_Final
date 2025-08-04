@@ -169,7 +169,7 @@ export default function Navigation({ items, className }: NavigationProps) {
               </div>
             </button>
             <a
-              href="https://stage.seller-admin.lompa.com.br/login"
+              href="https://seller.lompa.com.br/login"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center px-6 py-3 button-custom-rounded text-white transition-all duration-200 font-semibold"
@@ -246,7 +246,7 @@ export default function Navigation({ items, className }: NavigationProps) {
                 {/* Botões de Ação */}
                 <div className="flex flex-col space-y-3 mt-8">
                   <a
-                    href="https://stage.seller-admin.lompa.com.br/login"
+                    href="https://seller.lompa.com.br/login"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-full py-3 button-custom-rounded text-white transition-all duration-200 font-semibold"
