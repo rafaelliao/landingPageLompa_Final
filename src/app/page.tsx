@@ -225,6 +225,9 @@ function AboutCarousel() {
 function HomePageContent() {
   const { isMobile } = useResponsive()
   const [accordion, setAccordion] = useState([true, false, false]);
+  const [showQRPopup, setShowQRPopup] = useState(false);
+  const [iosQRCodeDataURL, setIosQRCodeDataURL] = useState<string>('');
+  const [androidQRCodeDataURL, setAndroidQRCodeDataURL] = useState<string>('');
 
   // Função para detectar plataforma mobile
   const detectMobilePlatform = () => {
@@ -256,8 +259,40 @@ function HomePageContent() {
   };
 
   const handleDownloadClick = () => {
-    const downloadLink = getDownloadLink();
-    window.open(downloadLink, '_blank');
+    if (isMobile) {
+      const downloadLink = getDownloadLink();
+      window.open(downloadLink, '_blank');
+    } else {
+      // Para desktop, mostrar popup QR code
+      import('qrcode').then((QRCode) => {
+        Promise.all([
+          QRCode.toDataURL('https://apps.apple.com/in/app/lompa/id6742741600', {
+            width: 180,
+            margin: 2,
+            color: {
+              dark: '#000000',
+              light: '#FFFFFF'
+            }
+          }),
+          QRCode.toDataURL('https://play.google.com/store/apps/details?id=com.app.lompamarketplace', {
+            width: 180,
+            margin: 2,
+            color: {
+              dark: '#000000',
+              light: '#FFFFFF'
+            }
+          })
+        ]).then(([iosQR, androidQR]) => {
+          setIosQRCodeDataURL(iosQR);
+          setAndroidQRCodeDataURL(androidQR);
+          setShowQRPopup(true);
+        }).catch(err => {
+          console.error('Erro ao gerar QR codes:', err);
+          // Fallback para abrir link genérico
+          window.open('https://lompa.com.br/download', '_blank');
+        });
+      });
+    }
   };
   
   return (
@@ -1771,6 +1806,160 @@ function HomePageContent() {
           
           {/* Footer */}
           <Footer sections={footerSections} />
+          
+          {/* QR Code Popup */}
+          {showQRPopup && (
+            <div
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 10000,
+              }}
+              onClick={() => setShowQRPopup(false)}
+            >
+              <div
+                style={{
+                  backgroundColor: '#FBF7FF',
+                  borderRadius: '20px',
+                  padding: '40px',
+                  maxWidth: '600px',
+                  width: '90%',
+                  textAlign: 'center',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h2
+                  style={{
+                    fontFamily: 'Inter',
+                    fontStyle: 'normal',
+                    fontWeight: 600,
+                    fontSize: '24px',
+                    lineHeight: '28px',
+                    color: '#4A148C',
+                    marginBottom: '8px',
+                    margin: '0 0 8px 0',
+                  }}
+                >
+                  Aponte o celular em um dos QR Code abaixo.
+                </h2>
+                
+                <p
+                  style={{
+                    fontFamily: 'Inter',
+                    fontStyle: 'normal',
+                    fontWeight: 500,
+                    fontSize: '16px',
+                    lineHeight: '20px',
+                    color: '#666666',
+                    marginBottom: '32px',
+                    margin: '0 0 32px 0',
+                  }}
+                >
+                  Escolha sua plataforma.
+                </p>
+                
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '60px',
+                    marginBottom: '32px',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {iosQRCodeDataURL && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '8px',
+                      }}
+                    >
+                      <img
+                        src={iosQRCodeDataURL}
+                        alt="QR Code para iOS"
+                        style={{
+                          width: '180px',
+                          height: '180px',
+                          borderRadius: '12px',
+                          border: '2px solid #E321FF',
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontFamily: 'Inter',
+                          fontWeight: 600,
+                          fontSize: '14px',
+                          color: '#4A148C',
+                        }}
+                      >
+                        iOS
+                      </span>
+                    </div>
+                  )}
+                  
+                  {androidQRCodeDataURL && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '8px',
+                      }}
+                    >
+                      <img
+                        src={androidQRCodeDataURL}
+                        alt="QR Code para Android"
+                        style={{
+                          width: '180px',
+                          height: '180px',
+                          borderRadius: '12px',
+                          border: '2px solid #E321FF',
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontFamily: 'Inter',
+                          fontWeight: 600,
+                          fontSize: '14px',
+                          color: '#4A148C',
+                        }}
+                      >
+                        Android
+                      </span>
+                    </div>
+                  )}
+                </div>
+                
+                <button
+                  onClick={() => setShowQRPopup(false)}
+                  style={{
+                    background: '#E321FF',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '12px',
+                    padding: '12px 24px',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    fontFamily: 'Inter',
+                  }}
+                >
+                  Fechar
+                </button>
+              </div>
+            </div>
+          )}
       </main>
     </MobileProvider>
   )
