@@ -129,10 +129,9 @@ export default function Navigation({ items, className }: NavigationProps) {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-4">
-            <button
+            <a
+              href="/suporte"
               className="group support-button flex items-center justify-center w-12 h-12 rounded-full border-2 border-white/30 text-white transition-all duration-300 hover:border-white/60 hover:bg-white/10 relative overflow-hidden"
-              onClick={() => {
-              }}
             >
               <div
                 className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 button-custom-rounded"
@@ -147,7 +146,7 @@ export default function Navigation({ items, className }: NavigationProps) {
             >
               <HeadphonesIcon className="w-4 h-4" />
               </div>
-            </button>
+            </a>
             
             <button
               className="group contact-button flex items-center justify-center w-12 h-12 rounded-full border-2 border-white/30 text-white transition-all duration-300 hover:border-white/60 hover:bg-white/10 relative overflow-hidden"
@@ -262,15 +261,16 @@ export default function Navigation({ items, className }: NavigationProps) {
                     Acesso Vendedor
                     </a>
                   
-                    <button
+                    <a
+                      href="/suporte"
                       className="flex items-center justify-center w-full py-3 button-custom-rounded border-2 border-white/30 text-white hover:border-white/60 hover:bg-white/10 transition-all duration-200 font-semibold"
-                    onClick={() => {
-                      setIsOpen(false)
-                    }}
-                  >
-                    <HeadphonesIcon className="w-4 h-4 mr-2" />
-                    Suporte
-                    </button>
+                      onClick={() => {
+                        setIsOpen(false)
+                      }}
+                    >
+                      <HeadphonesIcon className="w-4 h-4 mr-2" />
+                      Suporte
+                    </a>
                     
                     <a
                       href="https://wa.me/5511934380061"

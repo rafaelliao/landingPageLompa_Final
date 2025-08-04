@@ -1,0 +1,123 @@
+[33m230049e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mV3[m[33m)[m Atualiza termos de serviço e ajusta footer mobile
+[33m7434b6d[m feat: adiciona página política de privacidade e links de navegação
+[33ma0185de[m Add line break after 'Lompa' in mobile version text
+[33m9bbb642[m Update page title to 'Lompa - Social, visual e acessível'
+[33m540e163[m Add favicon configuration using favicon_lompa.svg
+[33m2b2a30f[m Remove frames and frame rules from mobile video carousel - transitions now match desktop version
+[33mff47828[m Versão atualizada com correções
+[33m4c492e6[m Restaurei commit 39bc198 e corrigi warning de hidratação removendo Date.now() dos caminhos de vídeo
+[33m39bc198[m Atualiza arquivos de vídeo Garrafa_reels.mp4 e adiciona parafusadeira_reels2.mp4
+[33m39000fb[m Corrige nome do arquivo Garrafa_reels.mp4 para funcionar no Vercel
+[33m20cbab6[m Ajusta dimensões do mockup mobile para proporção 9:16 mantendo altura original
+[33m9cf5f2e[m Atualiza vídeos Garrafa_Reels, bolsa2_reels e parafusadeira_reels
+[33m566f196[m Corrige nomes dos vídeos do carousel e adiciona logs de debug
+[33mf07fd5e[m Ajusta border-radius dos cards e newsletter desktop
+[33m085c5c5[m Corrige border-radius dos cards desktop para eliminar pontas brancas
+[33m225a4b8[m Adiciona seções py-16 da versão mobile para desktop após contact-desktop
+[33ma41b40a[m feat: implementar seções independentes desktop/mobile e otimizar layout - Adicionar seção cards_central_desktop substituindo Features Section - Migrar conteúdo mobile contact para desktop - Criar independência entre seções about e contact - Otimizar imagem mockup_multi3 com background-size cover - Centralizar elementos e ajustar proporções
+[33m8f8b13a[m Fix desktop background image alignment and size
+[33md0c9f9d[m Fix: Melhorar callback de scroll reverso para cards de produtos desktop - Estendido trigger window de 760vh para 800vh para melhor resposta a scroll pequeno - Adicionado gsap.set para reativar pointerEvents imediatamente - Implementado onLeaveBack callback como backup - Criado ScrollTrigger adicional para garantir reaparecimento dos cards
+[33m0e40825[m Corrigido efeito de movimentação por scroll dos cards de produtos - melhorada resposta a scroll pequeno
+[33m41caa2c[m feat: adicionar link acesso vendedor e botão fale conosco mobile - links para painel admin e WhatsApp
+[33m837017e[m feat: adicionar CNPJ no footer - centralizado abaixo do copyright
+[33maafd935[m feat: adicionar ícones redes sociais no footer - design personalizado com preenchimento roxo e LinkedIn destacado
+[33m2f9be0c[m feat: adicionar seção newsletter mobile - campo email e botão com design personalizado
+[33m158df9e[m fix: ajustar espaço do carousel - reduzir paddingRight para 40px
+[33mb7a3060[m fix: corrigir carousel da seção Curta e Compartilhe - adicionar scroll horizontal e largura fixa dos cards
+[33ma7bd6c1[m Corrigido carousel mobile: removido elemento de teste, ajustado CSS global e otimizado scroll lateral
+[33mdc5e251[m fix: ajusta carousel mobile e adiciona indicador visual
+[33m6716d0b[m feat: implementa carousel mobile com cards personalizados e imagens
+[33m780bb36[m Aplicar detecção de plataforma e links de download aos botões dos cards centrais e seção de contato
+[33m0728526[m Configurar links de download corretos do Lompa para Android e iOS
+[33mcae6871[m Simplificar footer e ajustar quebras de linha nos textos
+[33mdd347db[m Corrigir nome do arquivo de vídeo garrafa_reels para minúsculo
+[33m804694c[m Ajustar posicionamento da imagem mockup_multi e atualizar informações de contato no footer
+[33m4ea21ca[m Centralizar conteúdo do footer e atualizar descrição da marca
+[33mc3ff8d0[m Ajuste visual: imagem bolsa_card_central cobre toda a div superior do card central mobile e altura aumentada para 160px
+[33mf4b4fe5[m Atualizações finais da landing page
+[33md8ac076[m Atualizações na landing page - melhorias de performance e UI
+[33m480f85c[m feat: accordions mobile expansíveis na seção 'Quem pode usar o Lompa'
+[33m554d720[m fix(carousel): alternância automática sem scroll global forçado na section about
+[33mefd7ad8[m Fix: hooks do React no carousel About agora em componente funcional separado para build Vercel
+[33mffa4302[m Ajuste visual: carousel invertido, centralização, espaçamentos e melhorias no comparativo de marketplaces
+[33mf01e778[m Ajustes visuais mobile: espaçamentos, fontes e cores das seções e accordions
+[33m3327ed0[m Correção: fundo lompa_fundo_icon2.png removido do desktop, build atualizado e ajustes finais de produção
+[33md16d461[m[33m ([m[1;32mcodex/remove-console-statements-in-production[m[33m)[m Ajuste: nome do GIF da garrafa no carousel mobile para minúsculo
+[33mb0977ff[m Ajuste: correção nomes GIFs carousel mobile e layout uniforme
+[33m6dc32cf[m Ajuste: padding-top da hero-container-mobile aumentado para 5rem
+[33m632cfaa[m Ajustes: largura/altura dos cards centrais, fonte dos títulos, correção do botão, melhorias no carousel mobile e lógica de frames
+[33m27ec610[m Ajuste: mockup mobile 15% maior, ícone check menor nos cards centrais, quebra de linha após 'como' no texto do mockup
+[33m13a347b[m Ajuste: imagens e layout dos cards centrais mobile (user_card_central, bolsa_card_central)
+[33mf335956[m Ajuste: range do carousel mobile e movimentação do botão 'Descubra agora!' para iniciar em 100vh
+[33m6ed4388[m Ajuste visual: posição e opacidade do background lompa_fundo_icon2.png na hero-container
+[33m719c423[m Ajuste: background do lompa_fundo_icon.svg mais transparente e maior na hero-container (desktop/mobile)
+[33mbab06ab[m feat(mobile): ajustar pin do botão CTA para centro do mockup entre 80vh e 160vh
+[33m095858d[m feat(mobile): adicionar poster ao vídeo do carousel para evitar espaço vazio inicial
+[33m11b9260[m fix: garantir retorno em todos os caminhos do useEffect de showMockupContent (TypeScript build)
+[33m3533a8e[m fix: garantir retorno em todos os caminhos do useEffect do CTA (TypeScript build)
+[33m8708c2b[m feat(mobile): melhorias no botão CTA, ícone de download e ajustes de layout/timeline
+[33m4d85e15[m fix(carousel): transição overlap suave entre vídeos para evitar espaços vazios no desktop e mobile
+[33mbd57a9c[m perf(carousel): pré-carregar vídeos do carousel para início instantâneo no gatilho
+[33m639caa3[m ajuste: alterar range do carousel mobile para 30vh-250vh
+[33m1cf6f4b[m style(desktop): aumentar espaçamento superior dos cards desktop para 8rem
+[33mdb312e1[m Ajustes finais: animação mobile cards e garrafa, otimização de scrub, ranges e upscale. Refino para scroll rápido.
+[33mfb6d928[m Ajustes no mobile: pin do mockup para 300vh, carousel até 750vh, timing da garrafa e remoção de duplicidade da setinha
+[33ma155352[m Ajustes no layout mobile: posicionamento da setinha e espaçamento do mockup
+[33m0705762[m feat: adiciona setinha animada abaixo do título com posicionamento responsivo e z-index alto
+[33ma93e552[m fix: corrige erro de hidratação do <br> condicional no título do mobile usando CSS
+[33m037b416[m fix: carrossel desktop inicia sempre do vídeo 1 ao ativar, e inicia em 80vh
+[33m31262cd[m fix(hero-title): remove quebra de linha extra no mobile e garante responsividade do título final
+[33m5ba978f[m feat(carousel): adiciona preload auto nos vídeos do carousel para carregamento imediato e experiência otimizada
+[33m6187610[m fix(deps): adiciona framer-motion para corrigir erro de build no Vercel
+[33ma37108c[m fix(hero-section): garante retorno em todas as rotas da função initAnimation para corrigir erro de build
+[33ma4c09ce[m feat(mobile): ajusta range do carousel para 300vh-700vh e mantém pin no parente do mockup
+[33m6595a5c[m chore: backup local do projeto na versão estável
+[33m6151e70[m fix(video): adiciona playsInline para autoplay no iOS
+[33m016cc87[m feat(desktop): ajuste do pin do mockup desktop para 800vh-1400vh, mantendo lógica separada do mobile
+[33m07e3cba[m fix(desktop): ajustes finos de posição dos cards Boné, Maquiagem e Tênis
+[33m0ddbb78[m fix(mobile): ajustes nos callbacks de animação dos cards e atraso da saída da garrafa para melhor sincronização com o pin do mockup
+[33mf095135[m fix: corrige configurações ESLint e ScrollMonitor para build bem-sucedido
+[33m23dca71[m fix: corrige configurações do Vercel e ESLint para resolver erros de build
+[33mc974de3[m merge: resolve conflito removendo arquivo useScrollAnimation.ts deletado
+[33m2fdc3ce[m feat: implementação completa das animações mobile com pin do mockup e efeitos de saída dos cards
+[33m147f5b7[m feat: animacao do titulo desktop otimizada - timeline 400vh e transparencia mais lenta e suave
+[33m661dd02[m fix: ajuste das timelines de animacao - cards 80vh e titulo 60vh no mobile, correcao dos logs VH e otimizacao de qualidade da garrafa
+[33ma4b6e62[m mobile: ajuste fino na posição do card bolsa - movido 0.5rem para cima e correção do comentário CSS
+[33m63b88d6[m fix: mobile card scroll animation system
+[33m95cd5ee[m feat: mobile cards positioning and styling improvements
+[33m4f926ad[m feat: Timeline independente para Garrafa Stanley com movimento sincronizado - Criada timeline separada GARRAFA_TIMELINE (1400vh desktop, 700vh mobile) - Garrafa se move na mesma velocidade dos outros cards até timeline1 - Fica parada no destino até o final da sua timeline - Scale 80% maior, sem transparência, sempre na frente - Removida lógica da garrafa da timeline1 para evitar duplicidade
+[33me2a60db[m feat: Garrafa Stanley 80% maior e sem transparência - Aumenta scale da garrafa para 80% maior que outros cards - Remove transparência da garrafa (sempre opaca) - Aplica configurações em desktop e mobile automaticamente - Mantém efeitos visuais sem fade de transparência
+[33m99ec352[m fix: otimizações de performance e limpeza da interface - Corrigido problema de ScrollTrigger.refresh() indevido - Implementado debounce no handleResize (150ms) - Removida tag verde de debug vh do frontend - Melhorada performance da movimentação dos cards - Interface mais limpa e profissional
+[33m809d363[m feat: implementado efeito de saída para título e ícone central - Adicionada timeline TITLE_EXIT com Fade Out + Slide Up - Corrigido erro de setScale para setScaleX/setScaleY - Ícone central animado com movimento coordenado ao título - Efeito de profundidade com diferentes velocidades - Termina em 50% da timeline1 sem interferir nos cards
+[33m7ddb2ea[m feat: melhorias na animação dos cards produtos - Aumentada duração da timeline1 (1000vh desktop, 500vh mobile) - Reduzida transparência dos cards (0.85 desktop, 0.7 mobile) - Garrafa Stanley agora sempre na frente (z-index 1500) - Melhor visibilidade e experiência visual
+[33mbb5119a[m V3: Aumentado tamanho do ícone star bag da blusa no desktop (40px  50px)
+[33mf3bb474[m V3: Ajustado posicionamento dos cards maquiagem, tênis e boné para mais à esquerda na versão desktop
+[33m05bf78f[m V3: Implementado efeito de fade out com partículas super rápido para título e ícone
+[33m732e6cc[m V3: Ponto de Recuperação Final - Deploy Vercel bem-sucedido, build local OK, otimizações mobile completas
+[33m84b9989[m Trigger Vercel build for V3
+[33m0fd5e18[m V3: Mobile Optimization Complete - Timeline 1 ajustada para 400vh, z-index corrigido, debug system implementado, marcadores visuais removidos
+[33m4953cc3[m[33m ([m[1;32mv2.0-final-version[m[33m)[m feat: implementar otimizações críticas de performance para animação de cards
+[33mf36d0b0[m feat: adiciona sistema de monitoramento de scroll em vh
+[33mcf05766[m feat: implementar navbar inteligente e ajustes de layout mobile
+[33m3b15dbd[m feat: implementar melhorias de layout e responsividade
+[33mdf44b3f[m Ajustes finais: filtro de cards mobile, posicionamento do Boné e redução do ícone central
+[33ma517363[m Ajuste posicionamento dos cards: movidos 30px para cima na versão desktop e sobreposição do card Óculos sobre Tênis
+[33m9a30609[m[33m ([m[1;31morigin/v2.0-final-version[m[33m, [m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m feat: implementa autoplay robusto para dispositivos móveis iOS/Chrome - Adiciona atributos webkit-playsinline e x5-playsinline para compatibilidade iOS - Implementa múltiplas tentativas de reprodução com fallback - Adiciona listener para eventos de interação do usuário (touchstart, click, scroll) - Força reprodução automática após interação do usuário - Remove botões manuais, mantém experiência automática - Funciona em Safari iOS, Chrome mobile e outros navegadores móveis
+[33meb2b73b[m feat: implementa terceiro vídeo (parafusadeira) com transição TikTok completa - Integra terceiro vídeo na lógica principal de transição TikTok - Remove ScrollTriggers duplicados e conflitantes - Implementa transição suave entre 3 vídeos (garrafa  bolsa  parafusadeira) - Adiciona proteção contra zona morta para todas as transições - Mantém compatibilidade com fallback para scroll inverso - Funciona perfeitamente em desktop e mobile
+[33m07c6a6e[m Implementação da transição entre vídeos com ScrollTrigger e otimizações de performance
+[33mc83d15d[m fix: corrigir fallback dos cards mobile incluindo card garrafa - adicionar ScrollTrigger robusto para mobile com proteção dupla - garantir que card garrafa siga mesma regra dos outros cards - ajustar lógica de retorno para scroll < 300vh
+[33m01a7ff1[m feat: implementa transição de entrada do vídeo e ajusta proporções dos retângulos - Adiciona animação de entrada suave para vídeo (desktop e mobile) - Implementa fade in e zoom sutil do vídeo (0.6s + 100ms delay) - Ajusta proporções dos retângulos para mockup mobile (1:2.0) - Aumenta tamanho do retângulo mobile para melhor visibilidade - Mantém consistência visual entre desktop e mobile
+[33mc815b3c[m feat: implementa animação impactante da garrafa sobreposta com flip e bounce - Adiciona transição de entrada dramática para garrafa sobreposta - Implementa escala, rotação e opacidade simultâneas - Aplica efeito back.out(1.7) para animação mais impactante - Reduz duração para 0.4s e delay para 100ms - Funciona em desktop e mobile com consistência visual
+[33mcc2677d[m fix: restaura pin do retângulo mobile - Adiciona ScrollTrigger para fixar retângulo mobile durante animação - Mantém consistência com comportamento do desktop - Corrige problema de retângulo não fixar no mobile
+[33m12658e1[m fix: corrige autoplay do vídeo mobile no Vercel - Adiciona preload='auto' para carregamento antecipado - Implementa onLoadedData para forçar play quando carregado - Aplica correção tanto para desktop quanto mobile
+[33m6c2168a[m feat: implementa timeline responsiva e remove pin mobile - Timeline mobile reduzida para 500vh - Remove pin do retângulo mobile para consistência - Implementa regra global de fallback para cards - Ajusta velocidade da animação (scrub 3.5s)
+[33m68c1c45[m fix: remove conflitos de posicionamento da garrafa nos pins para evitar que volte sozinha
+[33m9838c47[m fix: reset explícito dos cards ao voltar o scroll para o topo (fallback reverso)
+[33m85a015c[m fix: corrige posicionamento da garrafa desktop no ScrollTrigger e unifica lógica de centralização
+[33mae9d56b[m feat: ajusta eixo Y da garrafa para centralizar no retângulo em ambas as versões
+[33mc16bd3e[m feat: usa centro da viewport como referência absoluta para centralização da garrafa
+[33mf355231[m fix: implementa centralização robusta da garrafa com ajustes específicos para Vercel
+[33mc5b129a[m fix: adiciona delay na animação dos cards para garantir centralização correta no Vercel
+[33mb7c5e87[m feat: implementa fade out dos outros cards aos 400vh com fallback para retorno
+[33m6455c26[m PONTO DE RESTAURACAO FINAL: Garrafa mobile centralizada e fixa no retângulo - Console limpo mostrando apenas scroll VH - Pin da garrafa mobile ajustado para 400vh-700vh - Centralização perfeita com arredondamento de coordenadas - Posição fixa garantida durante período do pin
+[33m7cf3b04[m Corrigir erro de variável duplicada mobileRectangle e ajustar animações dos cards mobile
